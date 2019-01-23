@@ -26,6 +26,8 @@ class Tautulli:
 
     def get_history(self, **kwargs):
         """
+        Get the Tautulli history.
+
         Required parameters:
             None
 
@@ -95,7 +97,7 @@ class Tautulli:
                 payload[k] = v
             else:
                 raise ValueError(
-                    '{0} is not an accepted parameter\n'.format(k)
+                    '{0} is not an accepted parameter'.format(k)
                 )
 
         # **kwarg checks
