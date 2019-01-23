@@ -1,5 +1,5 @@
 import configparser
-from .tautulli_api_auth import TautulliApiAuth
+from tautulli_api_auth import TautulliApiAuth
 import json
 import requests
 
@@ -310,3 +310,5 @@ class Tautulli:
             records_total = records_total['response']
             records_total = json.dumps(records_total, sort_keys=True, indent=4)
             return records_total
+        else:
+            r.raise_for_status()
