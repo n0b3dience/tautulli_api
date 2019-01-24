@@ -59,9 +59,11 @@ class TestGetHistory(unittest.TestCase):
             '    "message": null,\n' \
             '    "result": "success"\n' \
             '}'
+
         hist_test_1_act = tautulli.get_history(
             length=1, media_type='movie', user='nettles4349'
         )
+
         self.assertEqual(hist_test_1_act, hist_test_1_exp)
 
 
