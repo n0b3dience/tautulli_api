@@ -6,13 +6,24 @@ import requests
 
 # ConfigParser Variables
 config = configparser.ConfigParser()
-config.read('settings.ini')
+config.read('settings_private.ini')
 # Settings File Variables
 HOST = config['USER_SETTINGS']['host']
 PORT = config['USER_SETTINGS']['port']
 API_KEY = config['USER_SETTINGS']['api_key']
 SCHEMA = 'http'
 PATH = ''
+
+
+# Function to check if kwargs are correct
+def check_kwargs(kwarg_dict, payload_dict):
+    for k, v in kwarg_dict.items():
+        if k in payload_dict:
+            payload_dict[k] = v
+        else:
+            raise ValueError(
+                '{0} is not an accepted parameter'.format(k)
+            )
 
 
 class Tautulli:
@@ -42,15 +53,17 @@ class Tautulli:
             section_id (int):               2
             media_type (str):               "movie", "episode", "track"
             transcode_decision (str):       "direct play", "copy", "transcode",
-            order_column (str):             "date",
-            "friendly_name",
+            order_column (str):             "date", "friendly_name",
                                             "ip_address", "platform", "player",
                                             "full_title", "started",
                                             "paused_counter", "stopped",
                                             "duration"
-            order_dir (str):                "desc" or "asc"
-            start (int):                    Row to start from, 0
-            length (int):                   Number of items to return, 25
+            order_dir (str):                "desc" or "asc",
+                                            default: "desc"
+            start (int):                    Row to start from,
+                                            default: 0
+            length (int):                   Number of items to return,
+                                            default: 25
             search (str):                   A string to search for, "Thrones"
 
         Example usage:
@@ -91,14 +104,7 @@ class Tautulli:
         ]
         order_dir_list = ["desc", "asc"]
 
-        # Put **kwargs into payload
-        for k, v in kwargs.items():
-            if k in payload:
-                payload[k] = v
-            else:
-                raise ValueError(
-                    '{0} is not an accepted parameter'.format(k)
-                )
+        check_kwargs(kwargs, payload)
 
         # **kwarg checks
 
