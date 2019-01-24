@@ -26,6 +26,57 @@ def check_kwargs(kwarg_dict, payload_dict):
             )
 
 
+# Check kwarg type functions
+def check_bin_kw(kw_dict, kw_item):
+    if kw_dict[kw_item] is not None:
+        if kw_dict[kw_item] == 0 | 1:
+            pass
+        else:
+            raise TypeError(
+                '"{0}=<val>" <val> MUST be 0 or 1'.format(kw_item)
+            )
+    else:
+        pass
+
+
+def check_str_kw(kw_dict, kw_item, *check_list):
+    if kw_dict[kw_item] is not None:
+        if type(kw_dict[kw_item]) == str:
+            if len(check_list) > 0:
+                if kw_dict[kw_item] in check_list:
+                    pass
+                else:
+                    raise ValueError(
+                        '"{0}=<val>" <val> MUST be one of the following:\n'
+                        '    {1}'.format(kw_item, check_list)
+                    )
+            else:
+                pass
+        else:
+            raise TypeError(
+                '"{0}=<val>" <val> MUST be a STRING'.format(kw_item)
+            )
+    else:
+        pass
+
+
+def check_pos_int_kw(kw_dict, kw_item):
+    if kw_dict[kw_item] is not None:
+        if type(kw_dict[kw_item]) == int:
+            if kw_dict[kw_item] >= 0:
+                pass
+            else:
+                raise ValueError(
+                    '"{0}=<val>" <val> CANNOT be NEGATIVE'.format(kw_item)
+                )
+        else:
+            raise TypeError(
+                '"{0}=<val>" <val> MUST be an INTEGER'.format(kw_item)
+            )
+    else:
+        pass
+
+
 class Tautulli:
 
     def __init__(self):
