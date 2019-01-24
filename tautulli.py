@@ -39,16 +39,16 @@ def check_bin_kw(kw_dict, kw_item):
         pass
 
 
-def check_str_kw(kw_dict, kw_item, *check_list):
+def check_str_kw(kw_dict, kw_item, *value_check_dict):
     if kw_dict[kw_item] is not None:
         if type(kw_dict[kw_item]) == str:
-            if len(check_list) > 0:
-                if kw_dict[kw_item] in check_list:
+            if kw_dict[kw_item] in value_check_dict:
+                if kw_dict[kw_item] in value_check_dict[kw_item]:
                     pass
                 else:
                     raise ValueError(
                         '"{0}=<val>" <val> MUST be one of the following:\n'
-                        '    {1}'.format(kw_item, check_list)
+                        '    {1}'.format(kw_item, value_check_dict[kw_item])
                     )
             else:
                 pass
@@ -75,6 +75,16 @@ def check_pos_int_kw(kw_dict, kw_item):
             )
     else:
         pass
+
+
+def check_param_types(kw_dict, pos_int_list, str_list, bin_list):
+    for k in kw_dict.items():
+        if k in pos_int_list:
+            check_pos_int_kw(kw_dict, k)
+        elif k in str_list:
+            check_str_kw(kw_dict, k)
+        elif k in bin_list:
+            check_bin_kw(kw_dict, k)
 
 
 class Tautulli:
@@ -146,17 +156,46 @@ class Tautulli:
             'search': None                      # (str)
         }
 
-        # Parameter-check lists
-        media_type_list = ["movie", "episode", "track"]
-        transcode_decision_list = ["direct play", "copy", "transcode"]
-        order_column_list = [
-            "date", "friendly_name", "ip_address", "platform", "player",
-            "full_title", "started", "paused_counter", "stopped", "duration"
+        pos_int_params = [
+            'user_id',
+            'rating_key',
+            'parent_rating_key',
+            'grandparent_rating_key',
+            'section_id',
+            'start'
         ]
-        order_dir_list = ["desc", "asc"]
 
+        str_params = [
+            'user',
+            'start_date',
+            'media_type',
+            'transcode_decision',
+            'order_column',
+            'order_dir',
+            'length',
+            'search'
+        ]
+
+        bin_params = [
+            'grouping'
+        ]
+
+        # Parameter-check lists
+        param_check_dict = {
+            'media_type': ["movie", "episode", "track"],
+            'transcode_decision': ["direct play", "copy", "transcode"],
+            'order_column': [
+                "date", "friendly_name", "ip_address", "platform", "player",
+                "full_title", "started", "paused_counter", "stopped", "duration"
+            ],
+            'order_dir': ["desc", "asc"]
+        }
+
+        # Check parameters
         check_kwargs(kwargs, payload)
+        check_param_types(kwargs, pos_int_params, str_params, bin_params)
 
+        """
         # **kwarg checks
 
         if payload['grouping'] is not None:
@@ -360,7 +399,9 @@ class Tautulli:
                 )
         else:
             pass
+        """
 
+        # Send/receive request
         r = requests.get(self._base_url, params=payload)
         if r.status_code == 200:
             records_total = json.loads(r.content.decode('utf-8'))
