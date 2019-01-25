@@ -55,12 +55,7 @@ class Tautulli:
             search (str):                   A string to search for, "Thrones"
 
         Example usage:
-            Tautulli.get_history(
-                user="Jon Snow",
-                start_date="2018-01-01",
-                order_dir="asc",
-                length=200
-            )
+            get_history(user="Jon Snow", order_dir="asc", length=20)
         """
 
         payload = {
