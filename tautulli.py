@@ -1,8 +1,6 @@
 import configparser
-import json
 from tautulli_api_auth import TautulliApiAuth
 import utils
-import requests
 
 
 # ConfigParser Variables
@@ -122,15 +120,13 @@ class Tautulli:
 
         # Check parameters
         utils.check_kwargs(kwargs, payload)
-        utils.check_param_types(kwargs, pos_int_params, str_params,
-                                bin_params, param_check_dict)
+        utils.check_param_types(
+            kwargs, pos_int_params, str_params, bin_params, param_check_dict
+        )
 
-        # Send/receive request
-        r = requests.get(self._base_url, params=payload)
-        if r.status_code == 200:
-            records_total = json.loads(r.content.decode('utf-8'))
-            records_total = records_total['response']
-            records_total = json.dumps(records_total, sort_keys=True, indent=4)
-            return records_total
-        else:
-            r.raise_for_status()
+        # Send request
+        response = utils.send_receive_request(
+            self._base_url, params_dict=payload
+        )
+        # Return request
+        return response

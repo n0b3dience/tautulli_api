@@ -1,3 +1,5 @@
+import json
+import requests
 """
 Utility functions for tautulli_api
 """
@@ -74,3 +76,13 @@ def check_param_types(kw_dict, pos_int_list,
             check_str_kw(kw_dict, k, value_check_dict)
         elif k in bin_list:
             check_bin_kw(kw_dict, k)
+
+
+# Send/receive requests
+def send_receive_request(url, params_dict):
+    r = requests.get(url, params=params_dict)
+    if r.status_code == 200:
+        response = json.loads(r.content.decode('utf-8'))
+        return response
+    else:
+        r.raise_for_status()
