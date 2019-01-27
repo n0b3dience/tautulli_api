@@ -2390,7 +2390,7 @@ class Tautulli:
 
         payload = {
             'apikey': API_KEY,
-            'cmd': 'get_notifier_config'
+            'cmd': 'get_notifier_parameters'
         }
 
         # Send/receive request
@@ -2420,12 +2420,187 @@ class Tautulli:
 
         payload = {
             'apikey': API_KEY,
-            'cmd': 'get_notifier_config',
+            'cmd': 'get_notifiers',
             'notify_action': notify_action      # (str)
         }
 
         # Check keyword arguments
         utils.check_str_kw(payload, notify_action, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+        
+    def get_old_rating_keys(self, rating_key=None, media_type=None):
+        """
+        Get a list of old rating keys from the Tautulli database for all
+        of the item's parent/children.
+
+        Required parameters:
+            rating_key (str):       '12345'
+            media_type (str):       "movie", "show", "season",
+                                    "episode", "artist", "album",
+                                    "track"
+
+        Optional parameters:
+            None
+
+        Returns:
+            json:
+                {}
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_old_rating_keys',
+            'rating_key': rating_key,
+            'media_type': media_type
+        }
+
+        media_type_list = ['movie', 'show', 'season', 'episode', 'artist',
+                           'album', 'track']
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, rating_key, is_required=True)
+        utils.check_str_kw(payload, media_type, media_type_list,
+                           is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_plays_by_date(self, time_range=None, y_axis=None, user_id=None,
+                          grouping=None):
+        """
+        Get graph data by date.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            time_range (str):       The number of days of data to return
+            y_axis (str):           "plays" or "duration"
+            user_id (str):          The user id to filter the data
+            grouping (int):         0 or 1
+
+        Returns:
+            json:
+                {"categories":
+                    ["YYYY-MM-DD", "YYYY-MM-DD", ...]
+                 "series":
+                    [{"name": "Movies", "data": [...]}
+                     {"name": "TV", "data": [...]},
+                     {"name": "Music", "data": [...]}
+                     ]
+                 }
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_by_date',
+            'time_range': time_range,           # (str)
+            'y_axis': y_axis,                   # (str)
+            'user_id': user_id,                 # (str)
+            'grouping': grouping                # (bin)
+        }
+
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, time_range, is_required=False)
+        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(payload, user_id, is_required=False)
+        utils.check_bin_kw(payload, grouping, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_plays_by_dayofweek(self, time_range=None, y_axis=None,
+                               user_id=None, grouping=None):
+        """
+        Get graph data by day of the week.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            time_range (str):       The number of days of data to return
+            y_axis (str):           "plays" or "duration"
+            user_id (str):          The user id to filter the data
+            grouping (int):         0 or 1
+
+        Returns:
+            json:
+                {"categories":
+                    ["Sunday", "Monday", "Tuesday", ..., "Saturday"]
+                 "series":
+                    [{"name": "Movies", "data": [...]}
+                     {"name": "TV", "data": [...]},
+                     {"name": "Music", "data": [...]}
+                     ]
+                 }
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_by_dayofweek',
+            'time_range': time_range,               # (str)
+            'y_axis': y_axis,                       # (str)
+            'user_id': user_id,                     # (str)
+            'grouping': grouping                    # (bin)
+        }
+
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, time_range, is_required=False)
+        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(payload, user_id, is_required=False)
+        utils.check_bin_kw(payload, grouping, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_plays_by_hourofday(self, time_range=None, y_axis=None,
+                               user_id=None, grouping=None):
+        """
+        Get graph data by hour of the day.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            time_range (str):       The number of days of data to return
+            y_axis (str):           "plays" or "duration"
+            user_id (str):          The user id to filter the data
+            grouping (int):         0 or 1
+
+        Returns:
+            json:
+                {"categories":
+                    ["00", "01", "02", ..., "23"]
+                 "series":
+                    [{"name": "Movies", "data": [...]}
+                     {"name": "TV", "data": [...]},
+                     {"name": "Music", "data": [...]}
+                     ]
+                 }
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_by_hourofday',
+            'time_range': time_range,           # (str)
+            'y_axis': y_axis,                   # (str)
+            'user_id': user_id,                 # (str)
+            'grouping': grouping                # (bin)
+        }
+
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, time_range, is_required=False)
+        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(payload, user_id, is_required=False)
+        utils.check_bin_kw(payload, grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
