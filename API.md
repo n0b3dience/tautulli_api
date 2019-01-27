@@ -1775,7 +1775,7 @@ Returns:
 
 
 ### get_recently_added
-Get all items that where recelty added to plex.
+Get all items that where recently added to plex.
 
 ```
 Required parameters:
