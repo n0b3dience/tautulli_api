@@ -23,7 +23,12 @@ class Tautulli:
         # TODO: Figure out how the below ApiAuth works
         self.auth = TautulliApiAuth(api_key=API_KEY)
 
-    def get_history(self, **kwargs):
+    def get_history(self, grouping=None, user=None, user_id=None,
+                    rating_key=None, parent_rating_key=None,
+                    grandparent_rating_key=None, start_date=None,
+                    section_id=None, media_type=None,
+                    transcode_decision=None, order_column=None,
+                    order_dir=None, start=None, length=None, search=None):
         """
         Get the Tautulli history.
 
@@ -108,74 +113,55 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_history',
-            'grouping': None,                   # (int) 0 or 1
-            'user': None,                       # (str)
-            'user_id': None,                    # (int)
-            'rating_key': None,                 # (int)
-            'parent_rating_key': None,          # (int)
-            'grandparent_rating_key': None,     # (int)
-            'start_date': None,                 # (str) "YYYY-MM-DD"
-            'section_id': None,                 # (int)
-            'media_type': None,                 # (str)
-            'transcode_decision': None,         # (str)
-            'order_column': None,               # (str)
-            'order_dir': None,                  # (str)
-            'start': None,                      # (int)
-            'length': None,                     # (str)
-            'search': None                      # (str)
+            'grouping': grouping,                               # (bin)
+            'user': user,                                       # (str)
+            'user_id': user_id,                                 # (int)
+            'rating_key': rating_key,                           # (int)
+            'parent_rating_key': parent_rating_key,             # (int)
+            'grandparent_rating_key': grandparent_rating_key,   # (int)
+            'start_date': start_date,                           # (str)
+            'section_id': section_id,                           # (int)
+            'media_type': media_type,                           # (str)
+            'transcode_decision': transcode_decision,           # (str)
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
         }
 
-        pos_int_params = [
-            'user_id',
-            'rating_key',
-            'parent_rating_key',
-            'grandparent_rating_key',
-            'section_id',
-            'start'
+        media_type_list = ["movie", "episode", "track"]
+        transcode_decision_list = ["direct play", "copy", "transcode"]
+        order_column_list = [
+            "date", "friendly_name", "ip_address", "platform", "player",
+            "full_title", "started", "paused_counter", "stopped", "duration"
         ]
+        order_dir_list = ["desc", "asc"]
 
-        str_params = [
-            'user',
-            'start_date',
-            'media_type',
-            'transcode_decision',
-            'order_column',
-            'order_dir',
-            'length',
-            'search'
-        ]
+        # Check keyword arguments
+        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(payload, user, is_required=False)
+        utils.check_pos_int_kw(payload, user_id, is_required=False)
+        utils.check_pos_int_kw(payload, rating_key, is_required=False)
+        utils.check_pos_int_kw(payload, parent_rating_key, is_required=False)
+        utils.check_pos_int_kw(payload, grandparent_rating_key,
+                               is_required=False)
+        utils.check_str_kw(payload, start_date, is_required=False)
+        utils.check_pos_int_kw(payload, section_id, is_required=False)
+        utils.check_str_kw(payload, media_type, media_type_list,
+                           is_required=False)
+        utils.check_str_kw(payload, transcode_decision,
+                           transcode_decision_list, is_required=False)
+        utils.check_str_kw(payload, order_column, order_column_list,
+                           is_required=False)
+        utils.check_str_kw(payload, order_dir, order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(payload, start, is_required=False)
+        utils.check_pos_int_kw(payload, length, is_required=False)
+        utils.check_str_kw(payload, search, is_required=False)
 
-        bin_params = [
-            'grouping'
-        ]
-
-        # Parameter-check lists
-        param_check_dict = {
-            'media_type': ["movie", "episode", "track"],
-            'transcode_decision': ["direct play", "copy", "transcode"],
-            'order_column': [
-                "date", "friendly_name", "ip_address", "platform", "player",
-                "full_title", "started", "paused_counter", "stopped", "duration"
-            ],
-            'order_dir': ["desc", "asc"]
-        }
-
-        # Check parameters
-        utils.check_kwargs(kwargs, payload)
-        utils.check_param_types(
-            kwargs,
-            param_check_dict,
-            pos_int_list=pos_int_params,
-            str_list=str_params,
-            bin_list=bin_params
-        )
-
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def add_newsletter_config(self, agent_id=None):
         """
@@ -193,27 +179,14 @@ class Tautulli:
 
         payload = {
             'apikey': API_KEY,
-            'cmd': 'add_newsletter_config'
+            'cmd': 'add_newsletter_config',
+            'agent_id': agent_id                        # (int)
         }
 
-        if agent_id is not None:
-            if type(agent_id) == int:
-                payload['agent_id'] = agent_id
-            else:
-                raise TypeError(
-                    '"agent_id=<val>" <val> MUST be an INTEGER'
-                )
-        else:
-            raise ValueError(
-                '"agent_id" is a required keyword argument'
-            )
+        utils.check_pos_int_kw(payload, agent_id, is_required=True)
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def add_notifier_config(self, agent_id=None):
         """
@@ -231,27 +204,14 @@ class Tautulli:
 
         payload = {
             'apikey': API_KEY,
-            'cmd': 'add_notifier_config'
+            'cmd': 'add_notifier_config',
+            'agent_id': agent_id                            # (int)
         }
 
-        if agent_id is not None:
-            if type(agent_id) == int:
-                payload['agent_id'] = agent_id
-            else:
-                raise TypeError(
-                    '"agent_id=<val>" <val> MUST be an INTEGER'
-                )
-        else:
-            raise ValueError(
-                '"agent_id" is a required keyword argument'
-            )
+        utils.check_pos_int_kw(payload, agent_id, is_required=True)
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def arnold(self):
         """
@@ -263,12 +223,8 @@ class Tautulli:
             'cmd': 'arnold'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def backup_config(self):
         """
@@ -280,12 +236,8 @@ class Tautulli:
             'cmd': 'backup_config'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def backup_db(self):
         """
@@ -297,19 +249,15 @@ class Tautulli:
             'cmd': 'backup_db'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_all_library_history(self, section_id=None):
         """
         Delete all Tautulli history for a specific library.
 
         Required parameters:
-            section_id (str):       The id of the Plex library section
+            section_id (int):       The id of the Plex library section
 
         Optional parameters:
             None
@@ -320,33 +268,22 @@ class Tautulli:
 
         payload = {
             'apikey': API_KEY,
-            'cmd': 'delete_all_library_history'
+            'cmd': 'delete_all_library_history',
+            'section_id': section_id                        # (int) (req)
         }
 
-        if section_id is not None:
-            if type(section_id) == str:
-                payload['section_id'] = section_id
-                # Send request
-                response = utils.send_receive_request(
-                    self._base_url, params_dict=payload
-                )
-                # Return request
-                return response
-            else:
-                raise TypeError(
-                    '"section_id=<val>" <val> MUST be a STRING'
-                )
-        else:
-            raise ValueError(
-                '"section_id" is a required keyword argument'
-            )
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, section_id, is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_all_user_history(self, user_id=None):
         """
         Delete all Tautulli history for a specific user.
 
         Required parameters:
-            user_id (str):          The id of the Plex user
+            user_id (int):          The id of the Plex user
 
         Optional parameters:
             None
@@ -357,27 +294,15 @@ class Tautulli:
 
         payload = {
             'apikey': API_KEY,
-            'cmd': 'delete_all_user_history'
+            'cmd': 'delete_all_user_history',
+            'user_id': user_id                              # (int) (req)
         }
 
-        if user_id is not None:
-            if type(user_id) == str:
-                payload['user_id'] = user_id
-            else:
-                raise TypeError(
-                    '"user_id=<val>" <val> MUST be a STRING'
-                )
-        else:
-            raise ValueError(
-                '"user_id" is a required keyword argument'
-            )
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, user_id, is_required=True)
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_cache(self):
         """
@@ -389,14 +314,11 @@ class Tautulli:
             'cmd': 'delete_cache'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
-    def delete_hosted_images(self, **kwargs):
+    def delete_hosted_images(self, rating_key=None, service=None,
+                             delete_all=None):
         """
         Delete the images uploaded to image hosting services.
 
@@ -420,38 +342,18 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'delete_hosted_images',
-            'rating_key': None,     # (int)
-            'service': None,        # (str)
-            'delete_all': None      # (bool)
+            'rating_key': rating_key,                   # (int)
+            'service': service,                         # (str)
+            'delete_all': delete_all                    # (bool)
         }
 
-        pos_int_params = [
-            'rating_key'
-        ]
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, rating_key, is_required=False)
+        utils.check_str_kw(payload, service, is_required=False)
+        utils.check_bool_kw(payload, delete_all, is_required=False)
 
-        str_params = [
-            'service'
-        ]
-
-        bool_params = [
-            'delete_all'
-        ]
-
-        # Check parameters
-        utils.check_kwargs(kwargs, payload)
-        utils.check_param_types(
-            kwargs,
-            pos_int_list=pos_int_params,
-            str_list=str_params,
-            bool_list=bool_params
-        )
-
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_image_cache(self):
         """
@@ -463,12 +365,8 @@ class Tautulli:
             'cmd': 'delete_image_cache'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_library(self, section_id=None):
         """
@@ -488,27 +386,15 @@ class Tautulli:
 
         payload = {
             'apikey': API_KEY,
-            'cmd': 'delete_library'
+            'cmd': 'delete_library',
+            'section_id': section_id                    # (int) (req)
         }
 
-        if section_id is not None:
-            if type(section_id) == str:
-                payload['section_id'] = section_id
-            else:
-                raise TypeError(
-                    '"section_id=<val>" <val> MUST be a STRING'
-                )
-        else:
-            raise ValueError(
-                '"section_id" is a required keyword argument'
-            )
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, section_id, is_required=True)
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_login_log(self):
         """
@@ -529,12 +415,8 @@ class Tautulli:
             'cmd': 'delete_login_log'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_lookup_info(self, rating_key=None):
         """
@@ -570,12 +452,8 @@ class Tautulli:
                 '"rating_key" is a required keyword argument'
             )
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_media_info_cache(self, section_id=None):
         """
@@ -608,12 +486,8 @@ class Tautulli:
                 '"section_id" is a required keyword argument'
             )
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_mobile_device(self, mobile_device_id=None):
         """
@@ -646,12 +520,8 @@ class Tautulli:
                 '"mobile_device_id" is a required keyword argument'
             )
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_newsletter(self, newsletter_id=None):
         """
@@ -684,12 +554,8 @@ class Tautulli:
                 '"newsletter_id" is a required keyword argument'
             )
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_newsletter_log(self):
         """
@@ -710,12 +576,8 @@ class Tautulli:
             'cmd': 'delete_newsletter_log'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_notification_log(self):
         """
@@ -736,12 +598,8 @@ class Tautulli:
             'cmd': 'delete_notification_log'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_notifier(self, notifier_id=None):
         """
@@ -759,22 +617,15 @@ class Tautulli:
 
         payload = {
             'apikey': API_KEY,
-            'cmd': 'delete_temp_sessions',
+            'cmd': 'delete_notifier',
             'notifier_id': notifier_id
         }
 
-        if notifier_id is not None:
-            utils.check_pos_int_kw(payload, notifier_id)
-            # Send request
-            response = utils.send_receive_request(
-                self._base_url, params_dict=payload
-            )
-            # Return request
-            return response
-        else:
-            raise ValueError(
-                '"notifier_id" is a required keyword argument'
-            )
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, notifier_id, is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_temp_sessions(self):
         """
@@ -786,19 +637,15 @@ class Tautulli:
             'cmd': 'delete_temp_sessions'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def delete_user(self, user_id=None):
         """
         Delete a user from Tautulli. Also erases all history for the user.
 
         Required parameters:
-            user_id (str):          The id of the Plex user
+            user_id (int):          The id of the Plex user
 
         Optional parameters:
             None
@@ -809,26 +656,15 @@ class Tautulli:
 
         payload = {
             'apikey': API_KEY,
-            'cmd': 'delete_user'
+            'cmd': 'delete_user',
+            'user_id': user_id
         }
 
-        if user_id is not None:
-            if type(user_id) == str:
-                payload['user_id'] = user_id
-                # Send request
-                response = utils.send_receive_request(
-                    self._base_url, params_dict=payload
-                )
-                # Return request
-                return response
-            else:
-                raise TypeError(
-                    '"user_id=<val>" <val> MUST be a STRING'
-                )
-        else:
-            raise ValueError(
-                '"user_id" is a required keyword argument'
-            )
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, user_id, is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def docs(self):
         """
@@ -841,12 +677,8 @@ class Tautulli:
             'cmd': 'docs'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def docs_md(self):
         """
@@ -858,12 +690,8 @@ class Tautulli:
             'cmd': 'docs_md'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def download_config(self):
         """
@@ -875,12 +703,8 @@ class Tautulli:
             'cmd': 'download_config'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def download_database(self):
         """
@@ -892,12 +716,8 @@ class Tautulli:
             'cmd': 'download_database'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def download_log(self):
         """
@@ -909,12 +729,8 @@ class Tautulli:
             'cmd': 'download_log'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def download_plex_log(self):
         """
@@ -926,12 +742,8 @@ class Tautulli:
             'cmd': 'download_plex_log'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def edit_library(self, section_id=None, custom_thumb=None,
                      keep_history=None):
@@ -4297,6 +4109,325 @@ class Tautulli:
         # Check keyword arguments
         utils.check_str_kw(payload, query, is_required=True)
         utils.check_pos_int_kw(payload, limit, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def set_mobile_device_config(self, mobile_device_id=None,
+                                 friendly_name=None):
+        """
+        Configure an existing notification agent.
+
+        Required parameters:
+            mobile_device_id (int):        The mobile device config to update
+
+        Optional parameters:
+            friendly_name (str):           A friendly name to identify the
+                                           mobile device
+
+        Returns:
+            None
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'set_mobile_device_config',
+            'mobile_device_id': mobile_device_id,   # (int) (req)
+            'friendly_name': friendly_name          # (str)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, mobile_device_id, is_required=True)
+        utils.check_str_kw(payload, friendly_name, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def set_newsletter_config(self, newsletter_id=None, agent_id=None,
+                              newsletter_config_=None, newsletter_email_=None):
+        """
+        Configure an existing newsletter agent.
+
+        Required parameters:
+            newsletter_id (int):    The newsletter config to update
+            agent_id (int):         The newsletter type of the newsletter
+
+        Optional parameters:
+            Pass all the config options for the agent with the
+            'newsletter_config_' and 'newsletter_email_' prefix.
+
+        Returns:
+            None
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'set_newsletter_config',
+            'newsletter_id': newsletter_id,             # (int) (req)
+            'agent_id': agent_id,                       # (int) (req)
+            'newsletter_config_': newsletter_config_,   # (str)
+            'newsletter_email_': newsletter_email_      # (str)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, newsletter_id, is_required=True)
+        utils.check_pos_int_kw(payload, agent_id, is_required=True)
+        utils.check_str_kw(payload, newsletter_config_, is_required=False)
+        utils.check_str_kw(payload, newsletter_email_, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def set_notifier_config(self, notifier_id=None, agent_id=None, **cfg_opts):
+        """
+        Configure an existing notification agent.
+
+        Required parameters:
+            notifier_id (int):        The notifier config to update
+            agent_id (int):           The agent of the notifier
+
+        Optional parameters:
+            Pass all the config options for the agent with the agent prefix:
+                e.g. For Telegram: telegram_bot_token
+                                   telegram_chat_id
+                                   telegram_disable_web_preview
+                                   telegram_html_support
+                                   telegram_incl_poster
+                                   telegram_incl_subject
+            Notify actions (int):  0 or 1,
+                e.g. on_play, on_stop, etc.
+            Notify text (str):
+                e.g. on_play_subject, on_play_body, etc.
+
+        Returns:
+            None
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'set_notifier_config',
+            'notifier_id': notifier_id,         # (int) (req)
+            'agent_id': agent_id,               # (int) (req)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, notifier_id, is_required=True)
+        utils.check_pos_int_kw(payload, agent_id, is_required=True)
+
+        # Pack **cfg_opts in payload
+        for kw, val in cfg_opts.items():
+            payload[kw] = val
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def sql(self, query=None):
+        """
+        Query the Tautulli database with raw SQL. Automatically makes a
+        backup of the database if the latest backup is older then 24h.
+        `api_sql` must be manually enabled in the config file.
+
+        Required parameters:
+            query (str):        The SQL query
+
+        Optional parameters:
+            None
+
+        Returns:
+            None
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'sql',
+            'query': query,                 # (str) (req)
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, query, is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def terminate_session(self, session_key=None, session_id=None,
+                          message=None):
+        """
+        Stop a streaming session.
+
+        Required parameters:
+            session_key (int):          The session key of the session to
+                                        terminate, OR
+            session_id (str):           The session id of the session to
+                                        terminate
+
+        Optional parameters:
+            message (str):              A custom message to send to the client
+
+        Returns:
+            None
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'terminate_session',
+            'session_key': session_key,             # (int) (req, bitwise)
+            'session_id': session_id,               # (str) (req, bitwise)
+            'message': message                      # (str)
+        }
+
+        # Check for ONLY one required arguments
+        if session_key and session_id is None:
+            raise ValueError(
+                'Either "session_key" OR "session_id" is required'
+            )
+        elif session_key and session_id is not None:
+            raise ValueError(
+                'Only ONE required argument ("session_key" OR "session_id") '
+                'is required'
+            )
+        elif session_key is not None:
+            utils.check_pos_int_kw(payload, session_key)
+        elif session_id is not None:
+            utils.check_str_kw(payload, session_id)
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, message, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def undelete_library(self, session_key=None, session_name=None):
+        """
+        Restore a deleted library section to Tautulli.
+
+        Required parameters:
+            section_id (str):       The id of the Plex library section
+            section_name (str):     The name of the Plex library section
+
+        Optional parameters:
+            None
+
+        Returns:
+            None
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'undelete_library',
+            'session_key': session_key,                 # (str) (req)
+            'session_name': session_name                # (str) (req)
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, session_key, is_required=True)
+        utils.check_str_kw(payload, session_name, is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def undelete_user(self, user_id=None, username=None):
+        """
+        Restore a deleted user to Tautulli.
+
+        Required parameters:
+            user_id (str):          The id of the Plex user
+            username (str):         The username of the Plex user
+
+        Optional parameters:
+            None
+
+        Returns:
+            None
+        """
+
+    def uninstall_geoip_db(self):
+        """
+        Uninstalls the GeoLite2 database
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'uninstall_geoip_db'
+        }
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def update(self):
+        """
+        Update Tautulli.
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'update'
+        }
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def update_check(self):
+        """
+        Check for Tautulli updates.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            None
+
+        Returns:
+            json
+                {"result": "success",
+                 "update": true,
+                 "message": "An update for Tautulli is available."
+                }
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'update_check'
+        }
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def update_metadata_details(self, old_rating_key=None,
+                                new_rating_key=None, media_type=None):
+        """
+        Update the metadata in the Tautulli database by matching rating keys.
+        Also updates all parents or children of the media item if it is a
+        show/season/episode or artist/album/track.
+
+        Required parameters:
+            old_rating_key (int):       12345
+            new_rating_key (int):       54321
+            media_type (str):           "movie", "show", "season",
+                                        "episode", "artist", "album", "track"
+
+        Optional parameters:
+            None
+
+        Returns:
+            None
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'undelete_library',
+            'old_rating_key': old_rating_key,       # (int) (req)
+            'new_rating_key': new_rating_key,       # (int) (req)
+            'media_type': media_type                # (str) (req)
+        }
+
+        media_type_list = ["movie", "show", "season", "episode", "artist",
+                           "album", "track"]
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, old_rating_key, is_required=True)
+        utils.check_pos_int_kw(payload, new_rating_key, is_required=True)
+        utils.check_str_kw(payload, media_type, media_type_list,
+                           is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
