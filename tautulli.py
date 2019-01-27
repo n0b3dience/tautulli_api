@@ -1762,9 +1762,670 @@ class Tautulli:
             'cmd': 'get_library_names'
         }
 
-        # Send request
-        response = utils.send_receive_request(
-            self._base_url, params_dict=payload
-        )
-        # Return request
-        return response
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_library_user_stats(self, section_id=None, grouping=None):
+        """
+        Get a library's user statistics.
+
+        Required parameters:
+            section_id (int):               The id of the Plex library section
+
+        Optional parameters:
+            grouping (int):         0 or 1
+
+        Returns:
+            json:
+                [{"friendly_name": "Jon Snow",
+                  "total_plays": 170,
+                  "user_id": 133788,
+                  "user_thumb": "https://plex.tv/users/k10w42309cynaopq/avatar"
+                  },
+                 {"platform_type": "DanyKhaleesi69",
+                  "total_plays": 42,
+                  "user_id": 8008135,
+                  "user_thumb": "https://plex.tv/users/568gwwoib5t98a3a/avatar"
+                  },
+                 {...},
+                 {...}
+                 ]
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_library_user_stats',
+            'section_id': section_id,           # (int)
+            'grouping': grouping                # (int) 0 or 1
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, section_id, is_required=True)
+        utils.check_bin_kw(payload, grouping, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_library_watch_time_stats(self, section_id=None, grouping=None):
+        """
+        Get a library's watch time statistics.
+
+        Required parameters:
+            section_id (int):               The id of the Plex library section
+
+        Optional parameters:
+            grouping (int):         0 or 1
+
+        Returns:
+            json:
+                [{"query_days": 1,
+                  "total_plays": 0,
+                  "total_time": 0
+                  },
+                 {"query_days": 7,
+                  "total_plays": 3,
+                  "total_time": 15694
+                  },
+                 {"query_days": 30,
+                  "total_plays": 35,
+                  "total_time": 63054
+                  },
+                 {"query_days": 0,
+                  "total_plays": 508,
+                  "total_time": 1183080
+                  }
+                 ]
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_library_watch_time_stats',
+            'section_id': section_id,               # (int)
+            'grouping': grouping                    # (int) 0 or 1
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, section_id, is_required=True)
+        utils.check_bin_kw(payload, grouping, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_logs(self, sort=None, search=None, order=None, regex=None,
+                 start=None, end=None):
+        """
+        Get the Tautulli logs.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            sort (str):         "time", "thread", "msg", "loglevel"
+            search (str):       A string to search for
+            order (str):        "desc" or "asc"
+            regex (str):        A regex string to search for
+            start (int):        Row number to start from
+            end (int):          Row number to end at
+
+        Returns:
+            json:
+                [{"loglevel": "DEBUG",
+                  "msg": "Latest version is
+                         2d10b0748c7fa2ee4cf59960c3d3fffc6aa9512b",
+                  "thread": "MainThread",
+                  "time": "2016-05-08 09:36:51 "
+                  },
+                 {...},
+                 {...}
+                 ]
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_logs',
+            'sort': sort,           # (str)
+            'search': search,       # (str)
+            'order': order,         # (str)
+            'regex': regex,         # (str)
+            'start': start,         # (int)
+            'end': start            # (int)
+        }
+
+        sort_list = ["time", "thread", "msg", "loglevel"]
+        order_list = ["desc", "asc"]
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, sort, sort_list, is_required=False)
+        utils.check_str_kw(payload, search, is_required=False)
+        utils.check_str_kw(payload, order, order_list, is_required=False)
+        utils.check_str_kw(payload, regex, is_required=False)
+        utils.check_pos_int_kw(payload, start, is_required=False)
+        utils.check_pos_int_kw(payload, end, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_metadata(self, rating_key=None):
+        """
+        Get the metadata for a media item.
+
+        Required parameters:
+            rating_key (str):       Rating key of the item
+
+        Optional parameters:
+            None
+
+        Returns:
+            json:
+                {"actors": [
+                    "Kit Harington",
+                    "Emilia Clarke",
+                    "Isaac Hempstead-Wright",
+                    "Maisie Williams",
+                    "Liam Cunningham",
+                 ],
+                 "added_at": "1461572396",
+                 "art": "/library/metadata/1219/art/1462175063",
+                 "audience_rating": "8",
+                 "audience_rating_image":
+                    "rottentomatoes://image.rating.upright",
+                 "banner": "/library/metadata/1219/banner/1462175063",
+                 "collections": [],
+                 "content_rating": "TV-MA",
+                 "directors": [
+                    "Jeremy Podeswa"
+                 ],
+                 "duration": "2998290",
+                 "full_title": "Game of Thrones - The Red Woman",
+                 "genres": [
+                    "Adventure",
+                    "Drama",
+                    "Fantasy"
+                 ],
+                 "grandparent_rating_key": "1219",
+                 "grandparent_thumb": "/library/metadata/1219/thumb/1462175063",
+                 "grandparent_title": "Game of Thrones",
+                 "guid": "com.plexapp.agents.thetvdb://121361/6/1?lang=en",
+                 "labels": [],
+                 "last_viewed_at": "1462165717",
+                 "library_name": "TV Shows",
+                 "media_index": "1",
+                 "media_info": [
+                     {
+                         "aspect_ratio": "1.78",
+                         "audio_channel_layout": "5.1",
+                         "audio_channels": "6",
+                         "audio_codec": "ac3",
+                         "audio_profile": "",
+                         "bitrate": "10617",
+                         "container": "mkv",
+                         "height": "1078",
+                         "id": "257925",
+                         "optimized_version": 0,
+                         "parts": [
+                             {
+                                 "file": "/media/TV Shows/Game of
+                                         Thrones/Season 06/Game of Thrones -
+                                         S06E01 - The Red Woman.mkv",
+                                 "file_size": "3979115377",
+                                 "id": "274169",
+                                 "indexes": 1,
+                                 "streams": [
+                                     {
+                                         "id": "511663",
+                                         "type": "1",
+                                         "video_bit_depth": "8",
+                                         "video_bitrate": "10233",
+                                         "video_codec": "h264",
+                                         "video_codec_level": "41",
+                                         "video_frame_rate": "23.976",
+                                         "video_height": "1078",
+                                         "video_language": "",
+                                         "video_language_code": "",
+                                         "video_profile": "high",
+                                         "video_ref_frames": "4",
+                                         "video_width": "1920",
+                                         "selected": 0
+                                     },
+                                     {
+                                         "audio_bitrate": "384",
+                                         "audio_bitrate_mode": "",
+                                         "audio_channel_layout": "5.1(side)",
+                                         "audio_channels": "6",
+                                         "audio_codec": "ac3",
+                                         "audio_language": "",
+                                         "audio_language_code": "",
+                                         "audio_profile": "",
+                                         "audio_sample_rate": "48000",
+                                         "id": "511664",
+                                         "type": "2",
+                                         "selected": 1
+                                     },
+                                     {
+                                         "id": "511953",
+                                         "subtitle_codec": "srt",
+                                         "subtitle_container": "",
+                                         "subtitle_forced": 0,
+                                         "subtitle_format": "srt",
+                                         "subtitle_language": "English",
+                                         "subtitle_language_code": "eng",
+                                         "subtitle_location": "external",
+                                         "type": "3",
+                                         "selected": 1
+                                     }
+                                 ]
+                             }
+                         ],
+                         "video_codec": "h264",
+                         "video_framerate": "24p",
+                         "video_profile": "high",
+                         "video_resolution": "1080",
+                         "width": "1920"
+                     }
+                 ],
+                 "media_type": "episode",
+                 "original_title": "",
+                 "originally_available_at": "2016-04-24",
+                 "parent_media_index": "6",
+                 "parent_rating_key": "153036",
+                 "parent_thumb": "/library/metadata/153036/thumb/1462175062",
+                 "parent_title": "",
+                 "rating": "7.8",
+                 "rating_image": "rottentomatoes://image.rating.ripe",
+                 "rating_key": "153037",
+                 "section_id": "2",
+                 "sort_title": "Game of Thrones",
+                 "studio": "HBO",
+                 "summary": "Jon Snow is dead. Daenerys meets a strong man.
+                            Cersei sees her daughter again.",
+                 "tagline": "",
+                 "thumb": "/library/metadata/153037/thumb/1462175060",
+                 "title": "The Red Woman",
+                 "user_rating": "9.0",
+                 "updated_at": "1462175060",
+                 "writers": [
+                    "David Benioff",
+                    "D. B. Weiss"
+                 ],
+                 "year": "2016"
+                 }
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_metadata',
+            'rating_key': rating_key
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, rating_key, is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_new_rating_keys(self, rating_key=None, media_type=None):
+        """
+        Get a list of new rating keys for the PMS of all of the
+        item's parent/children.
+
+        Required parameters:
+            rating_key (str):       '12345'
+            media_type (str):       "movie", "show", "season",
+                                    "episode", "artist", "album",
+                                    "track"
+
+        Optional parameters:
+            None
+
+        Returns:
+            json:
+                {}
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_new_rating_keys',
+            'rating_key': rating_key,
+            'media_type': media_type
+        }
+
+        media_type_list = ['movie', 'show', 'season', 'episode', 'artist',
+                           'album', 'track']
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, rating_key, is_required=True)
+        utils.check_str_kw(payload, media_type, media_type_list,
+                           is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_newsletter_config(self, newsletter_id=None):
+        """
+        Get the configuration for an existing notification agent.
+
+        Required parameters:
+            newsletter_id (int):        The newsletter config to retrieve
+
+        Optional parameters:
+            None
+
+        Returns:
+            json:
+                {"id": 1,
+                 "agent_id": 0,
+                 "agent_name": "recently_added",
+                 "agent_label": "Recently Added",
+                 "friendly_name": "",
+                 "id_name": "",
+                 "cron": "0 0 * * 1",
+                 "active": 1,
+                 "subject": "Recently Added to {server_name}! ({end_date})",
+                 "body": "View the newsletter here: {newsletter_url}",
+                 "message": "",
+                 "config": {"custom_cron": 0,
+                            "filename": "newsletter_{newsletter_uuid}.html",
+                            "formatted": 1,
+                            "incl_libraries": ["1", "2"],
+                            "notifier_id": 1,
+                            "save_only": 0,
+                            "time_frame": 7,
+                            "time_frame_units": "days"
+                            },
+                 "email_config": {...},
+                 "config_options": [{...}, ...],
+                 "email_config_options": [{...}, ...]
+                 }
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_newsletter_config',
+            'newsletter_id': newsletter_id      # (int)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, newsletter_id, is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_newsletter_log(self, order_column=None, order_dir=None,
+                           start=None, length=None, search=None):
+        """
+        Get the data on the Tautulli newsletter logs table.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            order_column (str):             "timestamp", "newsletter_id",
+                                            "agent_name", "notify_action",
+                                            "subject_text", "start_date",
+                                            "end_date", "uuid"
+            order_dir (str):                "desc" or "asc"
+            start (int):                    Row to start from, 0
+            length (int):                   Number of items to return, 25
+            search (str):                   A string to search for, "Telegram"
+
+        Returns:
+            json:
+                {"draw": 1,
+                 "recordsTotal": 1039,
+                 "recordsFiltered": 163,
+                 "data":
+                    [{"agent_id": 0,
+                      "agent_name": "recently_added",
+                      "end_date": "2018-03-18",
+                      "id": 7,
+                      "newsletter_id": 1,
+                      "notify_action": "on_cron",
+                      "start_date": "2018-03-05",
+                      "subject_text": "Recently Added to Plex
+                                      (Winterfell-Server)! (2018-03-18)",
+                      "success": 1,
+                      "timestamp": 1462253821,
+                      "uuid": "7fe4g65i"
+                      },
+                     {...},
+                     {...}
+                     ]
+                 }
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_newsletter_log',
+            'order_column': order_column,   # (str)
+            'order_dir': order_dir,         # (str)
+            'start': start,                 # (int)
+            'length': length,               # (int)
+            'search': search                # (str)
+        }
+
+        order_column_list = ["timestamp", "newsletter_id", "agent_name",
+                             "notify_action", "subject_text", "start_date",
+                             "end_date", "uuid"]
+        order_dir_list = ["desc", "asc"]
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, order_column, order_column_list,
+                           is_required=False)
+        utils.check_str_kw(payload, order_dir, order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(payload, start, is_required=False)
+        utils.check_pos_int_kw(payload, length, is_required=False)
+        utils.check_str_kw(payload, search, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_newsletters(self):
+        """
+        Get a list of configured newsletters.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            None
+
+        Returns:
+            json:
+                [{"id": 1,
+                  "agent_id": 0,
+                  "agent_name": "recently_added",
+                  "agent_label": "Recently Added",
+                  "friendly_name": "",
+                  "cron": "0 0 * * 1",
+                  "active": 1
+                  }
+                 ]
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_newsletters'
+        }
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_notification_log(self, order_column=None, order_dir=None,
+                             start=None, length=None, search=None):
+        """
+        Get the data on the Tautulli notification logs table.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            order_column (str):             "timestamp", "notifier_id",
+                                            "agent_name", "notify_action",
+                                            "subject_text", "body_text"
+            order_dir (str):                "desc" or "asc"
+            start (int):                    Row to start from, 0
+            length (int):                   Number of items to return, 25
+            search (str):                   A string to search for, "Telegram"
+
+        Returns:
+            json:
+                {"draw": 1,
+                 "recordsTotal": 1039,
+                 "recordsFiltered": 163,
+                 "data":
+                    [{"agent_id": 13,
+                      "agent_name": "telegram",
+                      "body_text": "DanyKhaleesi69 started playing
+                                   The Red Woman.",
+                      "id": 1000,
+                      "notify_action": "on_play",
+                      "rating_key": 153037,
+                      "session_key": 147,
+                      "subject_text": "Tautulli (Winterfell-Server)",
+                      "success": 1,
+                      "timestamp": 1462253821,
+                      "user": "DanyKhaleesi69",
+                      "user_id": 8008135
+                      },
+                     {...},
+                     {...}
+                     ]
+                 }
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_notification_log',
+            'order_column': order_column,   # (str)
+            'order_dir': order_dir,         # (str)
+            'start': start,                 # (int)
+            'length': length,               # (int)
+            'search': search                # (str)
+        }
+
+        order_column_list = ["timestamp", "notifier_id", "agent_name",
+                             "notify_action", "subject_text", "body_text"]
+        order_dir_list = ["desc", "asc"]
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, order_column, order_column_list,
+                           is_required=False)
+        utils.check_str_kw(payload, order_dir, order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(payload, start, is_required=False)
+        utils.check_pos_int_kw(payload, length, is_required=False)
+        utils.check_str_kw(payload, search, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_notifier_config(self, notifier_id=None):
+        """
+        Get the configuration for an existing notification agent.
+
+        Required parameters:
+            notifier_id (int):        The notifier config to retrieve
+
+        Optional parameters:
+            None
+
+        Returns:
+            json:
+                {"id": 1,
+                 "agent_id": 13,
+                 "agent_name": "telegram",
+                 "agent_label": "Telegram",
+                 "friendly_name": "",
+                 "config": {"incl_poster": 0,
+                            "html_support": 1,
+                            "chat_id": "123456",
+                            "bot_token": "13456789:fio9040NNo04jLEp-4S",
+                            "incl_subject": 1,
+                            "disable_web_preview": 0
+                            },
+                 "config_options": [{...}, ...]
+                 "actions": {"on_play": 0,
+                             "on_stop": 0,
+                             ...
+                             },
+                 "notify_text": {"on_play": {"subject": "...",
+                                             "body": "..."
+                                             }
+                                 "on_stop": {"subject": "...",
+                                             "body": "..."
+                                             }
+                                 ...
+                                 }
+                 }
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_notifier_config',
+            'notifier_id': notifier_id          # (int)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, notifier_id, is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_notifier_parameters(self):
+        """
+        Get the list of available notification parameters.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            None
+
+        Returns:
+            json:
+                {
+                 }
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_notifier_config'
+        }
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_notifiers(self, notify_action=None):
+        """
+        Get a list of configured notifiers.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            notify_action (str):        The notification action to filter out
+
+        Returns:
+            json:
+                [{"id": 1,
+                  "agent_id": 13,
+                  "agent_name": "telegram",
+                  "agent_label": "Telegram",
+                  "friendly_name": "",
+                  "active": 1
+                  }
+                 ]
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_notifier_config',
+            'notify_action': notify_action      # (str)
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, notify_action, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
