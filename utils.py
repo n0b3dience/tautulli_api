@@ -6,8 +6,8 @@ Utility functions for tautulli_api
 
 
 # Function to check if kwargs are correct
-def check_kwargs(kwarg_dict, payload_dict):
-    for kw, val in kwarg_dict.items():
+def check_kwargs(kw_dict, payload_dict):
+    for kw, val in kw_dict.items():
         if kw in payload_dict:
             payload_dict[kw] = val
         else:
@@ -17,7 +17,7 @@ def check_kwargs(kwarg_dict, payload_dict):
 
 
 # Check kwarg type functions
-def check_bin_kw(kw_dict, kw_item):
+def check_bin_kw(kw_dict, kw_item, is_required=False):
     if kw_dict[kw_item] is not None:
         if kw_dict[kw_item] == 0 | 1:
             pass
@@ -25,11 +25,15 @@ def check_bin_kw(kw_dict, kw_item):
             raise TypeError(
                 '"{0}=<val>" <val> MUST be 0 or 1'.format(kw_item)
             )
+    elif is_required:
+            raise ValueError(
+                '"{0}" is a required keyword argument'
+            )
     else:
         pass
 
 
-def check_bool_kw(kw_dict, kw_item):
+def check_bool_kw(kw_dict, kw_item, is_required=False):
     if kw_dict[kw_item] is not None:
         if type(kw_dict[kw_item]) == bool:
             pass
@@ -37,11 +41,15 @@ def check_bool_kw(kw_dict, kw_item):
             raise TypeError(
                 '"{0}=<val>" <val> MUST be BOOLEAN'.format(kw_item)
             )
+    elif is_required:
+            raise ValueError(
+                '"{0}" is a required keyword argument'
+            )
     else:
         pass
 
 
-def check_str_kw(kw_dict, kw_item, *value_check_dict):
+def check_str_kw(kw_dict, kw_item, *value_check_dict, is_required=False):
     if kw_dict[kw_item] is not None:
         if type(kw_dict[kw_item]) == str:
             if kw_dict[kw_item] in value_check_dict:
@@ -58,11 +66,15 @@ def check_str_kw(kw_dict, kw_item, *value_check_dict):
             raise TypeError(
                 '"{0}=<val>" <val> MUST be a STRING'.format(kw_item)
             )
+    elif is_required:
+            raise ValueError(
+                '"{0}" is a required keyword argument'
+            )
     else:
         pass
 
 
-def check_pos_int_kw(kw_dict, kw_item):
+def check_pos_int_kw(kw_dict, kw_item, is_required=False):
     if kw_dict[kw_item] is not None:
         if type(kw_dict[kw_item]) == int:
             if kw_dict[kw_item] >= 0:
@@ -74,6 +86,10 @@ def check_pos_int_kw(kw_dict, kw_item):
         else:
             raise TypeError(
                 '"{0}=<val>" <val> MUST be an INTEGER'.format(kw_item)
+            )
+    elif is_required:
+            raise ValueError(
+                '"{0}" is a required keyword argument'
             )
     else:
         pass

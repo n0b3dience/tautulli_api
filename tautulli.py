@@ -933,7 +933,8 @@ class Tautulli:
         # Return request
         return response
 
-    def edit_library(self):
+    def edit_library(self, section_id=None, custom_thumb=None,
+                     keep_history=None):
         """
         Update a library section on Tautulli.
 
@@ -949,7 +950,24 @@ class Tautulli:
             None
         """
 
-    def edit_user(self):
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'edit_library',
+            'section_id': section_id,
+            'custom_thumb': custom_thumb,
+            'keep_history': keep_history
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, section_id, is_required=True)
+        utils.check_str_kw(payload, custom_thumb, is_required=False)
+        utils.check_bin_kw(payload, keep_history, is_required=False)
+
+        # Send request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def edit_user(self, user_id=None, friendly_name=None, custom_thumb=None,
+                  keep_history=None, allow_guest=None):
         """
         Update a user on Tautulli.
 
@@ -966,7 +984,27 @@ class Tautulli:
             None
         """
 
-    def get_activity(self):
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'edit_user',
+            'user_id': user_id,
+            'friendly_name': friendly_name,
+            'custom_thumb': custom_thumb,
+            'keep_history': keep_history,
+            'allow_guest': allow_guest
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, user_id, is_required=True)
+        utils.check_str_kw(payload, friendly_name, is_required=False)
+        utils.check_str_kw(payload, custom_thumb, is_required=False)
+        utils.check_bin_kw(payload, keep_history, is_required=False)
+        utils.check_bool_kw(payload, allow_guest, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_activity(self, session_key=None, session_id=None):
         """
         Get the current activity on the PMS.
 
@@ -1208,7 +1246,21 @@ class Tautulli:
                  }
         """
 
-    def get_apikey(self):
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_activity',
+            'session_key': session_key,
+            'session_id': session_id
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, session_key, is_required=False)
+        utils.check_str_kw(payload, session_id, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_apikey(self, username=None, password=None):
         """
         Get the apikey. Username and password are required if auth is enabled.
         Makes and saves the apikey if it does not exist.
@@ -1223,6 +1275,20 @@ class Tautulli:
         Returns:
             string:             "apikey"
         """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_apikey',
+            'username': username,
+            'password': password
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, username, is_required=False)
+        utils.check_str_kw(payload, password, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def get_date_formats(self):
         """
@@ -1253,7 +1319,7 @@ class Tautulli:
         # Return request
         return response
 
-    def get_geoip_lookup(self):
+    def get_geoip_lookup(self, ip_address=None):
         """
         Get the geolocation info for an IP address.
         The GeoLite2 database must be installed.
@@ -1281,7 +1347,20 @@ class Tautulli:
                  }
         """
 
-    def get_home_stats(self):
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_geoip_lookup',
+            'ip_address': ip_address
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, ip_address, is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_home_stats(self, grouping=None, time_range=None, stats_type=None,
+                       stats_count=None):
         """
         Get the homepage watch statistics.
 
@@ -1356,6 +1435,24 @@ class Tautulli:
                  ]
         """
 
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_home_stats',
+            'grouping': grouping,
+            'time_range': time_range,
+            'stats_type': stats_type,
+            'stats_count': stats_count
+        }
+
+        # Check keyword arguments
+        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(payload, time_range, is_required=False)
+        utils.check_bin_kw(payload, stats_type, is_required=False)
+        utils.check_str_kw(payload, stats_count, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
     def get_libraries(self):
         """
         Get a list of all libraries on your server.
@@ -1394,7 +1491,8 @@ class Tautulli:
         # Return request
         return response
 
-    def get_libraries_table(self):
+    def get_libraries_table(self, order_column=None, order_dir=None,
+                            start=None, length=None, search=None):
         """
         Get the data on the Tautulli libraries table.
 
@@ -1450,12 +1548,42 @@ class Tautulli:
                  }
         """
 
-    def get_library(self):
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_libraries_table',
+            'order_column': order_column,
+            'order_dir': order_dir,
+            'start': start,
+            'length': length,
+            'search': search
+        }
+
+        order_column_list = [
+            "library_thumb", "section_name", "section_type", "count",
+            "parent_count", "child_count", "last_accessed", "last_played",
+            "plays", "duration"
+        ]
+
+        order_dir_list = ["asc", "desc"]
+
+        # Check keyword arguments
+        utils.check_str_kw(payload, order_column, order_column_list,
+                           is_required=False)
+        utils.check_str_kw(payload, order_dir, order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(payload, start, is_required=False)
+        utils.check_pos_int_kw(payload, length, is_required=False)
+        utils.check_str_kw(payload, search, is_required=False)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_library(self, section_id=None):
         """
         Get a library's details.
 
         Required parameters:
-            section_id (str):               The id of the Plex library section
+            section_id (int):               The id of the Plex library section
 
         Optional parameters:
             None
@@ -1476,12 +1604,27 @@ class Tautulli:
                  }
         """
 
-    def get_library_media_info(self):
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_library',
+            'section_id': section_id
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(payload, section_id, is_required=True)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
+
+    def get_library_media_info(self, section_id=None, rating_key=None,
+                               section_type=None, order_column=None,
+                               order_dir=None, start=None, length=None,
+                               search=None, refresh=None):
         """
         Get the data on the Tautulli media info tables.
 
         Required parameters:
-            section_id (str):               The id of the Plex library
+            section_id (int):               The id of the Plex library
                                             section, OR
             rating_key (str):               The grandparent or parent rating key
 
@@ -1536,6 +1679,55 @@ class Tautulli:
                      ]
                  }
         """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_library_media_info',
+            'section_id': section_id,           # (int)
+            'rating_key': rating_key,           # (str)
+            'section_type': section_type,       # (str)
+            'order_column': order_column,       # (str)
+            'order_dir': order_dir,             # (str)
+            'start': start,                     # (int)
+            'length': length,                   # (int)
+            'search': search,                   # (str)
+            'refresh': refresh                  # (str)
+        }
+
+        section_type_list = ["movie", "show", "artist", "photo"]
+        order_column_list = [
+            "added_at", "sort_title", "container", "bitrate", "video_codec",
+            "video_resolution", "video_framerate", "audio_codec",
+            "audio_channels",  "file_size", "last_played", "play_count"
+        ]
+        order_dir_list = ["desc", "asc"]
+
+        # Check for ONLY one required arguments
+        if section_id and rating_key is None:
+            raise ValueError(
+                'Either "section_id" OR "rating_key" is required'
+            )
+        elif section_id and rating_key is not None:
+            raise ValueError(
+                'Only ONE required argument ("section_id" OR "rating_key") '
+                'is required'
+            )
+        elif section_id is not None:
+            utils.check_pos_int_kw(payload, section_id)
+        elif rating_key is not None:
+            utils.check_str_kw(payload, rating_key)
+
+        # Check optional keyword arguments
+        utils.check_str_kw(payload, section_type, section_type_list)
+        utils.check_str_kw(payload, order_column, order_column_list)
+        utils.check_str_kw(payload, order_dir, order_dir_list)
+        utils.check_pos_int_kw(payload, start)
+        utils.check_pos_int_kw(payload, length)
+        utils.check_str_kw(payload, search)
+        utils.check_str_kw(payload, refresh)
+
+        # Send/receive request
+        utils.send_receive_request(self._base_url, params_dict=payload)
 
     def get_library_names(self):
         """
