@@ -6,76 +6,90 @@ Utility functions for tautulli_api
 
 
 # Function to check if kwargs are correct
-def check_kwargs(kwarg_dict, payload_dict):
-    for k, v in kwarg_dict.items():
-        if k in payload_dict:
-            payload_dict[k] = v
+def check_kwargs(kw_dict, payload_dict):
+    for kw, val in kw_dict.items():
+        if kw in payload_dict:
+            payload_dict[kw] = val
         else:
             raise ValueError(
-                '{0} is not an accepted parameter'.format(k)
+                '{0} is not an accepted parameter'.format(kw)
             )
 
 
-# Check kwarg type functions
-def check_bin_kw(kw_dict, kw_item):
-    if kw_dict[kw_item] is not None:
-        if kw_dict[kw_item] == 0 | 1:
+def check_bin_kw(kw_item, is_required=False):
+    if kw_item is not None:
+        if kw_item == 0 | 1:
             pass
         else:
             raise TypeError(
-                '"{0}=<val>" <val> MUST be 0 or 1'.format(kw_item)
+                'BINARY TYPE ERROR'
+            )
+    elif is_required:
+            raise ValueError(
+                'ERROR - BINARY VALUE IS REQUIRED'
             )
     else:
         pass
 
 
-def check_str_kw(kw_dict, kw_item, *value_check_dict):
-    if kw_dict[kw_item] is not None:
-        if type(kw_dict[kw_item]) == str:
-            if kw_dict[kw_item] in value_check_dict:
-                if kw_dict[kw_item] in value_check_dict[kw_item]:
-                    pass
-                else:
-                    raise ValueError(
-                        '"{0}=<val>" <val> MUST be one of the following:\n'
-                        '    {1}'.format(kw_item, value_check_dict[kw_item])
-                    )
-            else:
-                pass
+def check_bool_kw(kw_item, is_required=False):
+    if kw_item is not None:
+        if type(kw_item) == bool:
+            pass
         else:
             raise TypeError(
-                '"{0}=<val>" <val> MUST be a STRING'.format(kw_item)
+                'BOOLEAN TYPE ERROR'
+            )
+    elif is_required:
+            raise ValueError(
+                'ERROR - BOOLEAN VALUE IS REQUIRED'
             )
     else:
         pass
 
 
-def check_pos_int_kw(kw_dict, kw_item):
-    if kw_dict[kw_item] is not None:
-        if type(kw_dict[kw_item]) == int:
-            if kw_dict[kw_item] >= 0:
+def check_str_kw(kw_item, value_check_dict=None, is_required=False):
+    if kw_item is not None:
+        if type(kw_item) == str:
+            if value_check_dict is None:
+                pass
+            elif kw_item in value_check_dict:
                 pass
             else:
                 raise ValueError(
-                    '"{0}=<val>" <val> CANNOT be NEGATIVE'.format(kw_item)
+                    'INCORRECT STRING ERROR'
                 )
         else:
             raise TypeError(
-                '"{0}=<val>" <val> MUST be an INTEGER'.format(kw_item)
+                'STRING TYPE ERROR'
+            )
+    elif is_required:
+            raise ValueError(
+                'ERROR - STRING VALUE IS REQUIRED'
             )
     else:
         pass
 
 
-def check_param_types(kw_dict, pos_int_list,
-                      str_list, bin_list, *value_check_dict):
-    for k in kw_dict.items():
-        if k in pos_int_list:
-            check_pos_int_kw(kw_dict, k)
-        elif k in str_list:
-            check_str_kw(kw_dict, k, value_check_dict)
-        elif k in bin_list:
-            check_bin_kw(kw_dict, k)
+def check_pos_int_kw(kw_item, is_required=False):
+    if kw_item is not None:
+        if type(kw_item) == int:
+            if kw_item >= 0:
+                pass
+            else:
+                raise ValueError(
+                    'ERROR - INTEGER VALUE CANNOT BE NEGATIVE'
+                )
+        else:
+            raise TypeError(
+                'INTEGER TYPE ERROR'
+            )
+    elif is_required:
+            raise ValueError(
+                'ERROR - INTEGER VALUE IS REQUIRED'
+            )
+    else:
+        pass
 
 
 # Send/receive requests
