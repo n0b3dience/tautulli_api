@@ -162,7 +162,8 @@ class Tautulli:
         utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def add_newsletter_config(self, agent_id=None):
         """
@@ -187,7 +188,8 @@ class Tautulli:
         utils.check_pos_int_kw(agent_id, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def add_notifier_config(self, agent_id=None):
         """
@@ -212,7 +214,8 @@ class Tautulli:
         utils.check_pos_int_kw(agent_id, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def arnold(self):
         """
@@ -225,7 +228,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def backup_config(self):
         """
@@ -238,7 +242,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def backup_db(self):
         """
@@ -251,7 +256,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_all_library_history(self, section_id=None):
         """
@@ -277,7 +283,8 @@ class Tautulli:
         utils.check_pos_int_kw(section_id, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_all_user_history(self, user_id=None):
         """
@@ -303,7 +310,8 @@ class Tautulli:
         utils.check_pos_int_kw(user_id, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_cache(self):
         """
@@ -316,7 +324,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_hosted_images(self, rating_key=None, service=None,
                              delete_all=None):
@@ -354,7 +363,8 @@ class Tautulli:
         utils.check_bool_kw(delete_all, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_image_cache(self):
         """
@@ -367,7 +377,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_library(self, section_id=None):
         """
@@ -395,7 +406,8 @@ class Tautulli:
         utils.check_pos_int_kw(section_id, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_login_log(self):
         """
@@ -417,7 +429,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_lookup_info(self, rating_key=None):
         """
@@ -454,7 +467,8 @@ class Tautulli:
             )
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_media_info_cache(self, section_id=None):
         """
@@ -488,7 +502,8 @@ class Tautulli:
             )
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_mobile_device(self, mobile_device_id=None):
         """
@@ -522,7 +537,8 @@ class Tautulli:
             )
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_newsletter(self, newsletter_id=None):
         """
@@ -556,7 +572,8 @@ class Tautulli:
             )
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_newsletter_log(self):
         """
@@ -578,7 +595,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_notification_log(self):
         """
@@ -600,7 +618,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_notifier(self, notifier_id=None):
         """
@@ -626,7 +645,8 @@ class Tautulli:
         utils.check_pos_int_kw(notifier_id, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_temp_sessions(self):
         """
@@ -639,7 +659,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_user(self, user_id=None):
         """
@@ -665,7 +686,8 @@ class Tautulli:
         utils.check_pos_int_kw(user_id, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def docs(self):
         """
@@ -679,7 +701,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def docs_md(self):
         """
@@ -692,7 +715,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def download_config(self):
         """
@@ -705,7 +729,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def download_database(self):
         """
@@ -718,7 +743,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def download_log(self):
         """
@@ -731,7 +757,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def download_plex_log(self):
         """
@@ -744,7 +771,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def edit_library(self, section_id=None, custom_thumb=None,
                      keep_history=None):
@@ -777,7 +805,8 @@ class Tautulli:
         utils.check_bin_kw(keep_history, is_required=False)
 
         # Send request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def edit_user(self, user_id=None, friendly_name=None, custom_thumb=None,
                   keep_history=None, allow_guest=None):
@@ -815,7 +844,8 @@ class Tautulli:
         utils.check_bool_kw(allow_guest, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_activity(self, session_key=None, session_id=None):
         """
@@ -1071,7 +1101,8 @@ class Tautulli:
         utils.check_str_kw(session_id, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_apikey(self, username=None, password=None):
         """
@@ -1101,7 +1132,8 @@ class Tautulli:
         utils.check_str_kw(password, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_date_formats(self):
         """
@@ -1170,7 +1202,8 @@ class Tautulli:
         utils.check_str_kw(ip_address, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_home_stats(self, grouping=None, time_range=None, stats_type=None,
                        stats_count=None):
@@ -1264,7 +1297,8 @@ class Tautulli:
         utils.check_str_kw(stats_count, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_libraries(self):
         """
@@ -1389,7 +1423,8 @@ class Tautulli:
         utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_library(self, section_id=None):
         """
@@ -1427,7 +1462,8 @@ class Tautulli:
         utils.check_pos_int_kw(section_id, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_library_media_info(self, section_id=None, rating_key=None,
                                section_type=None, order_column=None,
@@ -1540,7 +1576,8 @@ class Tautulli:
         utils.check_str_kw(refresh)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_library_names(self):
         """
@@ -1576,7 +1613,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_library_user_stats(self, section_id=None, grouping=None):
         """
@@ -1617,7 +1655,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_library_watch_time_stats(self, section_id=None, grouping=None):
         """
@@ -1662,7 +1701,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_logs(self, sort=None, search=None, order=None, regex=None,
                  start=None, end=None):
@@ -1716,7 +1756,8 @@ class Tautulli:
         utils.check_pos_int_kw(end, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_metadata(self, rating_key=None):
         """
@@ -1874,7 +1915,8 @@ class Tautulli:
         utils.check_str_kw(rating_key, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_new_rating_keys(self, rating_key=None, media_type=None):
         """
@@ -1911,7 +1953,8 @@ class Tautulli:
                            is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_newsletter_config(self, newsletter_id=None):
         """
@@ -1961,7 +2004,8 @@ class Tautulli:
         utils.check_pos_int_kw(newsletter_id, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_newsletter_log(self, order_column=None, order_dir=None,
                            start=None, length=None, search=None):
@@ -2031,7 +2075,8 @@ class Tautulli:
         utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_newsletters(self):
         """
@@ -2062,7 +2107,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_notification_log(self, order_column=None, order_dir=None,
                              start=None, length=None, search=None):
@@ -2131,7 +2177,8 @@ class Tautulli:
         utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_notifier_config(self, notifier_id=None):
         """
@@ -2183,7 +2230,8 @@ class Tautulli:
         utils.check_pos_int_kw(notifier_id, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_notifier_parameters(self):
         """
@@ -2207,7 +2255,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_notifiers(self, notify_action=None):
         """
@@ -2241,7 +2290,8 @@ class Tautulli:
         utils.check_str_kw(notify_action, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
         
     def get_old_rating_keys(self, rating_key=None, media_type=None):
         """
@@ -2278,7 +2328,8 @@ class Tautulli:
                            is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_plays_by_date(self, time_range=None, y_axis=None, user_id=None,
                           grouping=None):
@@ -2324,7 +2375,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_plays_by_dayofweek(self, time_range=None, y_axis=None,
                                user_id=None, grouping=None):
@@ -2370,7 +2422,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_plays_by_hourofday(self, time_range=None, y_axis=None,
                                user_id=None, grouping=None):
@@ -2416,7 +2469,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_plays_by_source_resolution(self, time_range=None, y_axis=None,
                                        user_id=None, grouping=None):
@@ -2461,7 +2515,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_plays_by_stream_resolution(self, time_range=None, y_axis=None,
                                        user_id=None, grouping=None):
@@ -2507,7 +2562,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_plays_by_stream_type(self, time_range=None, y_axis=None,
                                  user_id=None, grouping=None):
@@ -2553,7 +2609,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_plays_by_top_10_platforms(self, time_range=None, y_axis=None,
                                       user_id=None, grouping=None):
@@ -2599,7 +2656,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_plays_by_top_10_users(self, time_range=None, y_axis=None,
                                   user_id=None, grouping=None):
@@ -2645,7 +2703,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_plays_per_month(self, time_range=None, y_axis=None,
                             user_id=None, grouping=None):
@@ -2691,7 +2750,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_plex_log(self, window=None, log_type=None):
         """
@@ -2729,7 +2789,8 @@ class Tautulli:
         utils.check_str_kw(log_type, log_type_list, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_pms_token(self, username=None, password=None):
         """
@@ -2758,7 +2819,8 @@ class Tautulli:
         utils.check_str_kw(password, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_pms_update(self):
         """
@@ -2793,7 +2855,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
         
     def get_recently_added(self, count=25, start=None, media_type=None,
                            section_id=None):
@@ -2857,7 +2920,8 @@ class Tautulli:
         utils.check_pos_int_kw(section_id, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_server_friendly_name(self):
         """
@@ -2879,7 +2943,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_server_id(self, hostname='localhost', port=32400, ssl=None,
                       remote=None):
@@ -2915,7 +2980,8 @@ class Tautulli:
         utils.check_str_kw(remote, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_server_identity(self):
         """
@@ -2941,7 +3007,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_server_list(self):
         """
@@ -2974,7 +3041,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_server_pref(self, pref=None):
         """
@@ -2997,7 +3065,8 @@ class Tautulli:
         utils.check_str_kw(pref, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_servers_info(self):
         """
@@ -3026,7 +3095,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_settings(self, key=None):
         """
@@ -3056,7 +3126,8 @@ class Tautulli:
         utils.check_str_kw(key, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_stream_data(self, row_id=None, session_key=None):
         """
@@ -3143,7 +3214,8 @@ class Tautulli:
             utils.check_pos_int_kw(session_key)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_stream_type_by_top_10_platforms(self, time_range=None,
                                             y_axis=None, user_id=None,
@@ -3190,7 +3262,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_stream_type_by_top_10_users(self, time_range=None, y_axis=None,
                                         user_id=None, grouping=None):
@@ -3236,7 +3309,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_synced_items(self, machine_id=None, user_id=None):
         """
@@ -3291,7 +3365,8 @@ class Tautulli:
         utils.check_str_kw(user_id, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
     
     def get_user(self, user_id=None):
         """
@@ -3331,7 +3406,8 @@ class Tautulli:
         utils.check_str_kw(user_id, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_user_ips(self, user_id=None, order_column=None, order_dir=None,
                      start=None, length=None, search=None):
@@ -3407,7 +3483,8 @@ class Tautulli:
         utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_user_logins(self, user_id=None, order_column=None,
                         order_dir=None, start=None, length=None, search=None):
@@ -3478,7 +3555,8 @@ class Tautulli:
         utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_user_names(self):
         """
@@ -3505,7 +3583,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_user_player_stats(self, user_id=None, grouping=None):
         """
@@ -3546,7 +3625,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_user_watch_time_stats(self, user_id=None, grouping=None):
         """
@@ -3591,7 +3671,8 @@ class Tautulli:
         utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_users(self):
         """
@@ -3635,7 +3716,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_users_table(self, order_column=None, order_dir=None, start=None, 
                         length=None, search=None):
@@ -3717,7 +3799,8 @@ class Tautulli:
         utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
         
     def get_whois_lookup(self, ip_address=None):
         """
@@ -3760,7 +3843,8 @@ class Tautulli:
         utils.check_str_kw(ip_address, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
     
     def import_database(self, app=None, database_path=None, table_name=None, 
                         import_ignore_interval=None):
@@ -3802,7 +3886,8 @@ class Tautulli:
                                is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
     
     def install_geoip_db(self):
         """
@@ -3815,7 +3900,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
     
     def notify(self, notifier_id=None, subject=None, body=None, 
                script_args=None):
@@ -3850,7 +3936,8 @@ class Tautulli:
         utils.check_str_kw(script_args, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
     
     def notify_newsletter(self, newsletter_id=None, subject=None, body=None, 
                           message=None):
@@ -3885,7 +3972,8 @@ class Tautulli:
         utils.check_str_kw(message, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
         
     def notify_recently_added(self, rating_key=None, notifier_id=None):
         """
@@ -3919,7 +4007,8 @@ class Tautulli:
         utils.check_pos_int_kw(notifier_id, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def pms_image_proxy(self, img=None, rating_key=None, width=None,
                         height=None, opacity=None, background=None,
@@ -3995,7 +4084,8 @@ class Tautulli:
         utils.check_bool_kw(return_hash, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def refresh_libraries_list(self):
         """
@@ -4008,7 +4098,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def refresh_users_list(self):
         """
@@ -4021,7 +4112,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def register_device(self, device_name=None, device_id=None,
                         friendly_name=None):
@@ -4056,7 +4148,8 @@ class Tautulli:
         utils.check_str_kw(friendly_name, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def restart(self):
         """
@@ -4069,7 +4162,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def search(self, query=None, limit=None):
         """
@@ -4112,7 +4206,8 @@ class Tautulli:
         utils.check_pos_int_kw(limit, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def set_mobile_device_config(self, mobile_device_id=None,
                                  friendly_name=None):
@@ -4142,7 +4237,8 @@ class Tautulli:
         utils.check_str_kw(friendly_name, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def set_newsletter_config(self, newsletter_id=None, agent_id=None,
                               newsletter_config_=None, newsletter_email_=None):
@@ -4177,7 +4273,8 @@ class Tautulli:
         utils.check_str_kw(newsletter_email_, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def set_notifier_config(self, notifier_id=None, agent_id=None, **cfg_opts):
         """
@@ -4220,7 +4317,8 @@ class Tautulli:
             payload[kw] = val
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def sql(self, query=None):
         """
@@ -4248,7 +4346,8 @@ class Tautulli:
         utils.check_str_kw(query, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def terminate_session(self, session_key=None, session_id=None,
                           message=None):
@@ -4295,7 +4394,8 @@ class Tautulli:
         utils.check_str_kw(message, is_required=False)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def undelete_library(self, session_key=None, session_name=None):
         """
@@ -4324,7 +4424,8 @@ class Tautulli:
         utils.check_str_kw(session_name, is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def undelete_user(self, user_id=None, username=None):
         """
@@ -4352,7 +4453,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def update(self):
         """
@@ -4365,7 +4467,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def update_check(self):
         """
@@ -4391,7 +4494,8 @@ class Tautulli:
         }
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def update_metadata_details(self, old_rating_key=None,
                                 new_rating_key=None, media_type=None):
@@ -4431,4 +4535,5 @@ class Tautulli:
                            is_required=True)
 
         # Send/receive request
-        utils.send_receive_request(self._base_url, params_dict=payload)
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
