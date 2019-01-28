@@ -1216,8 +1216,8 @@ class Tautulli:
         Optional parameters:
             grouping (bin):         0 or 1
             time_range (str):       The time range to calculate statistics, '30'
-            stats_type (int):       0 for plays, 1 for duration
-            stats_count (str):      The number of top items to list, '5'
+            stats_type (bin):       0 for plays, 1 for duration
+            stats_count (int):      The number of top items to list, 5
 
         Returns:
             json:
@@ -1286,15 +1286,15 @@ class Tautulli:
             'cmd': 'get_home_stats',
             'grouping': grouping,                               # (bin)
             'time_range': time_range,                           # (str)
-            'stats_type': stats_type,                           # (int)
-            'stats_count': stats_count                          # (str)
+            'stats_type': stats_type,                           # (bin)
+            'stats_count': stats_count                          # (int)
         }
 
         # Check keyword arguments
         utils.check_bin_kw(grouping, is_required=False)
         utils.check_str_kw(time_range, is_required=False)
         utils.check_bin_kw(stats_type, is_required=False)
-        utils.check_str_kw(stats_count, is_required=False)
+        utils.check_pos_int_kw(stats_count, is_required=False)
 
         # Send/receive request
         resp = utils.send_receive_request(self._base_url, params_dict=payload)
