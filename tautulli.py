@@ -1214,7 +1214,7 @@ class Tautulli:
             None
 
         Optional parameters:
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
             time_range (str):       The time range to calculate statistics, '30'
             stats_type (int):       0 for plays, 1 for duration
             stats_count (str):      The number of top items to list, '5'
@@ -1284,10 +1284,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_home_stats',
-            'grouping': grouping,
-            'time_range': time_range,
-            'stats_type': stats_type,
-            'stats_count': stats_count
+            'grouping': grouping,                   # (bin)
+            'time_range': time_range,               # (str)
+            'stats_type': stats_type,               # (int)
+            'stats_count': stats_count              # (str)
         }
 
         # Check keyword arguments
@@ -2437,7 +2437,7 @@ class Tautulli:
             time_range (str):       The number of days of data to return
             y_axis (str):           "plays" or "duration"
             user_id (str):          The user id to filter the data
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
 
         Returns:
             json:
@@ -2454,10 +2454,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_plays_by_hourofday',
-            'time_range': time_range,           # (str)
-            'y_axis': y_axis,                   # (str)
-            'user_id': user_id,                 # (str)
-            'grouping': grouping                # (bin)
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
         }
 
         y_axis_list = ['plays', 'duration']
@@ -2484,7 +2484,7 @@ class Tautulli:
             time_range (str):       The number of days of data to return
             y_axis (str):           "plays" or "duration"
             user_id (str):          The user id to filter the data
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
 
         Returns:
             json:
@@ -2500,10 +2500,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_plays_by_source_resolution',
-            'time_range': time_range,           # (str)
-            'y_axis': y_axis,                   # (str)
-            'user_id': user_id,                 # (str)
-            'grouping': grouping                # (bin)
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
         }
 
         y_axis_list = ['plays', 'duration']
@@ -2530,7 +2530,7 @@ class Tautulli:
             time_range (str):       The number of days of data to return
             y_axis (str):           "plays" or "duration"
             user_id (str):          The user id to filter the data
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
 
         Returns:
             json:
@@ -2547,10 +2547,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_plays_by_stream_resolution',
-            'time_range': time_range,  # (str)
-            'y_axis': y_axis,  # (str)
-            'user_id': user_id,  # (str)
-            'grouping': grouping  # (bin)
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
         }
 
         y_axis_list = ['plays', 'duration']
@@ -2577,7 +2577,7 @@ class Tautulli:
             time_range (str):       The number of days of data to return
             y_axis (str):           "plays" or "duration"
             user_id (str):          The user id to filter the data
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
 
         Returns:
             json:
@@ -2594,10 +2594,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_plays_by_stream_type',
-            'time_range': time_range,  # (str)
-            'y_axis': y_axis,  # (str)
-            'user_id': user_id,  # (str)
-            'grouping': grouping  # (bin)
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
         }
 
         y_axis_list = ['plays', 'duration']
@@ -2624,7 +2624,7 @@ class Tautulli:
             time_range (str):       The number of days of data to return
             y_axis (str):           "plays" or "duration"
             user_id (str):          The user id to filter the data
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
 
         Returns:
             json:
@@ -2641,10 +2641,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_plays_by_top_10_platforms',
-            'time_range': time_range,  # (str)
-            'y_axis': y_axis,  # (str)
-            'user_id': user_id,  # (str)
-            'grouping': grouping  # (bin)
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
         }
 
         y_axis_list = ['plays', 'duration']
@@ -2671,7 +2671,7 @@ class Tautulli:
             time_range (str):       The number of days of data to return
             y_axis (str):           "plays" or "duration"
             user_id (str):          The user id to filter the data
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
 
         Returns:
             json:
@@ -2688,10 +2688,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_plays_by_top_10_users',
-            'time_range': time_range,  # (str)
-            'y_axis': y_axis,  # (str)
-            'user_id': user_id,  # (str)
-            'grouping': grouping  # (bin)
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
         }
 
         y_axis_list = ['plays', 'duration']
@@ -2718,7 +2718,7 @@ class Tautulli:
             time_range (str):       The number of months of data to return
             y_axis (str):           "plays" or "duration"
             user_id (str):          The user id to filter the data
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
 
         Returns:
             json:
@@ -2735,10 +2735,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_plays_per_month',
-            'time_range': time_range,           # (str)
-            'y_axis': y_axis,                   # (str)
-            'user_id': user_id,                 # (str)
-            'grouping': grouping                # (bin)
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
         }
 
         y_axis_list = ['plays', 'duration']
@@ -2778,8 +2778,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_plex_log',
-            'window': window,           # (int)
-            'log_type': log_type        # (str)
+            'window': window,                                   # (int)
+            'log_type': log_type                                # (str)
         }
 
         log_type_list = ['server', 'scanner']
@@ -2810,8 +2810,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_pms_token',
-            'username': username,           # (str)
-            'password': password            # (str)
+            'username': username,                               # (str)
+            'password': password                                # (str)
         }
 
         # Check keyword arguments
@@ -2904,10 +2904,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_recently_added',
-            'count': count,             # (int)
-            'start': start,             # (int)
-            'type': media_type,         # (str)
-            'section_id': section_id    # (int)
+            'count': count,                                     # (int) (req)
+            'start': start,                                     # (int)
+            'type': media_type,                                 # (str)
+            'section_id': section_id                            # (int)
         }
 
         media_type_list = ["movie", "show", "artist"]
@@ -2956,8 +2956,8 @@ class Tautulli:
             port (int):         32400
 
         Optional parameters:
-            ssl (int):          0 or 1
-            remote (int):       0 or 1
+            ssl (bin):          0 or 1
+            remote (bin):       0 or 1
 
         Returns:
             json:
@@ -2967,17 +2967,17 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_server_id',
-            'hostname': hostname,
-            'port': port,
-            'ssl': ssl,
-            'remote': remote
+            'hostname': hostname,                               # (str) (req)
+            'port': port,                                       # (int) (req)
+            'ssl': ssl,                                         # (bin)
+            'remote': remote                                    # (bin)
         }
 
         # Check keyword arguments
         utils.check_str_kw(hostname, is_required=True)
         utils.check_pos_int_kw(port, is_required=True)
-        utils.check_str_kw(ssl, is_required=False)
-        utils.check_str_kw(remote, is_required=False)
+        utils.check_bin_kw(ssl, is_required=False)
+        utils.check_bin_kw(remote, is_required=False)
 
         # Send/receive request
         resp = utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3058,7 +3058,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_server_pref',
-            'pref': pref                    # (str)
+            'pref': pref                                        # (str)
         }
 
         # Check keyword arguments
@@ -3119,7 +3119,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_settings',
-            'key': key                  # (str)
+            'key': key                                          # (str)
         }
 
         # Check keyword arguments
@@ -3194,8 +3194,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_stream_data',
-            'row_id': row_id,           # (int)
-            'session_key': session_key  # (int)
+            'row_id': row_id,                                   # (int)
+            'session_key': session_key                          # (int)
         }
 
         # Check for ONLY one required arguments
@@ -3230,7 +3230,7 @@ class Tautulli:
             time_range (str):       The number of days of data to return
             y_axis (str):           "plays" or "duration"
             user_id (str):          The user id to filter the data
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
 
         Returns:
             json:
@@ -3247,10 +3247,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_stream_type_by_top_10_platforms',
-            'time_range': time_range,  # (str)
-            'y_axis': y_axis,  # (str)
-            'user_id': user_id,  # (str)
-            'grouping': grouping  # (bin)
+            'time_range': time_range,                               # (str)
+            'y_axis': y_axis,                                       # (str)
+            'user_id': user_id,                                     # (str)
+            'grouping': grouping                                    # (bin)
         }
 
         y_axis_list = ['plays', 'duration']
@@ -3277,7 +3277,7 @@ class Tautulli:
             time_range (str):       The number of days of data to return
             y_axis (str):           "plays" or "duration"
             user_id (str):          The user id to filter the data
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
 
         Returns:
             json:
@@ -3294,10 +3294,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_stream_type_by_top_10_users',
-            'time_range': time_range,  # (str)
-            'y_axis': y_axis,  # (str)
-            'user_id': user_id,  # (str)
-            'grouping': grouping  # (bin)
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
         }
 
         y_axis_list = ['plays', 'duration']
@@ -3399,7 +3399,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_user',
-            'user_id': user_id              # (str)
+            'user_id': user_id                                  # (str)
         }
 
         # Check keyword arguments
@@ -3460,12 +3460,12 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_user_ips',
-            'user_id': user_id,                 # (str) (req)
-            'order_column': order_column,       # (str)
-            'order_dir': order_dir,             # (str)
-            'start': start,                     # (int)
-            'length': length,                   # (int)
-            'search': search                    # (str)
+            'user_id': user_id,                                 # (str) (req)
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
         }
 
         order_column_list = ["last_seen", "ip_address", "platform", "player", 
@@ -3532,12 +3532,12 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_user_logins',
-            'user_id': user_id,  # (str) (req)
-            'order_column': order_column,  # (str)
-            'order_dir': order_dir,  # (str)
-            'start': start,  # (int)
-            'length': length,  # (int)
-            'search': search  # (str)
+            'user_id': user_id,                                 # (str) (req)
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
         }
 
         order_column_list = ["date", "time", "ip_address", "host",
@@ -3594,7 +3594,7 @@ class Tautulli:
             user_id (str):          The id of the Plex user
 
         Optional parameters:
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
 
         Returns:
             json:
@@ -3636,7 +3636,7 @@ class Tautulli:
             user_id (str):          The id of the Plex user
 
         Optional parameters:
-            grouping (int):         0 or 1
+            grouping (bin):         0 or 1
 
         Returns:
             json:
@@ -3923,10 +3923,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'notify',
-            'notifier_id': notifier_id,         # (int) (req)
-            'subject': subject,                 # (str) (req)
-            'body': body,                       # (str) (req)
-            'script_args': script_args          # (str)
+            'notifier_id': notifier_id,                         # (int) (req)
+            'subject': subject,                                 # (str) (req)
+            'body': body,                                       # (str) (req)
+            'script_args': script_args                          # (str)
         }
 
         # Check keyword arguments
@@ -3959,10 +3959,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'notify_newsletter',
-            'newsletter_id': newsletter_id,     # (int) (req)
-            'subject': subject,                 # (str)
-            'body': body,                       # (str)
-            'message': message                  # (str)
+            'newsletter_id': newsletter_id,                     # (int) (req)
+            'subject': subject,                                 # (str)
+            'body': body,                                       # (str)
+            'message': message                                  # (str)
         }
 
         # Check keyword arguments
@@ -3998,8 +3998,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'notify_recently_added',
-            'rating_key': rating_key,               # (int) (req)
-            'notifier_id': notifier_id              # (int)
+            'rating_key': rating_key,                           # (int) (req)
+            'notifier_id': notifier_id                          # (int)
         }
 
         # Check keyword arguments
@@ -4042,17 +4042,17 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'pms_image_proxy',
-            'img': img,                             # (str) (req, bitwise)
-            'rating_key': rating_key,               # (int) (req, bitwise)
-            'width': width,                         # (int)
-            'height': height,                       # (int)
-            'opacity': opacity,                     # (int)
-            'background': background,               # (int)
-            'blur': blur,                           # (int)
-            'img_format': img_format,               # (str)
-            'fallback': fallback,                   # (str)
-            'refresh': refresh,                     # (bool)
-            'return_hash': return_hash              # (bool)
+            'img': img,                                 # (str) (req, bitwise)
+            'rating_key': rating_key,                   # (int) (req, bitwise)
+            'width': width,                             # (int)
+            'height': height,                           # (int)
+            'opacity': opacity,                         # (int)
+            'background': background,                   # (int)
+            'blur': blur,                               # (int)
+            'img_format': img_format,                   # (str)
+            'fallback': fallback,                       # (str)
+            'refresh': refresh,                         # (bool)
+            'return_hash': return_hash                  # (bool)
         }
 
         fallback_list = ["poster", "cover", "art"]
@@ -4137,9 +4137,9 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'register_device',
-            'device_name': device_name,                 # (str)
-            'device_id': device_id,                     # (str)
-            'friendly_name': friendly_name              # (str)
+            'device_name': device_name,                         # (str) (req)
+            'device_id': device_id,                             # (str) (req)
+            'friendly_name': friendly_name                      # (str)
         }
 
         # Check keyword arguments
@@ -4197,8 +4197,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'search',
-            'query': query,                     # (str) (req)
-            'limit': limit                      # (int)
+            'query': query,                                     # (str) (req)
+            'limit': limit                                      # (int)
         }
 
         # Check keyword arguments
@@ -4228,8 +4228,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'set_mobile_device_config',
-            'mobile_device_id': mobile_device_id,   # (int) (req)
-            'friendly_name': friendly_name          # (str)
+            'mobile_device_id': mobile_device_id,               # (int) (req)
+            'friendly_name': friendly_name                      # (str)
         }
 
         # Check keyword arguments
@@ -4260,10 +4260,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'set_newsletter_config',
-            'newsletter_id': newsletter_id,             # (int) (req)
-            'agent_id': agent_id,                       # (int) (req)
-            'newsletter_config_': newsletter_config_,   # (str)
-            'newsletter_email_': newsletter_email_      # (str)
+            'newsletter_id': newsletter_id,                     # (int) (req)
+            'agent_id': agent_id,                               # (int) (req)
+            'newsletter_config_': newsletter_config_,           # (str)
+            'newsletter_email_': newsletter_email_              # (str)
         }
 
         # Check keyword arguments
@@ -4292,7 +4292,7 @@ class Tautulli:
                                    telegram_html_support
                                    telegram_incl_poster
                                    telegram_incl_subject
-            Notify actions (int):  0 or 1,
+            Notify actions (bin):  0 or 1,
                 e.g. on_play, on_stop, etc.
             Notify text (str):
                 e.g. on_play_subject, on_play_body, etc.
@@ -4339,7 +4339,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'sql',
-            'query': query,                 # (str) (req)
+            'query': query,                         # (str) (req)
         }
 
         # Check keyword arguments
