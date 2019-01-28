@@ -100,3 +100,18 @@ def send_receive_request(url, params_dict):
         return response
     else:
         r.raise_for_status()
+
+
+# Send/receive request with text response
+def send_receive_request_text(url, params_dict):
+    r = requests.get(url, params=params_dict)
+    if r.status_code == 200:
+        return r
+    else:
+        r.raise_for_status()
+
+
+# Pretty print json
+def pprint_json(json_data, sort_keys=True, indent=4):
+    pprint_result = json.dumps(json_data, sort_keys=sort_keys, indent=indent)
+    return pprint_result

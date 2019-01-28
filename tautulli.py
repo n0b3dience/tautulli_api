@@ -182,7 +182,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'add_newsletter_config',
-            'agent_id': agent_id                        # (int)
+            'agent_id': agent_id                                # (int)
         }
 
         utils.check_pos_int_kw(agent_id, is_required=True)
@@ -208,7 +208,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'add_notifier_config',
-            'agent_id': agent_id                            # (int)
+            'agent_id': agent_id                                # (int)
         }
 
         utils.check_pos_int_kw(agent_id, is_required=True)
@@ -276,7 +276,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'delete_all_library_history',
-            'section_id': section_id                        # (int) (req)
+            'section_id': section_id                            # (int) (req)
         }
 
         # Check keyword arguments
@@ -303,7 +303,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'delete_all_user_history',
-            'user_id': user_id                              # (int) (req)
+            'user_id': user_id                                  # (int) (req)
         }
 
         # Check keyword arguments
@@ -352,9 +352,9 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'delete_hosted_images',
-            'rating_key': rating_key,                   # (int)
-            'service': service,                         # (str)
-            'delete_all': delete_all                    # (bool)
+            'rating_key': rating_key,                           # (int)
+            'service': service,                                 # (str)
+            'delete_all': delete_all                            # (bool)
         }
 
         # Check keyword arguments
@@ -399,7 +399,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'delete_library',
-            'section_id': section_id                    # (int) (req)
+            'section_id': section_id                        # (int) (req)
         }
 
         # Check keyword arguments
@@ -638,7 +638,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'delete_notifier',
-            'notifier_id': notifier_id
+            'notifier_id': notifier_id                          # (int)
         }
 
         # Check keyword arguments
@@ -679,7 +679,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'delete_user',
-            'user_id': user_id
+            'user_id': user_id                                  # (int) (req)
         }
 
         # Check keyword arguments
@@ -785,7 +785,7 @@ class Tautulli:
         Optional parameters:
             custom_thumb (str):         The URL for the custom
                                         library thumbnail
-            keep_history (int):         0 or 1
+            keep_history (bin):         0 or 1
 
         Returns:
             None
@@ -794,9 +794,9 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'edit_library',
-            'section_id': section_id,
-            'custom_thumb': custom_thumb,
-            'keep_history': keep_history
+            'section_id': section_id,                           # (str) (req)
+            'custom_thumb': custom_thumb,                       # (str)
+            'keep_history': keep_history                        # (bin)
         }
 
         # Check keyword arguments
@@ -819,8 +819,8 @@ class Tautulli:
         Optional parameters:
             friendly_name(str):         The friendly name of the user
             custom_thumb (str):         The URL for the custom user thumbnail
-            keep_history (int):         0 or 1
-            allow_guest (int):          0 or 1
+            keep_history (bin):         0 or 1
+            allow_guest (bin):          0 or 1
 
         Returns:
             None
@@ -829,11 +829,11 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'edit_user',
-            'user_id': user_id,
-            'friendly_name': friendly_name,
-            'custom_thumb': custom_thumb,
-            'keep_history': keep_history,
-            'allow_guest': allow_guest
+            'user_id': user_id,                                 # (str) (req)
+            'friendly_name': friendly_name,                     # (str)
+            'custom_thumb': custom_thumb,                       # (str)
+            'keep_history': keep_history,                       # (bin)
+            'allow_guest': allow_guest                          # (bin)
         }
 
         # Check keyword arguments
@@ -841,7 +841,7 @@ class Tautulli:
         utils.check_str_kw(friendly_name, is_required=False)
         utils.check_str_kw(custom_thumb, is_required=False)
         utils.check_bin_kw(keep_history, is_required=False)
-        utils.check_bool_kw(allow_guest, is_required=False)
+        utils.check_bin_kw(allow_guest, is_required=False)
 
         # Send/receive request
         resp = utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1092,8 +1092,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_activity',
-            'session_key': session_key,
-            'session_id': session_id
+            'session_key': session_key,                         # (int)
+            'session_id': session_id                            # (str)
         }
 
         # Check keyword arguments
@@ -1123,8 +1123,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_apikey',
-            'username': username,
-            'password': password
+            'username': username,                               # (str)
+            'password': password                                # (str)
         }
 
         # Check keyword arguments
@@ -1195,7 +1195,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_geoip_lookup',
-            'ip_address': ip_address
+            'ip_address': ip_address                            # (str) (req)
         }
 
         # Check keyword arguments
@@ -1284,10 +1284,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_home_stats',
-            'grouping': grouping,                   # (bin)
-            'time_range': time_range,               # (str)
-            'stats_type': stats_type,               # (int)
-            'stats_count': stats_count              # (str)
+            'grouping': grouping,                               # (bin)
+            'time_range': time_range,                           # (str)
+            'stats_type': stats_type,                           # (int)
+            'stats_count': stats_count                          # (str)
         }
 
         # Check keyword arguments
@@ -1398,11 +1398,11 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_libraries_table',
-            'order_column': order_column,
-            'order_dir': order_dir,
-            'start': start,
-            'length': length,
-            'search': search
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
         }
 
         order_column_list = [
@@ -1532,15 +1532,15 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_library_media_info',
-            'section_id': section_id,           # (int)
-            'rating_key': rating_key,           # (str)
-            'section_type': section_type,       # (str)
-            'order_column': order_column,       # (str)
-            'order_dir': order_dir,             # (str)
-            'start': start,                     # (int)
-            'length': length,                   # (int)
-            'search': search,                   # (str)
-            'refresh': refresh                  # (str)
+            'section_id': section_id,                           # (int)
+            'rating_key': rating_key,                           # (str)
+            'section_type': section_type,                       # (str)
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search,                                   # (str)
+            'refresh': refresh                                  # (str)
         }
 
         section_type_list = ["movie", "show", "artist", "photo"]
@@ -1624,7 +1624,7 @@ class Tautulli:
             section_id (int):               The id of the Plex library section
 
         Optional parameters:
-            grouping (int):         0 or 1
+            grouping (bin):                 0 or 1
 
         Returns:
             json:
@@ -1646,8 +1646,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_library_user_stats',
-            'section_id': section_id,           # (int)
-            'grouping': grouping                # (int) 0 or 1
+            'section_id': section_id,                           # (int)
+            'grouping': grouping                                # (bin)
         }
 
         # Check keyword arguments
@@ -1666,7 +1666,7 @@ class Tautulli:
             section_id (int):               The id of the Plex library section
 
         Optional parameters:
-            grouping (int):         0 or 1
+            grouping (bin):                 0 or 1
 
         Returns:
             json:
@@ -1692,8 +1692,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_library_watch_time_stats',
-            'section_id': section_id,               # (int)
-            'grouping': grouping                    # (int) 0 or 1
+            'section_id': section_id,                           # (int)
+            'grouping': grouping                                # (bin)
         }
 
         # Check keyword arguments
@@ -1736,12 +1736,12 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_logs',
-            'sort': sort,           # (str)
-            'search': search,       # (str)
-            'order': order,         # (str)
-            'regex': regex,         # (str)
-            'start': start,         # (int)
-            'end': start            # (int)
+            'sort': sort,                                       # (str)
+            'search': search,                                   # (str)
+            'order': order,                                     # (str)
+            'regex': regex,                                     # (str)
+            'start': start,                                     # (int)
+            'end': start                                        # (int)
         }
 
         sort_list = ["time", "thread", "msg", "loglevel"]
@@ -1908,7 +1908,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_metadata',
-            'rating_key': rating_key
+            'rating_key': rating_key                            # (str)
         }
 
         # Check keyword arguments
@@ -1940,8 +1940,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_new_rating_keys',
-            'rating_key': rating_key,
-            'media_type': media_type
+            'rating_key': rating_key,                           # (str)
+            'media_type': media_type                            # (str)
         }
 
         media_type_list = ['movie', 'show', 'season', 'episode', 'artist',
@@ -1997,7 +1997,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_newsletter_config',
-            'newsletter_id': newsletter_id      # (int)
+            'newsletter_id': newsletter_id                      # (int)
         }
 
         # Check keyword arguments
@@ -2053,11 +2053,11 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_newsletter_log',
-            'order_column': order_column,   # (str)
-            'order_dir': order_dir,         # (str)
-            'start': start,                 # (int)
-            'length': length,               # (int)
-            'search': search                # (str)
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
         }
 
         order_column_list = ["timestamp", "newsletter_id", "agent_name",
@@ -2156,11 +2156,11 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_notification_log',
-            'order_column': order_column,   # (str)
-            'order_dir': order_dir,         # (str)
-            'start': start,                 # (int)
-            'length': length,               # (int)
-            'search': search                # (str)
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
         }
 
         order_column_list = ["timestamp", "notifier_id", "agent_name",
@@ -2223,7 +2223,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_notifier_config',
-            'notifier_id': notifier_id          # (int)
+            'notifier_id': notifier_id                          # (int)
         }
 
         # Check keyword arguments
@@ -2283,7 +2283,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_notifiers',
-            'notify_action': notify_action      # (str)
+            'notify_action': notify_action                      # (str)
         }
 
         # Check keyword arguments
@@ -2315,8 +2315,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_old_rating_keys',
-            'rating_key': rating_key,
-            'media_type': media_type
+            'rating_key': rating_key,                           # (str)
+            'media_type': media_type                            # (str)
         }
 
         media_type_list = ['movie', 'show', 'season', 'episode', 'artist',
@@ -2360,10 +2360,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_plays_by_date',
-            'time_range': time_range,           # (str)
-            'y_axis': y_axis,                   # (str)
-            'user_id': user_id,                 # (str)
-            'grouping': grouping                # (bin)
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
         }
 
         y_axis_list = ['plays', 'duration']
@@ -2407,10 +2407,10 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_plays_by_dayofweek',
-            'time_range': time_range,               # (str)
-            'y_axis': y_axis,                       # (str)
-            'user_id': user_id,                     # (str)
-            'grouping': grouping                    # (bin)
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
         }
 
         y_axis_list = ['plays', 'duration']
@@ -3356,8 +3356,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_synced_items',
-            'machine_id': machine_id,
-            'user_id': user_id
+            'machine_id': machine_id,                           # (str) (req)
+            'user_id': user_id                                  # (str)
         }
 
         # Check keyword arguments
@@ -3616,8 +3616,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_user_player_stats',
-            'user_id': user_id,             # (str) (req)
-            'grouping': grouping            # (bin)
+            'user_id': user_id,                                 # (str) (req)
+            'grouping': grouping                                # (bin)
         }
 
         # Check keyword arguments
@@ -3662,8 +3662,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_user_watch_time_stats',
-            'user_id': user_id,             # (str) (req)
-            'grouping': grouping            # (bin)
+            'user_id': user_id,                                 # (str) (req)
+            'grouping': grouping                                # (bin)
         }
 
         # Check keyword arguments
@@ -3777,11 +3777,11 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_user_logins',
-            'order_column': order_column,   # (str)
-            'order_dir': order_dir,         # (str)
-            'start': start,                 # (int)
-            'length': length,               # (int)
-            'search': search                # (str)
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
         }
 
         order_column_list = ["user_thumb", "friendly_name", "last_seen", 
@@ -3836,7 +3836,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'get_whois_lookup',
-            'ip_address': ip_address            # (str) (req)
+            'ip_address': ip_address                            # (str) (req)
         }
 
         # Check keyword arguments
@@ -4304,8 +4304,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'set_notifier_config',
-            'notifier_id': notifier_id,         # (int) (req)
-            'agent_id': agent_id,               # (int) (req)
+            'notifier_id': notifier_id,                         # (int) (req)
+            'agent_id': agent_id,                               # (int) (req)
         }
 
         # Check keyword arguments
@@ -4339,7 +4339,7 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'sql',
-            'query': query,                         # (str) (req)
+            'query': query,                                     # (str) (req)
         }
 
         # Check keyword arguments
@@ -4370,9 +4370,9 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'terminate_session',
-            'session_key': session_key,             # (int) (req, bitwise)
-            'session_id': session_id,               # (str) (req, bitwise)
-            'message': message                      # (str)
+            'session_key': session_key,                 # (int) (req, bitwise)
+            'session_id': session_id,                   # (str) (req, bitwise)
+            'message': message                          # (str)
         }
 
         # Check for ONLY one required arguments
@@ -4415,8 +4415,8 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'undelete_library',
-            'session_key': session_key,                 # (str) (req)
-            'session_name': session_name                # (str) (req)
+            'session_key': session_key,                         # (str) (req)
+            'session_name': session_name                        # (str) (req)
         }
 
         # Check keyword arguments
@@ -4520,9 +4520,9 @@ class Tautulli:
         payload = {
             'apikey': API_KEY,
             'cmd': 'undelete_library',
-            'old_rating_key': old_rating_key,       # (int) (req)
-            'new_rating_key': new_rating_key,       # (int) (req)
-            'media_type': media_type                # (str) (req)
+            'old_rating_key': old_rating_key,                   # (int) (req)
+            'new_rating_key': new_rating_key,                   # (int) (req)
+            'media_type': media_type                            # (str) (req)
         }
 
         media_type_list = ["movie", "show", "season", "episode", "artist",
