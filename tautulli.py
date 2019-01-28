@@ -3776,7 +3776,7 @@ class Tautulli:
 
         payload = {
             'apikey': API_KEY,
-            'cmd': 'get_user_logins',
+            'cmd': 'get_users_table',
             'order_column': order_column,                       # (str)
             'order_dir': order_dir,                             # (str)
             'start': start,                                     # (int)
@@ -4323,7 +4323,7 @@ class Tautulli:
     def sql(self, query=None):
         """
         Query the Tautulli database with raw SQL. Automatically makes a
-        backup of the database if the latest backup is older then 24h.
+        backup of the database if the latest backup is older than 24hrs.
         `api_sql` must be manually enabled in the config file.
 
         Required parameters:
