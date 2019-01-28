@@ -139,26 +139,27 @@ class Tautulli:
         order_dir_list = ["desc", "asc"]
 
         # Check keyword arguments
-        utils.check_bin_kw(payload, grouping, is_required=False)
-        utils.check_str_kw(payload, user, is_required=False)
-        utils.check_pos_int_kw(payload, user_id, is_required=False)
-        utils.check_pos_int_kw(payload, rating_key, is_required=False)
-        utils.check_pos_int_kw(payload, parent_rating_key, is_required=False)
-        utils.check_pos_int_kw(payload, grandparent_rating_key,
+        utils.check_bin_kw(grouping, is_required=False)
+        utils.check_str_kw(user, is_required=False)
+        utils.check_pos_int_kw(user_id, is_required=False)
+        utils.check_pos_int_kw(rating_key, is_required=False)
+        utils.check_pos_int_kw(parent_rating_key, is_required=False)
+        utils.check_pos_int_kw(grandparent_rating_key,
                                is_required=False)
-        utils.check_str_kw(payload, start_date, is_required=False)
-        utils.check_pos_int_kw(payload, section_id, is_required=False)
-        utils.check_str_kw(payload, media_type, media_type_list,
+        utils.check_str_kw(start_date, is_required=False)
+        utils.check_pos_int_kw(section_id, is_required=False)
+        utils.check_str_kw(media_type, value_check_dict=media_type_list,
                            is_required=False)
-        utils.check_str_kw(payload, transcode_decision,
-                           transcode_decision_list, is_required=False)
-        utils.check_str_kw(payload, order_column, order_column_list,
+        utils.check_str_kw(transcode_decision,
+                           value_check_dict=transcode_decision_list,
                            is_required=False)
-        utils.check_str_kw(payload, order_dir, order_dir_list,
+        utils.check_str_kw(order_column, value_check_dict=order_column_list,
                            is_required=False)
-        utils.check_pos_int_kw(payload, start, is_required=False)
-        utils.check_pos_int_kw(payload, length, is_required=False)
-        utils.check_str_kw(payload, search, is_required=False)
+        utils.check_str_kw(order_dir, value_check_dict=order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -183,7 +184,7 @@ class Tautulli:
             'agent_id': agent_id                        # (int)
         }
 
-        utils.check_pos_int_kw(payload, agent_id, is_required=True)
+        utils.check_pos_int_kw(agent_id, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -208,7 +209,7 @@ class Tautulli:
             'agent_id': agent_id                            # (int)
         }
 
-        utils.check_pos_int_kw(payload, agent_id, is_required=True)
+        utils.check_pos_int_kw(agent_id, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -273,7 +274,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, section_id, is_required=True)
+        utils.check_pos_int_kw(section_id, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -299,7 +300,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, user_id, is_required=True)
+        utils.check_pos_int_kw(user_id, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -348,9 +349,9 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, rating_key, is_required=False)
-        utils.check_str_kw(payload, service, is_required=False)
-        utils.check_bool_kw(payload, delete_all, is_required=False)
+        utils.check_pos_int_kw(rating_key, is_required=False)
+        utils.check_str_kw(service, is_required=False)
+        utils.check_bool_kw(delete_all, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -391,7 +392,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, section_id, is_required=True)
+        utils.check_pos_int_kw(section_id, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -622,7 +623,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, notifier_id, is_required=True)
+        utils.check_pos_int_kw(notifier_id, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -661,7 +662,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, user_id, is_required=True)
+        utils.check_pos_int_kw(user_id, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -771,9 +772,9 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, section_id, is_required=True)
-        utils.check_str_kw(payload, custom_thumb, is_required=False)
-        utils.check_bin_kw(payload, keep_history, is_required=False)
+        utils.check_str_kw(section_id, is_required=True)
+        utils.check_str_kw(custom_thumb, is_required=False)
+        utils.check_bin_kw(keep_history, is_required=False)
 
         # Send request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -807,11 +808,11 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, user_id, is_required=True)
-        utils.check_str_kw(payload, friendly_name, is_required=False)
-        utils.check_str_kw(payload, custom_thumb, is_required=False)
-        utils.check_bin_kw(payload, keep_history, is_required=False)
-        utils.check_bool_kw(payload, allow_guest, is_required=False)
+        utils.check_str_kw(user_id, is_required=True)
+        utils.check_str_kw(friendly_name, is_required=False)
+        utils.check_str_kw(custom_thumb, is_required=False)
+        utils.check_bin_kw(keep_history, is_required=False)
+        utils.check_bool_kw(allow_guest, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1066,8 +1067,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, session_key, is_required=False)
-        utils.check_str_kw(payload, session_id, is_required=False)
+        utils.check_pos_int_kw(session_key, is_required=False)
+        utils.check_str_kw(session_id, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1096,8 +1097,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, username, is_required=False)
-        utils.check_str_kw(payload, password, is_required=False)
+        utils.check_str_kw(username, is_required=False)
+        utils.check_str_kw(password, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1166,7 +1167,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, ip_address, is_required=True)
+        utils.check_str_kw(ip_address, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1257,10 +1258,10 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_bin_kw(payload, grouping, is_required=False)
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_bin_kw(payload, stats_type, is_required=False)
-        utils.check_str_kw(payload, stats_count, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_bin_kw(stats_type, is_required=False)
+        utils.check_str_kw(stats_count, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1379,13 +1380,13 @@ class Tautulli:
         order_dir_list = ["asc", "desc"]
 
         # Check keyword arguments
-        utils.check_str_kw(payload, order_column, order_column_list,
+        utils.check_str_kw(order_column, order_column_list,
                            is_required=False)
-        utils.check_str_kw(payload, order_dir, order_dir_list,
+        utils.check_str_kw(order_dir, order_dir_list,
                            is_required=False)
-        utils.check_pos_int_kw(payload, start, is_required=False)
-        utils.check_pos_int_kw(payload, length, is_required=False)
-        utils.check_str_kw(payload, search, is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1423,7 +1424,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, section_id, is_required=True)
+        utils.check_pos_int_kw(section_id, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1525,18 +1526,18 @@ class Tautulli:
                 'is required'
             )
         elif section_id is not None:
-            utils.check_pos_int_kw(payload, section_id)
+            utils.check_pos_int_kw(section_id)
         elif rating_key is not None:
-            utils.check_str_kw(payload, rating_key)
+            utils.check_str_kw(rating_key)
 
         # Check optional keyword arguments
-        utils.check_str_kw(payload, section_type, section_type_list)
-        utils.check_str_kw(payload, order_column, order_column_list)
-        utils.check_str_kw(payload, order_dir, order_dir_list)
-        utils.check_pos_int_kw(payload, start)
-        utils.check_pos_int_kw(payload, length)
-        utils.check_str_kw(payload, search)
-        utils.check_str_kw(payload, refresh)
+        utils.check_str_kw(section_type, section_type_list)
+        utils.check_str_kw(order_column, order_column_list)
+        utils.check_str_kw(order_dir, order_dir_list)
+        utils.check_pos_int_kw(start)
+        utils.check_pos_int_kw(length)
+        utils.check_str_kw(search)
+        utils.check_str_kw(refresh)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1612,8 +1613,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, section_id, is_required=True)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_pos_int_kw(section_id, is_required=True)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1657,8 +1658,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, section_id, is_required=True)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_pos_int_kw(section_id, is_required=True)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1707,12 +1708,12 @@ class Tautulli:
         order_list = ["desc", "asc"]
 
         # Check keyword arguments
-        utils.check_str_kw(payload, sort, sort_list, is_required=False)
-        utils.check_str_kw(payload, search, is_required=False)
-        utils.check_str_kw(payload, order, order_list, is_required=False)
-        utils.check_str_kw(payload, regex, is_required=False)
-        utils.check_pos_int_kw(payload, start, is_required=False)
-        utils.check_pos_int_kw(payload, end, is_required=False)
+        utils.check_str_kw(sort, sort_list, is_required=False)
+        utils.check_str_kw(search, is_required=False)
+        utils.check_str_kw(order, order_list, is_required=False)
+        utils.check_str_kw(regex, is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(end, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1870,7 +1871,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, rating_key, is_required=True)
+        utils.check_str_kw(rating_key, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -1905,8 +1906,8 @@ class Tautulli:
                            'album', 'track']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, rating_key, is_required=True)
-        utils.check_str_kw(payload, media_type, media_type_list,
+        utils.check_str_kw(rating_key, is_required=True)
+        utils.check_str_kw(media_type, media_type_list,
                            is_required=True)
 
         # Send/receive request
@@ -1957,7 +1958,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, newsletter_id, is_required=True)
+        utils.check_pos_int_kw(newsletter_id, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2021,13 +2022,13 @@ class Tautulli:
         order_dir_list = ["desc", "asc"]
 
         # Check keyword arguments
-        utils.check_str_kw(payload, order_column, order_column_list,
+        utils.check_str_kw(order_column, order_column_list,
                            is_required=False)
-        utils.check_str_kw(payload, order_dir, order_dir_list,
+        utils.check_str_kw(order_dir, order_dir_list,
                            is_required=False)
-        utils.check_pos_int_kw(payload, start, is_required=False)
-        utils.check_pos_int_kw(payload, length, is_required=False)
-        utils.check_str_kw(payload, search, is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2121,13 +2122,13 @@ class Tautulli:
         order_dir_list = ["desc", "asc"]
 
         # Check keyword arguments
-        utils.check_str_kw(payload, order_column, order_column_list,
+        utils.check_str_kw(order_column, order_column_list,
                            is_required=False)
-        utils.check_str_kw(payload, order_dir, order_dir_list,
+        utils.check_str_kw(order_dir, order_dir_list,
                            is_required=False)
-        utils.check_pos_int_kw(payload, start, is_required=False)
-        utils.check_pos_int_kw(payload, length, is_required=False)
-        utils.check_str_kw(payload, search, is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2179,7 +2180,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, notifier_id, is_required=True)
+        utils.check_pos_int_kw(notifier_id, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2237,7 +2238,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, notify_action, is_required=False)
+        utils.check_str_kw(notify_action, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2272,8 +2273,8 @@ class Tautulli:
                            'album', 'track']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, rating_key, is_required=True)
-        utils.check_str_kw(payload, media_type, media_type_list,
+        utils.check_str_kw(rating_key, is_required=True)
+        utils.check_str_kw(media_type, media_type_list,
                            is_required=True)
 
         # Send/receive request
@@ -2317,10 +2318,10 @@ class Tautulli:
         y_axis_list = ['plays', 'duration']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
-        utils.check_str_kw(payload, user_id, is_required=False)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2363,10 +2364,10 @@ class Tautulli:
         y_axis_list = ['plays', 'duration']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
-        utils.check_str_kw(payload, user_id, is_required=False)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2409,10 +2410,10 @@ class Tautulli:
         y_axis_list = ['plays', 'duration']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
-        utils.check_str_kw(payload, user_id, is_required=False)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2454,10 +2455,10 @@ class Tautulli:
         y_axis_list = ['plays', 'duration']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
-        utils.check_str_kw(payload, user_id, is_required=False)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2500,10 +2501,10 @@ class Tautulli:
         y_axis_list = ['plays', 'duration']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
-        utils.check_str_kw(payload, user_id, is_required=False)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2546,10 +2547,10 @@ class Tautulli:
         y_axis_list = ['plays', 'duration']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
-        utils.check_str_kw(payload, user_id, is_required=False)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2592,10 +2593,10 @@ class Tautulli:
         y_axis_list = ['plays', 'duration']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
-        utils.check_str_kw(payload, user_id, is_required=False)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2638,10 +2639,10 @@ class Tautulli:
         y_axis_list = ['plays', 'duration']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
-        utils.check_str_kw(payload, user_id, is_required=False)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2684,10 +2685,10 @@ class Tautulli:
         y_axis_list = ['plays', 'duration']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
-        utils.check_str_kw(payload, user_id, is_required=False)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2724,8 +2725,8 @@ class Tautulli:
         log_type_list = ['server', 'scanner']
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, window, is_required=False)
-        utils.check_str_kw(payload, log_type, log_type_list, is_required=False)
+        utils.check_pos_int_kw(window, is_required=False)
+        utils.check_str_kw(log_type, log_type_list, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2753,8 +2754,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, username, is_required=True)
-        utils.check_str_kw(payload, password, is_required=True)
+        utils.check_str_kw(username, is_required=True)
+        utils.check_str_kw(password, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2849,11 +2850,11 @@ class Tautulli:
         media_type_list = ["movie", "show", "artist"]
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, count, is_required=True)
-        utils.check_pos_int_kw(payload, start, is_required=False)
-        utils.check_str_kw(payload, media_type, media_type_list,
+        utils.check_pos_int_kw(count, is_required=True)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_str_kw(media_type, media_type_list,
                            is_required=False)
-        utils.check_pos_int_kw(payload, section_id, is_required=False)
+        utils.check_pos_int_kw(section_id, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2908,10 +2909,10 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, hostname, is_required=True)
-        utils.check_pos_int_kw(payload, port, is_required=True)
-        utils.check_str_kw(payload, ssl, is_required=False)
-        utils.check_str_kw(payload, remote, is_required=False)
+        utils.check_str_kw(hostname, is_required=True)
+        utils.check_pos_int_kw(port, is_required=True)
+        utils.check_str_kw(ssl, is_required=False)
+        utils.check_str_kw(remote, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -2993,7 +2994,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, pref, is_required=True)
+        utils.check_str_kw(pref, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3052,7 +3053,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, key, is_required=False)
+        utils.check_str_kw(key, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3137,9 +3138,9 @@ class Tautulli:
                 'is required'
             )
         elif row_id is not None:
-            utils.check_pos_int_kw(payload, row_id)
+            utils.check_pos_int_kw(row_id)
         elif session_key is not None:
-            utils.check_pos_int_kw(payload, session_key)
+            utils.check_pos_int_kw(session_key)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3183,10 +3184,10 @@ class Tautulli:
         y_axis_list = ['plays', 'duration']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
-        utils.check_str_kw(payload, user_id, is_required=False)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3229,10 +3230,10 @@ class Tautulli:
         y_axis_list = ['plays', 'duration']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, time_range, is_required=False)
-        utils.check_str_kw(payload, y_axis, y_axis_list, is_required=False)
-        utils.check_str_kw(payload, user_id, is_required=False)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3286,8 +3287,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, machine_id, is_required=True)
-        utils.check_str_kw(payload, user_id, is_required=False)
+        utils.check_str_kw(machine_id, is_required=True)
+        utils.check_str_kw(user_id, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3327,7 +3328,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, user_id, is_required=True)
+        utils.check_str_kw(user_id, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3396,14 +3397,14 @@ class Tautulli:
         order_dir_list = ["desc", "asc"]
 
         # Check keyword arguments
-        utils.check_str_kw(payload, user_id, is_required=True)
-        utils.check_str_kw(payload, order_column, order_column_list,
+        utils.check_str_kw(user_id, is_required=True)
+        utils.check_str_kw(order_column, order_column_list,
                            is_required=False)
-        utils.check_str_kw(payload, order_dir, order_dir_list,
+        utils.check_str_kw(order_dir, order_dir_list,
                            is_required=False)
-        utils.check_pos_int_kw(payload, start, is_required=False)
-        utils.check_pos_int_kw(payload, length, is_required=False)
-        utils.check_str_kw(payload, search, is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3467,14 +3468,14 @@ class Tautulli:
         order_dir_list = ["desc", "asc"]
 
         # Check keyword arguments
-        utils.check_str_kw(payload, user_id, is_required=True)
-        utils.check_str_kw(payload, order_column, order_column_list,
+        utils.check_str_kw(user_id, is_required=True)
+        utils.check_str_kw(order_column, order_column_list,
                            is_required=False)
-        utils.check_str_kw(payload, order_dir, order_dir_list,
+        utils.check_str_kw(order_dir, order_dir_list,
                            is_required=False)
-        utils.check_pos_int_kw(payload, start, is_required=False)
-        utils.check_pos_int_kw(payload, length, is_required=False)
-        utils.check_str_kw(payload, search, is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3541,8 +3542,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, user_id, is_required=True)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(user_id, is_required=True)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3586,8 +3587,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, user_id, is_required=True)
-        utils.check_bin_kw(payload, grouping, is_required=False)
+        utils.check_str_kw(user_id, is_required=True)
+        utils.check_bin_kw(grouping, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3707,13 +3708,13 @@ class Tautulli:
         order_dir_list = ["desc", "asc"]
 
         # Check keyword arguments
-        utils.check_str_kw(payload, order_column, order_column_list,
+        utils.check_str_kw(order_column, order_column_list,
                            is_required=False)
-        utils.check_str_kw(payload, order_dir, order_dir_list,
+        utils.check_str_kw(order_dir, order_dir_list,
                            is_required=False)
-        utils.check_pos_int_kw(payload, start, is_required=False)
-        utils.check_pos_int_kw(payload, length, is_required=False)
-        utils.check_str_kw(payload, search, is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3756,7 +3757,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, ip_address, is_required=True)
+        utils.check_str_kw(ip_address, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3793,11 +3794,11 @@ class Tautulli:
         table_name_list = ['processed', 'grouped']
 
         # Check keyword arguments
-        utils.check_str_kw(payload, app, app_list, is_required=True)
-        utils.check_str_kw(payload, database_path, is_required=True)
-        utils.check_str_kw(payload, table_name, table_name_list, 
+        utils.check_str_kw(app, app_list, is_required=True)
+        utils.check_str_kw(database_path, is_required=True)
+        utils.check_str_kw(table_name, table_name_list, 
                            is_required=True)
-        utils.check_pos_int_kw(payload, import_ignore_interval, 
+        utils.check_pos_int_kw(import_ignore_interval, 
                                is_required=False)
 
         # Send/receive request
@@ -3843,10 +3844,10 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, notifier_id, is_required=True)
-        utils.check_str_kw(payload, subject, is_required=True)
-        utils.check_str_kw(payload, body, is_required=True)
-        utils.check_str_kw(payload, script_args, is_required=False)
+        utils.check_pos_int_kw(notifier_id, is_required=True)
+        utils.check_str_kw(subject, is_required=True)
+        utils.check_str_kw(body, is_required=True)
+        utils.check_str_kw(script_args, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3878,10 +3879,10 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, newsletter_id, is_required=True)
-        utils.check_str_kw(payload, subject, is_required=False)
-        utils.check_str_kw(payload, body, is_required=False)
-        utils.check_str_kw(payload, message, is_required=False)
+        utils.check_pos_int_kw(newsletter_id, is_required=True)
+        utils.check_str_kw(subject, is_required=False)
+        utils.check_str_kw(body, is_required=False)
+        utils.check_str_kw(message, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3914,8 +3915,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, rating_key, is_required=True)
-        utils.check_pos_int_kw(payload, notifier_id, is_required=False)
+        utils.check_pos_int_kw(rating_key, is_required=True)
+        utils.check_pos_int_kw(notifier_id, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -3978,20 +3979,20 @@ class Tautulli:
                 'is required'
             )
         elif img is not None:
-            utils.check_str_kw(payload, img)
+            utils.check_str_kw(img)
         elif rating_key is not None:
-            utils.check_pos_int_kw(payload, rating_key)
+            utils.check_pos_int_kw(rating_key)
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, width, is_required=False)
-        utils.check_pos_int_kw(payload, height, is_required=False)
-        utils.check_pos_int_kw(payload, opacity, is_required=False)
-        utils.check_pos_int_kw(payload, background, is_required=False)
-        utils.check_pos_int_kw(payload, blur, is_required=False)
-        utils.check_str_kw(payload, img_format, is_required=False)
-        utils.check_str_kw(payload, fallback, fallback_list, is_required=False)
-        utils.check_bool_kw(payload, refresh, is_required=False)
-        utils.check_bool_kw(payload, return_hash, is_required=False)
+        utils.check_pos_int_kw(width, is_required=False)
+        utils.check_pos_int_kw(height, is_required=False)
+        utils.check_pos_int_kw(opacity, is_required=False)
+        utils.check_pos_int_kw(background, is_required=False)
+        utils.check_pos_int_kw(blur, is_required=False)
+        utils.check_str_kw(img_format, is_required=False)
+        utils.check_str_kw(fallback, fallback_list, is_required=False)
+        utils.check_bool_kw(refresh, is_required=False)
+        utils.check_bool_kw(return_hash, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -4050,9 +4051,9 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, device_name, is_required=True)
-        utils.check_str_kw(payload, device_id, is_required=True)
-        utils.check_str_kw(payload, friendly_name, is_required=False)
+        utils.check_str_kw(device_name, is_required=True)
+        utils.check_str_kw(device_id, is_required=True)
+        utils.check_str_kw(friendly_name, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -4107,8 +4108,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, query, is_required=True)
-        utils.check_pos_int_kw(payload, limit, is_required=False)
+        utils.check_str_kw(query, is_required=True)
+        utils.check_pos_int_kw(limit, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -4137,8 +4138,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, mobile_device_id, is_required=True)
-        utils.check_str_kw(payload, friendly_name, is_required=False)
+        utils.check_pos_int_kw(mobile_device_id, is_required=True)
+        utils.check_str_kw(friendly_name, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -4170,10 +4171,10 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, newsletter_id, is_required=True)
-        utils.check_pos_int_kw(payload, agent_id, is_required=True)
-        utils.check_str_kw(payload, newsletter_config_, is_required=False)
-        utils.check_str_kw(payload, newsletter_email_, is_required=False)
+        utils.check_pos_int_kw(newsletter_id, is_required=True)
+        utils.check_pos_int_kw(agent_id, is_required=True)
+        utils.check_str_kw(newsletter_config_, is_required=False)
+        utils.check_str_kw(newsletter_email_, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -4211,8 +4212,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, notifier_id, is_required=True)
-        utils.check_pos_int_kw(payload, agent_id, is_required=True)
+        utils.check_pos_int_kw(notifier_id, is_required=True)
+        utils.check_pos_int_kw(agent_id, is_required=True)
 
         # Pack **cfg_opts in payload
         for kw, val in cfg_opts.items():
@@ -4244,7 +4245,7 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, query, is_required=True)
+        utils.check_str_kw(query, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -4286,12 +4287,12 @@ class Tautulli:
                 'is required'
             )
         elif session_key is not None:
-            utils.check_pos_int_kw(payload, session_key)
+            utils.check_pos_int_kw(session_key)
         elif session_id is not None:
-            utils.check_str_kw(payload, session_id)
+            utils.check_str_kw(session_id)
 
         # Check keyword arguments
-        utils.check_str_kw(payload, message, is_required=False)
+        utils.check_str_kw(message, is_required=False)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -4319,8 +4320,8 @@ class Tautulli:
         }
 
         # Check keyword arguments
-        utils.check_str_kw(payload, session_key, is_required=True)
-        utils.check_str_kw(payload, session_name, is_required=True)
+        utils.check_str_kw(session_key, is_required=True)
+        utils.check_str_kw(session_name, is_required=True)
 
         # Send/receive request
         utils.send_receive_request(self._base_url, params_dict=payload)
@@ -4424,9 +4425,9 @@ class Tautulli:
                            "album", "track"]
 
         # Check keyword arguments
-        utils.check_pos_int_kw(payload, old_rating_key, is_required=True)
-        utils.check_pos_int_kw(payload, new_rating_key, is_required=True)
-        utils.check_str_kw(payload, media_type, media_type_list,
+        utils.check_pos_int_kw(old_rating_key, is_required=True)
+        utils.check_pos_int_kw(new_rating_key, is_required=True)
+        utils.check_str_kw(media_type, media_type_list,
                            is_required=True)
 
         # Send/receive request
