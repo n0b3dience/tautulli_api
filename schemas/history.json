@@ -1,0 +1,62 @@
+{
+  "$id": "https://nettles.com/history.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "A schema for defining ",
+  "type": "object",
+  "properties": {
+    "apikey": {
+      "type": "string"
+    },
+    "cmd": {
+      "type": "string"
+    },
+    "grouping": {
+      "type": "string"
+    },
+    "user": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "integer"
+    },
+    "rating_key": {
+      "type": "integer"
+    },
+    "parent_rating_key": {
+      "type": "integer"
+    },
+    "grandparent_rating_key": {
+      "type": "integer"
+    },
+    "start_date": {
+      "type": "string"
+    },
+    "section_id": {
+      "type": "integer"
+    },
+    "media_type": {
+      "type": "string"
+    },
+    "transcode_decision": {
+      "type": "string"
+    },
+    "order_column": {
+      "type": "string"
+    },
+    "order_dir": {
+      "type": "string"
+    },
+    "start": {
+      "type": "integer"
+    },
+    "length": {
+      "type": "integer"
+    },
+    "search": {
+      "type": "string"
+    }
+  },
+  "required": [ ],
+  "dependencies": {
+  }
+}
