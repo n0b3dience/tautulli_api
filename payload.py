@@ -72,7 +72,7 @@ class Payload:
         """Validate payload"""
         if unique_schema:
             try:
-                schema = '/schemas/{}.json'.format(self.name)
+                schema = './schemas/{}.json'.format(self.name)
                 with open(schema, 'r') as schema_file:
                     schema = json.load(schema_file)
                     validate(instance=self.payload, schema=schema)

@@ -1,5 +1,5 @@
 {
-  "$id": "payload.json",
+  "$id": "https://github.com/n0b3dience/tautulli_api/tree/new_structure/schemas/payload.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "description": "A schema for defining payload parameters",
   "type": "object",
@@ -29,7 +29,5 @@
     }
 
   },
-  "required": ["apikey", "cmd"],
-  "dependencies": {
-  }
+  "required": ["apikey", "cmd"]
 }

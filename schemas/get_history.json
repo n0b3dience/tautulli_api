@@ -1,9 +1,9 @@
 {
-  "$id": "get_history.json",
+  "$id": "https://github.com/n0b3dience/tautulli_api/tree/new_structure/schemas/get_history.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "description": "A schema for defining get_history() parameters",
   "type": "object",
-  "allOf": [{"$ref": "payload.json#/properties"}],
+  "allOf": [{"$ref": "https://github.com/n0b3dience/tautulli_api/tree/new_structure/schemas/payload.json/properties"}],
   "properties": {
 
     "grouping": {
@@ -67,25 +67,25 @@
 
     "media_type": {
       "type": "string",
-      "pattern": "^(movie|episode|track)$",
+      "enum": ["movie", "episode", "track"],
       "description": "'media_type=<type str>' is the library media type to filter: \"movie\", \"episode\" or \"track\""
     },
 
     "transcode_decision": {
       "type": "string",
-      "pattern": "^(direct play|copy|transcode)$",
+      "enum": ["direct play", "copy", "transcode"],
       "description": "'transcode_decision=<tcode dec str>' is the transcode type to filter: \"direct play\", \"copy\" or \"transcode\""
     },
 
     "order_column": {
       "type": "string",
-      "pattern": "^(date|friendly_name|ip_address|platform|player|full_title|started|paused_counter|stopped|duration)$",
+      "enum": ["date", "friendly_name", "ip_address", "platform", "player", "full_title", "started", "paused_counter", "stopped", "duration"],
       "description": "'order_column=<column str>' order results by: \"date\", \"friendly_name\", \"ip_address\", \"platform\", \"ip_address\", \"ip_address\", \"ip_address\", \"ip_address\", \"ip_address\" or \"ip_address\""
     },
 
     "order_dir": {
       "type": "string",
-      "pattern": "^(asc|desc)$",
+      "enum": ["desc", "asc"],
       "description": "'order_dir=<dir str>' is the direction to return the results: \"asc\" or \"desc\" (default)"
     },
 
@@ -113,7 +113,6 @@
     }
 
   },
-  "required": [],
   "dependencies": {
   }
 }
