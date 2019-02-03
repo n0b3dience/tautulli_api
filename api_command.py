@@ -10,8 +10,8 @@ config.read('settings_private.ini')
 HOST = config['USER_SETTINGS']['host']
 PORT = config['USER_SETTINGS']['port']
 API_KEY = config['USER_SETTINGS']['api_key']
-SCHEMA = 'http'
-PATH = ''
+SCHEMA = config['USER_SETTINGS']['schema']
+PATH = config['USER_SETTINGS']['path']
 
 
 class ApiCommand:

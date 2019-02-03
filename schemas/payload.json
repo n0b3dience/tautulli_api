@@ -1,0 +1,35 @@
+{
+  "$id": "payload.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "A schema for defining payload parameters",
+  "type": "object",
+  "properties": {
+
+    "apikey": {
+      "type": "string"
+    },
+
+    "cmd": {
+      "type": "string"
+    },
+
+    "out_type": {
+      "type": "string"
+    },
+
+    "callback": {
+      "type": "string"
+    },
+
+    "debug": {
+      "anyOf": [
+        {"type": "string", "pattern": "^0*?[01]$"},
+        {"type": "integer", "minimum": 0, "maximum": 1}
+      ]
+    }
+
+  },
+  "required": ["apikey", "cmd"],
+  "dependencies": {
+  }
+}
