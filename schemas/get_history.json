@@ -1,10 +1,37 @@
 {
-  "$id": "https://github.com/n0b3dience/tautulli_api/tree/new_structure/schemas/get_history.json",
+  "$id": "get_history#",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "description": "A schema for defining get_history() parameters",
   "type": "object",
-  "allOf": [{"$ref": "https://github.com/n0b3dience/tautulli_api/tree/new_structure/schemas/payload.json/properties"}],
   "properties": {
+
+    "apikey": {
+      "type": "string",
+      "description": "The Tautulli API key"
+    },
+
+    "cmd": {
+      "type": "string",
+      "description": "The API command"
+    },
+
+    "out_type": {
+      "type": "string",
+      "enum": ["json", "xml"],
+      "description": "The type of output to return (\"json\" or \"xml\")"
+    },
+
+    "callback": {
+      "type": "string"
+    },
+
+    "debug": {
+      "anyOf": [
+        {"type": "string", "pattern": "^0*?[01]$"},
+        {"type": "integer", "minimum": 0, "maximum": 1}
+      ],
+      "description": "Enable/disable debugging"
+    },
 
     "grouping": {
       "anyOf": [
@@ -113,6 +140,7 @@
     }
 
   },
+  "required": ["apikey", "cmd"],
   "dependencies": {
   }
 }

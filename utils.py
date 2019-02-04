@@ -1,8 +1,25 @@
 import json
 import requests
+from sys import platform
 """
 Utility functions for tautulli_api
 """
+
+
+def get_os():
+    """Checks user's operating system"""
+    linux = 'linux'
+    windows = 'windows'
+    osx = 'osx'
+    # Linux
+    if platform == 'linux' or platform == 'linux2':
+        return linux
+    # OS X
+    elif platform == 'darwin':
+        return osx
+    # Windows
+    elif platform == 'win32' or platform == 'cygwin':
+        return windows
 
 
 # Function to check if kwargs are correct

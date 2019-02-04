@@ -29,32 +29,45 @@ class Payload:
         self.out_type = out_type
         self.callback = callback
         self.debug = debug
-        self.payload = {
+        self._base_payload = {
             'apikey': API_KEY,
             'cmd': self.cmd,
             'out_type': self.out_type,
             'callback': self.callback,
             'debug': self.debug
         }
-        self.params = params
+        self.params = self._strip_params()
+        self.payload = self.update()
 
-        if len(params) > 0:
-            self.update(params)
+    def update(self):
+        payload = self._base_payload
+        # Combine params with _base_payload into payload
+        for key in self.params:
+            payload[key] = self.params[key]
+        # Remove all None values from payload
+        for key in payload:
+            if payload[key] is None:
+                del payload[key]
+        self.validate()
+        return payload
 
-    def update(self, param_dict):
-        self.payload.update(param_dict)
+    def _strip_params(self):
+        stripped_params = {}
+        for key in self.params:
+            if self.params[key] is not None:
+                stripped_params[key] = self.params[key]
+        return stripped_params
 
     def clear(self):
+        """Clear everything from payload"""
         self.payload.clear()
 
     def remove_keys(self, *keys):
-        if keys is not None:
-            for key in keys:
-                del self.payload[key]
-        else:
-            pass
+        """Removes given keys from payload"""
+        for key in keys:
+            del self.payload[key]
 
-    def get_results(self, pprint=False):
+    def get(self, pprint=False):
         """Send/receive API request"""
         r = requests.get(self._base_url, params=self.payload)
         if r.status_code == 200:
@@ -68,9 +81,9 @@ class Payload:
         else:
             r.raise_for_status()
 
-    def validate(self, unique_schema=True):
+    def validate(self):
         """Validate payload"""
-        if unique_schema:
+        if len(self.params) > 0:
             try:
                 schema = './schemas/{}.json'.format(self.name)
                 with open(schema, 'r') as schema_file:

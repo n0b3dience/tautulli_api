@@ -6,19 +6,15 @@
   "properties": {
 
     "apikey": {
-      "type": "string",
-      "description": "The Tautulli API key"
+      "type": "string"
     },
 
     "cmd": {
-      "type": "string",
-      "description": "The API command"
+      "type": "string"
     },
 
     "out_type": {
-      "type": "string",
-      "enum": ["json", "xml"],
-      "description": "The type of output to return (\"json\" or \"xml\")"
+      "type": "string"
     },
 
     "callback": {
@@ -29,9 +25,9 @@
       "anyOf": [
         {"type": "string", "pattern": "^0*?[01]$"},
         {"type": "integer", "minimum": 0, "maximum": 1}
-      ],
-      "description": "Enable/disable debugging"
+      ]
     }
+
   },
   "required": ["apikey", "cmd"]
 }

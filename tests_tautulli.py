@@ -1,18 +1,23 @@
 from tautulli import Tautulli
+import os
 import unittest
 import json
-from jsonschema import validate, ValidationError, SchemaError
+from jsonschema import validate, ValidationError, SchemaError, RefResolver
 
 
-def validate_payload(schema_path, payload_dict):
+def validate_payload(schema_json, payload_dict):
+    schema_dir = os.path.abspath('schemas')
     try:
-        with open(schema_path, 'r') as schema_file:
+        # with open(schema_path, 'r') as schema_file:
+        with open(os.path.join(schema_dir, schema_json)) as schema_file:
             schema = json.load(schema_file)
-            validate(instance=payload_dict, schema=schema)
+            resolver = RefResolver('file:///{}/'.format(schema_dir), None)
+            validate(instance=payload_dict, schema=schema, resolver=resolver)
+            schema_file.close()
     except ValidationError as e:
-        print(e.message)
+        print('VALIDATION ERROR::: {}'.format(e.message))
     except SchemaError as e:
-        print(e.message)
+        print('SCHEMA ERROR::: {}'.format(e.message))
 
 
 class TestGetHistory(unittest.TestCase):
@@ -32,6 +37,7 @@ class TestGetHistory(unittest.TestCase):
         self.assertEqual(hist_test_1_act, hist_test_1_exp)
     
     def test_get_hist_schema(self):
+        # TODO: Figure out issue with validation 'None' error.
         payload = {
             "apikey": "WE431DU51235DAQ100T",
             "cmd": "get_history",
@@ -54,17 +60,42 @@ class TestGetHistory(unittest.TestCase):
             "callback": None,
             "debug": None
         }
-        schema_path = './schemas/get_history.json'
-        validate_payload(schema_path, payload)
-        print("Check 01 OK")
-        payload["user"] = "nettles4349"
-        validate_payload(schema_path, payload)
-        print("Check 02 OK --- user=\"nettles4349\"")
-        payload["grandparent_rating_key"] = 3744
-        validate_payload(schema_path, payload)
-        print("Check 03 OK --- gp_rtg_ky=3744")
-        payload["grandparent_rating_key"] = "3744"
-        print("Check 03 OK --- gp_rtg_ky=\"3744\"")
+        pl = {}
+        for k in payload:
+            if payload[k] is not None:
+                pl[k] = payload[k]
+            else:
+                pass
+        schema_json = 'get_history.json'
+        validate_payload(schema_json, pl)
+        print("\nCheck 01 finished\n")
+
+        pl["user"] = "nettles4349"
+        print('    user={}'.format(pl["user"]))
+        validate_payload(schema_json, pl)
+        print("Check 02 finished --- user=\"nettles4349\"\n")
+
+        pl["grandparent_rating_key"] = 3744
+        '    grandparent_rating_key={}'.format(
+            pl["grandparent_rating_key"]
+        )
+        print('   "grandparent_rating_key"={}'.format(
+            pl["grandparent_rating_key"])
+        )
+        validate_payload(schema_json, pl)
+        print("Check 03 finished --- gp_rtg_ky=3744\n")
+
+        pl["grandparent_rating_key"] = "3744"
+        print('    grandparent_rating_key={}'.format(
+            pl["grandparent_rating_key"])
+        )
+        validate_payload(schema_json, pl)
+        print("Check 04 finished --- gp_rtg_ky=\"3744\"\n")
+
+        pl["cmd"] = None
+        print('    cmd={}'.format(pl["cmd"]))
+        validate_payload(schema_json, pl)
+        print("Check 05 finished --- cmd=None (FAIL)")
 
 
 if __name__ == '__main__':
