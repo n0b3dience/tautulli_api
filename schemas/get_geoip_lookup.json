@@ -1,7 +1,7 @@
 {
-  "$id": "get_apikey#",
+  "$id": "get_geoip_lookup#",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "description": "A schema for defining get_apikey() parameters",
+  "description": "A schema for defining get_geoip_lookup() parameters",
   "type": "object",
   "properties": {
 
@@ -17,10 +17,7 @@
 
     "out_type": {
       "type": "string",
-      "enum": [
-        "json",
-        "xml"
-      ],
+      "enum": ["json", "xml"],
       "description": "The type of output to return (\"json\" or \"xml\")"
     },
 
@@ -30,28 +27,16 @@
 
     "debug": {
       "anyOf": [
-        {
-          "type": "string",
-          "pattern": "^0*?[01]$"
-        },
-        {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 1
-        }
+        {"type": "string", "pattern": "^0*?[01]$"},
+        {"type": "integer", "minimum": 0, "maximum": 1}
       ],
       "description": "Enable/disable debugging"
     },
-
-    "username": {
+    
+    "ip_address": {
       "type": "string",
-      "description": "The user whose API key should be returned"
-    },
-
-    "password": {
-      "type": "string",
-      "description": "The user's password"
+      "description": "The target IP address"
     }
   },
-  "required": ["apikey", "cmd"]
+  "required": ["apikey", "cmd", "ip_address"]
 }

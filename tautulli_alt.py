@@ -106,5 +106,5 @@ class Tautulli:
                           order_column=order_column, order_dir=order_dir,
                           start=start, length=length, search=search)
 
-        result = payload.get_results()
+        result = payload.get()
         return result

@@ -1106,8 +1106,10 @@ class Tautulli:
 
     def get_apikey(self, username=None, password=None):
         """
-        Get the apikey. Username and password are required if auth is enabled.
-        Makes and saves the apikey if it does not exist.
+        Get the apikey.
+
+        Username and password are required if auth is enabled. Makes and
+        saves the apikey if it does not exist.
 
         Required parameters:
             None

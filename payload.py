@@ -1,6 +1,7 @@
+import os
 import configparser
 import json
-from jsonschema import validate, ValidationError, SchemaError
+from jsonschema import validate, ValidationError, SchemaError, RefResolver
 import requests
 
 
@@ -18,17 +19,21 @@ PATH = config['USER_SETTINGS']['path']
 class Payload:
     """Base class for API command payload"""
 
-    def __init__(self, name, out_type=None, callback=None,
+    def __init__(self, name, host=HOST, port=PORT, apikey=API_KEY,
+                 schema=SCHEMA, path=PATH, out_type=None, callback=None,
                  debug=None, **params):
-        self._base_url = '{0}://{1}:{2}{3}/api/v2'.format(
-            SCHEMA, HOST, PORT, PATH
-        )
         self.name = name
-        self.apikey = API_KEY
-        self.cmd = name
+        self.host = host
+        self.port = port
+        self._apikey = apikey
+        self.schema = schema
+        self.path = path
         self.out_type = out_type
         self.callback = callback
         self.debug = debug
+        self.cmd = name
+        self._base_url = '{0}://{1}:{2}{3}/api/v2'.format(
+            self.schema, self.host, self.port, self.path)
         self._base_payload = {
             'apikey': API_KEY,
             'cmd': self.cmd,
@@ -36,26 +41,39 @@ class Payload:
             'callback': self.callback,
             'debug': self.debug
         }
+        self._params = params
+        self._schema_dir = os.path.abspath('schemas')
+        self._resolver = RefResolver(
+            'file:///{}/'.format(self._schema_dir), None)
         self.params = self._strip_params()
         self.payload = self.update()
 
     def update(self):
-        payload = self._base_payload
-        # Combine params with _base_payload into payload
+        """Form payload"""
+        payload = {}
+        # Add non-None _base_payload keys/vals into payload
+        for key in self._base_payload:
+            if self._base_payload[key] is not None:
+                payload[key] = self._base_payload[key]
+            else:
+                pass
+        # Add non-None _params keys/vals into payload
         for key in self.params:
-            payload[key] = self.params[key]
-        # Remove all None values from payload
-        for key in payload:
-            if payload[key] is None:
-                del payload[key]
-        self.validate()
-        return payload
+            payload[key] = self._params[key]
+        # Validate payload against JSON Schema
+        try:
+            self._validate(payload)
+            return payload
+        except SchemaError as e:
+            raise e.message
+        except ValidationError as e:
+            raise e.message
 
     def _strip_params(self):
         stripped_params = {}
-        for key in self.params:
-            if self.params[key] is not None:
-                stripped_params[key] = self.params[key]
+        for key in self._params:
+            if self._params[key] is not None:
+                stripped_params[key] = self._params[key]
         return stripped_params
 
     def clear(self):
@@ -81,14 +99,15 @@ class Payload:
         else:
             r.raise_for_status()
 
-    def validate(self):
+    def _validate(self, updated_payload):
         """Validate payload"""
         if len(self.params) > 0:
             try:
                 schema = './schemas/{}.json'.format(self.name)
                 with open(schema, 'r') as schema_file:
                     schema = json.load(schema_file)
-                    validate(instance=self.payload, schema=schema)
+                    validate(instance=updated_payload, schema=schema,
+                             resolver=self._resolver)
             except ValidationError as e:
                 print(e.message)
             except SchemaError as e:
@@ -98,7 +117,8 @@ class Payload:
                 schema = '/schemas/payload.json'
                 with open(schema, 'r') as schema_file:
                     schema = json.load(schema_file)
-                    validate(instance=self.payload, schema=schema)
+                    validate(instance=updated_payload, schema=schema,
+                             resolver=self._resolver)
             except ValidationError as e:
                 print(e.message)
             except SchemaError as e:

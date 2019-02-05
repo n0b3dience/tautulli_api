@@ -1,9 +1,9 @@
+import os
+from sys import platform
 import json
 import requests
-from sys import platform
-"""
-Utility functions for tautulli_api
-"""
+from jsonschema import validate, ValidationError, SchemaError, RefResolver
+"""Utility functions for tautulli_api"""
 
 
 def get_os():
@@ -132,3 +132,18 @@ def send_receive_request_text(url, params_dict):
 def pprint_json(json_data, sort_keys=True, indent=4):
     pprint_result = json.dumps(json_data, sort_keys=sort_keys, indent=indent)
     return pprint_result
+
+
+def validate_payload(schema_json, payload_dict):
+    schema_dir = os.path.abspath('schemas')
+    try:
+        # with open(schema_path, 'r') as schema_file:
+        with open(os.path.join(schema_dir, schema_json)) as schema_file:
+            schema = json.load(schema_file)
+            resolver = RefResolver('file:///{}/'.format(schema_dir), None)
+            validate(instance=payload_dict, schema=schema, resolver=resolver)
+            schema_file.close()
+    except ValidationError as e:
+        print('VALIDATION ERROR::: {}'.format(e.message))
+    except SchemaError as e:
+        print('SCHEMA ERROR::: {}'.format(e.message))
