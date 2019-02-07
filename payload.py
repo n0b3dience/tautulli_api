@@ -22,18 +22,31 @@ class Payload:
     def __init__(self, name, host=HOST, port=PORT, apikey=API_KEY,
                  schema=SCHEMA, path=PATH, out_type=None, callback=None,
                  debug=None, **params):
+        """Payload constructor"""
+        # Command name
         self.name = name
-        self.host = host
-        self.port = port
+        # Kwarg values
+        self._host = host
+        self._port = port
         self._apikey = apikey
-        self.schema = schema
-        self.path = path
+        self._schema = schema
+        self._path = path
+        # API endpoint values
+        self.host = self._check_host()
+        self.port = self._check_port()
+        self.apikey = self._check_apikey()
+        self.schema = self._check_schema()
+        self.path = self._check_path()
+        # Optional params for all API commands
         self.out_type = out_type
         self.callback = callback
         self.debug = debug
+        # Command value
         self.cmd = name
+        # API endpoint
         self._base_url = '{0}://{1}:{2}{3}/api/v2'.format(
             self.schema, self.host, self.port, self.path)
+        # Raw base-payload values
         self._base_payload = {
             'apikey': API_KEY,
             'cmd': self.cmd,
@@ -41,12 +54,52 @@ class Payload:
             'callback': self.callback,
             'debug': self.debug
         }
+        # Command object *args
         self._params = params
+        # JSON Schema directory
         self._schema_dir = os.path.abspath('schemas')
+        # Ref resolver for JSON Schema
         self._resolver = RefResolver(
             'file:///{}/'.format(self._schema_dir), None)
+        # Param dict with None values removed
         self.params = self._strip_params()
+        # Final payload with None values removed
         self.payload = self.update()
+
+    def _check_host(self):
+        """Check if 'host' kwarg has been manually entered"""
+        if self._host is None:
+            return HOST
+        else:
+            return self._host
+
+    def _check_port(self):
+        """Check if 'port' kwarg has been manually entered"""
+        if self._port is None:
+            return PORT
+        else:
+            return self._port
+
+    def _check_path(self):
+        """Check if 'path' kwarg has been manually entered"""
+        if self._path is None:
+            return PATH
+        else:
+            return self._path
+
+    def _check_schema(self):
+        """Check if 'schema' kwarg has been manually entered"""
+        if self._schema is None:
+            return SCHEMA
+        else:
+            return self._schema
+
+    def _check_apikey(self):
+        """Check if 'apikey' kwarg has been manually entered"""
+        if self._apikey is None:
+            return API_KEY
+        else:
+            return self._apikey
 
     def update(self):
         """Form payload"""
