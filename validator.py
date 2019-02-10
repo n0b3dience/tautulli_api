@@ -1,3 +1,6 @@
+"""Validator Class"""
+
+
 import os
 import json
 from jsonschema import validate, ValidationError, SchemaError, RefResolver
@@ -5,7 +8,9 @@ from jsonschema import validate, ValidationError, SchemaError, RefResolver
 
 class Validator:
     """JSON Schema validator class"""
+
     def __init__(self, payload):
+        """Validator constructor"""
         self.payload = payload
         self.name = self.payload['cmd']
         self.schema_file = self._get_schema_file_name()

@@ -21,7 +21,7 @@ class Tautulli:
             SCHEMA, HOST, PORT, PATH
         )
         # TODO: Figure out how the below ApiAuth works
-        self.auth = TautulliApiAuth(api_key=API_KEY)
+        self.auth = TautulliApiAuth(apikey=API_KEY)
 
     def get_history(self, grouping=None, user=None, user_id=None,
                     rating_key=None, parent_rating_key=None,
