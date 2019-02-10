@@ -34,9 +34,7 @@ class Validator:
                 schema = json.load(schema_file)
                 validate(instance=self.payload, schema=schema,
                          resolver=self._resolver)
-
         except ValidationError as e:
             print(e.message)
-
         except SchemaError as e:
             print(e.message)
