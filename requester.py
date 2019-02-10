@@ -1,6 +1,6 @@
-"""Requester class"""
-
-
+"""
+Requester class
+"""
 import requests
 import json
 

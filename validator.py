@@ -1,6 +1,6 @@
-"""Validator Class"""
-
-
+"""
+Validator Class
+"""
 import os
 import json
 from jsonschema import validate, ValidationError, SchemaError, RefResolver
@@ -14,7 +14,7 @@ class Validator:
         self.payload = payload
         self.name = self.payload['cmd']
         self.schema_file = self._get_schema_file_name()
-        self.base_pl_keys = ('apikey', 'cmd', 'out_type', 'callback', 'debug')
+        # self.base_pl_keys = ['apikey', 'cmd', 'out_type', 'callback', 'debug']
         self._schema_dir = os.path.abspath('schemas')
         # Ref resolver for schema files
         self._resolver = RefResolver(
@@ -22,7 +22,9 @@ class Validator:
 
     def _get_schema_file_name(self):
         """Return schema file name"""
-        if self.payload.keys() in self.base_pl_keys:
+        if self.payload.keys() in (
+            'apikey', 'cmd', 'out_type', 'callback', 'debug'
+        ):
             return 'payload.json'
         else:
             return '{}.json'.format(self.name)

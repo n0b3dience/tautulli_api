@@ -1,28 +1,28 @@
-"""Payload class"""
+"""
+Payload class
+"""
 
 
 class Payload:
     """API command payload class"""
 
-    def __init__(self, name, **params):
+    def __init__(self, **params):
         """Payload constructor"""
         # Command name
-        self.name = name
+        # self.name = name
         # Command value
-        self.cmd = name
+        # self.cmd = name
         # Raw base-payload values
         # self._base_payload = {'cmd': self.cmd}
-        # Command object *args
+        # Command object **kwargs
         self.params = params
         # Final payload with None values removed
         self.payload = self.update()
 
     def update(self):
         """Form payload"""
-        # Clear payload
-        self.clear()
-        # Setup local-scope payload base dict
-        payload = {'cmd': self.cmd}
+        # Setup local-scope payload dict
+        payload = {}
         # Add non-None _base_payload keys/vals into payload
         # for key in self._base_payload:
         #     if self._base_payload[key] is not None:
