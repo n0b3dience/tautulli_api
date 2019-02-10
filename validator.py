@@ -25,18 +25,22 @@ class Validator:
         if self.payload.keys() in (
             'apikey', 'cmd', 'out_type', 'callback', 'debug'
         ):
-            return 'payload.json'
+            return './schemas/payload.json'
         else:
-            return '{}.json'.format(self.name)
+            return './schemas/{}.json'.format(self.name)
 
     def validate(self):
         """Validate payload with JSON Schema"""
         try:
             with open(self.schema_file, 'r') as schema_file:
+                print('Schema:  ::: {} :::  opened...'.format(self.schema_file))
                 schema = json.load(schema_file)
                 validate(instance=self.payload, schema=schema,
                          resolver=self._resolver)
         except ValidationError as e:
-            print(e.message)
+            print(':::VALIDATION ERROR:::\n{0} : {1}\n{2}'.format(
+                e.validator.__str__(), e.parent, e.message))
+            print(e)
         except SchemaError as e:
-            print(e.message)
+            print(':::SCHEMA ERROR:::\n{0} : {1}\n{2}'.format(
+                e.cause, e.validator_value, e.message))

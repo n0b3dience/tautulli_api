@@ -8,12 +8,6 @@ class Payload:
 
     def __init__(self, **params):
         """Payload constructor"""
-        # Command name
-        # self.name = name
-        # Command value
-        # self.cmd = name
-        # Raw base-payload values
-        # self._base_payload = {'cmd': self.cmd}
         # Command object **kwargs
         self.params = params
         # Final payload with None values removed
@@ -35,6 +29,7 @@ class Payload:
                 payload[key] = self.params[key]
             else:
                 pass
+
         return payload
 
     def clear(self):
