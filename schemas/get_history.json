@@ -135,7 +135,7 @@
     }
 
   },
-  "required": ["cmd"],
+  "required": ["cmd", "apikey"],
   "dependencies": {
   }
 }

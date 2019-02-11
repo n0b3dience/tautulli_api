@@ -2,19 +2,34 @@ from tautulli import Tautulli
 import unittest
 
 
-class TestGetHistory(unittest.TestCase):
-    """Test get_history()"""
+class TestTautulli(unittest.TestCase):
+    """Test Tautulli() methods"""
 
-    def test_get_history(self):
+    def test_get_history_0(self):
+
         tautulli = Tautulli()
-        hist_test_1_exp = 'Blade Runner 2049'
 
-        resp = tautulli.get_history(
-            length=2, media_type='movie', user='nettles4349'
-        )
-        hist_test_1_act = resp['response']['data']['data'][1]['full_title']
+        hist_test_exp = 'success'
 
-        self.assertEqual(hist_test_1_act, hist_test_1_exp)
+        req = tautulli.get_history()
+        hist_test_act = req['response']['result']
+
+        self.assertEqual(hist_test_act, hist_test_exp)
+
+    def test_get_history_1(self):
+        tautulli = Tautulli()
+        hist_test_exp = 'success'
+
+        req = tautulli.get_history(
+            user='nettles4349', out_type='json', length=10)
+        hist_test_act = req['response']['result']
+
+        self.assertEqual(hist_test_act, hist_test_exp)
+
+    def test_get_server_id(self):
+        tautulli = Tautulli()
+        req = tautulli.get_server_id(hostname='192.168.1.7')
+        print(req)
 
 
 if __name__ == '__main__':

@@ -23,8 +23,6 @@ class Payload:
                 payload[key] = self.params['params'][key]
             else:
                 pass
-
-        print(payload)
         return payload
 
     def clear(self):

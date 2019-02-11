@@ -3869,7 +3869,7 @@ class Tautulli:
         # Send/receive request
         resp = utils.send_receive_request(self._base_url, params_dict=payload)
         return resp
-    
+
     def install_geoip_db(self):
         """
         Downloads and installs the GeoLite2 database
