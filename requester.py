@@ -8,15 +8,15 @@ import json
 class Requester:
     """Requester class"""
 
-    def __init__(self, url, payload, auth):
+    def __init__(self, url, payload):
         """Requester constructor"""
         self.url = url
         self.payload = payload
-        self.auth = auth
+        # self.auth = auth
 
     def get(self, pprint=False):
         """Send/receive API request"""
-        r = requests.get(self.url, auth=self.auth, params=self.payload)
+        r = requests.get(self.url, params=self.payload)
         if r.status_code == 200:
             r = json.loads(r.content.decode('utf-8'))
             if pprint:

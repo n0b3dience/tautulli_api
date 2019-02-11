@@ -38,10 +38,11 @@ class Tautulli:
 
     def _cmd(self, pprint=False, **params):
         """Sends and receives API command"""
-        payload = Payload(params=params).payload
+        payload = {'apikey': self.apikey}
+        payload.update(Payload(params=params).payload)
         validator = Validator(payload)
         validator.validate()
-        requester = Requester(self.url, payload, self.auth)
+        requester = Requester(self.url, payload)
         r = requester.get(pprint=pprint)
         return r
 

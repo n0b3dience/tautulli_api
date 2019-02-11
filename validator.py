@@ -36,14 +36,14 @@ class Validator:
         """Validate payload with JSON Schema"""
         try:
             with open(self.schema_file, 'r') as schema_file:
-                print('Schema:  ::: {} :::  opened...'.format(self.schema_file))
                 schema = json.load(schema_file)
                 validate(instance=self.payload, schema=schema,
                          resolver=self._resolver)
         except ValidationError as e:
-            print(':::VALIDATION ERROR:::\n{0} : {1}\n{2}'.format(
-                e.validator.__str__(), e.parent, e.message))
+            print(':::VALIDATION ERROR:::\n{0}'.format(
+                e.message))
             print(e)
         except SchemaError as e:
-            print(':::SCHEMA ERROR:::\n{0} : {1}\n{2}'.format(
-                e.cause, e.validator_value, e.message))
+            print(':::SCHEMA ERROR:::\n{0}'.format(
+                e.message))
+            print(e)
