@@ -6,7 +6,7 @@ def main():
     read_file = open('tautulli.txt', 'r')
     file_text = read_file.read()
     # Write-file vars
-    # write_file = open('tautulli_alt_2.py', 'a')
+    # write_file = open('tautulli.py', 'a')
     # Regex patterns
     full_pat = re.compile(
         r'^\s{4}def\s(?P<m_name>\w+?)\(self.*?\):.*?'

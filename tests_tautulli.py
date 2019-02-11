@@ -1,4 +1,4 @@
-from tautulli_alt import Tautulli
+from tautulli import Tautulli
 import unittest
 
 
