@@ -574,7 +574,7 @@ class Tautulli:
                  "message": "Deleted lookup info."}
         """
 
-        req = self._cmd(cmd='delete_lookup_info')
+        req = self._cmd(cmd='delete_lookup_info', rating_key=rating_key)
         return req
 
     def delete_media_info_cache(self, section_id=None):
@@ -700,5 +700,5 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_user' , user_id=user_id)
+        req = self._cmd(cmd='delete_user', user_id=user_id)
         return req
