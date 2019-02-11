@@ -17,19 +17,14 @@ class Payload:
         """Form payload"""
         # Setup local-scope payload dict
         payload = {}
-        # Add non-None _base_payload keys/vals into payload
-        # for key in self._base_payload:
-        #     if self._base_payload[key] is not None:
-        #         payload[key] = self._base_payload[key]
-        #     else:
-        #         pass
         # Add non-None _params keys/vals into payload
-        for key in self.params:
-            if self.params[key] is not None:
-                payload[key] = self.params[key]
+        for key in self.params['params']:
+            if self.params['params'][key] is not None:
+                payload[key] = self.params['params'][key]
             else:
                 pass
 
+        print(payload)
         return payload
 
     def clear(self):

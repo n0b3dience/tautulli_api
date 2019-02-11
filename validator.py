@@ -12,7 +12,7 @@ class Validator:
     def __init__(self, payload):
         """Validator constructor"""
         self.payload = payload
-        self.name = self.payload['cmd']
+        self.name = self._get_cmd()
         self.schema_file = self._get_schema_file_name()
         # self.base_pl_keys = ['apikey', 'cmd', 'out_type', 'callback', 'debug']
         self._schema_dir = os.path.abspath('schemas')
@@ -28,6 +28,9 @@ class Validator:
             return './schemas/payload.json'
         else:
             return './schemas/{}.json'.format(self.name)
+
+    def _get_cmd(self):
+        return self.payload['cmd']
 
     def validate(self):
         """Validate payload with JSON Schema"""

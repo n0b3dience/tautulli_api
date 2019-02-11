@@ -5,11 +5,6 @@
   "type": "object",
   "properties": {
 
-    "apikey": {
-      "type": "string",
-      "description": "The Tautulli API key"
-    },
-
     "cmd": {
       "type": "string",
       "description": "The API command"
@@ -140,7 +135,7 @@
     }
 
   },
-  "required": ["apikey", "cmd"],
+  "required": ["cmd"],
   "dependencies": {
   }
 }
