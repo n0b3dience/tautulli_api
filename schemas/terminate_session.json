@@ -1,0 +1,59 @@
+{
+  "$id": "terminate_session#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "A schema for defining terminate_session() parameters",
+  "type": "object",
+  "properties": {
+
+    "apikey": {
+      "type": "string",
+      "description": "The Tautulli API key"
+    },
+
+    "cmd": {
+      "type": "string",
+      "description": "The API command"
+    },
+
+    "out_type": {
+      "type": "string",
+      "enum": ["json", "xml"],
+      "description": "The type of output to return (\"json\" or \"xml\")"
+    },
+
+    "callback": {
+      "type": "string"
+    },
+
+    "debug": {
+      "anyOf": [
+        {"type": "string", "pattern": "^0*?[01]$"},
+        {"type": "integer", "minimum": 0, "maximum": 1}
+      ],
+      "description": "Enable/disable debugging"
+    },
+
+    "session_key": {
+      "anyOf": [
+        {"type": "string", "pattern": "^\\d+$"},
+        {"type": "integer", "minimum": 0}
+      ],
+      "description": "The session key of the session to terminate"
+    },
+
+    "session_id": {
+      "type": "string",
+      "description": "The session ID of the session to terminate"
+    },
+
+    "message": {
+      "type": "string",
+      "description": "A custom message to send the client"
+    }
+    
+  },
+  "oneOf": [
+    {"required": ["apikey", "cmd", "session_key"]},
+    {"required": ["apikey", "cmd", "session_id"]}
+  ]
+}

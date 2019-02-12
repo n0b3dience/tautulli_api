@@ -2772,7 +2772,7 @@ class Tautulli:
                         ip_address=ip_address)
         return req
 
-    def import_database(self, pprint=False, app=None, database_path=None,
+    def import_database(self, app=None, database_path=None,
                         table_name=None, import_ignore_interval=None):
         """
         Import a PlexWatch or Plexivity database into Tautulli.
@@ -2791,7 +2791,404 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='import_database', pprint=pprint, app=app,
+        req = self._cmd(cmd='import_database', app=app,
                         database_path=database_path, table_name=table_name,
                         import_ignore_interval=import_ignore_interval)
+        return req
+
+    def install_geoip_db(self):
+        """Downloads and installs the GeoLite2 database"""
+
+        req = self._cmd(cmd='install_geoip_db')
+        return req
+
+    def notify(self, pprint=False, notifier_id=None, subject=None, body=None,
+               script_args=None):
+        """
+        Send a notification using Tautulli.
+
+        Required parameters:
+            notifier_id (int):      The ID number of the notification agent
+            subject (str):          The subject of the message
+            body (str):             The body of the message
+
+        Optional parameters:
+            script_args (str):      The arguments for script notifications
+
+        Returns:
+            None
+        """
+
+        req = self._cmd(cmd='notify', pprint=pprint, notifier_id=notifier_id,
+                        subject=subject, body=body, script_args=script_args)
+        return req
+
+    def notify_newsletter(self, pprint=False, newsletter_id=None, subject=None,
+                          body=None, message=None):
+        """
+        Send a newsletter using Tautulli.
+
+        Required parameters:
+            newsletter_id (int):    The ID number of the newsletter agent
+
+        Optional parameters:
+            subject (str):          The subject of the newsletter
+            body (str):             The body of the newsletter
+            message (str):          The message of the newsletter
+
+        Returns:
+            None
+        """
+
+        req = self._cmd(cmd='notify_newsletter', pprint=pprint,
+                        newsletter_id=newsletter_id, subject=subject,
+                        body=body, message=message)
+        return req
+
+    def notify_recently_added(self, pprint=False, rating_key=None,
+                              notifier_id=None):
+        """
+        Send a recently added notification using Tautulli.
+
+        Required parameters:
+            rating_key (int):       The rating key for the media
+
+        Optional parameters:
+            notifier_id (int):      The ID number of the notification agent.
+                                    The notification will send to all enabled
+                                    notification agents if notifier id is not
+                                    provided.
+
+        Returns:
+            json
+                {"result": "success",
+                 "message": "Notification queued."
+                }
+        """
+
+        req = self._cmd(cmd='notify_recently_added', pprint=pprint,
+                        rating_key=rating_key, notifier_id=notifier_id)
+        return req
+
+    def pms_image_proxy(self, pprint=False, rating_key=None, width=None,
+                        height=None, opacity=None, background=None,
+                        blur=None, img_format=None, fallback=None,
+                        refresh=None, return_hash=None):
+        """
+                Get image from PMS; save it to image cache directory.
+
+                Required parameters:
+                    img (str):              /library/metadata/
+                                            153037/thumb/1462175060
+                    or
+                    rating_key (int):       54321
+
+                Optional parameters:
+                    width (int):            300
+                    height (int):           450
+                    opacity (int):          25
+                    background (int):       282828
+                    blur (int):             3
+                    img_format (str):       png
+                    fallback (str):         "poster", "cover", "art"
+                    refresh (bool):         True or False whether to refresh the
+                                            image cache
+                    return_hash (bool):     True or False to return the
+                                            self-hosted image hash instead of
+                                            the image
+
+                Returns:
+                    None
+                """
+
+        req = self._cmd(cmd='pms_image_proxy', pprint=pprint,
+                        rating_key=rating_key, width=width, height=height,
+                        opacity=opacity, background=background, blur=blur,
+                        img_format=img_format, fallback=fallback,
+                        refresh=refresh, return_hash=return_hash)
+        return req
+
+    def refresh_libraries_list(self):
+        """Refresh the Tautulli libraries list."""
+
+        req = self._cmd(cmd='refresh_libraries_list')
+        return req
+
+    def refresh_users_list(self):
+        """Refresh the Tautulli users list."""
+
+        req = self._cmd(cmd='refresh_users_list')
+        return req
+
+    def register_device(self, device_name=None, device_id=None,
+                        friendly_name=None):
+        """
+        Registers the Tautulli Android App for notifications.
+
+        Required parameters:
+            device_name (str):        The device name of the Tautulli
+                                      Android App
+            device_id (int):          The OneSignal device id of the Tautulli
+                                      Android App
+
+        Optional parameters:
+            friendly_name (str):      A friendly name to identify the
+                                      mobile device
+
+        Returns:
+            None
+        """
+
+        req = self._cmd(cmd='register_device', device_name=device_name,
+                        device_id=device_id, friendly_name=friendly_name)
+        return req
+
+    def restart(self):
+        """Restart Tautulli."""
+
+        req = self._cmd(cmd='restart')
+        return req
+
+    def search(self, pprint=False, query=None, limit=None):
+        """
+        Get search results from the PMS.
+
+        Required parameters:
+            query (str):        The query string to search for
+
+        Optional parameters:
+            limit (int):        The maximum number of items to return per
+                                media type
+
+        Returns:
+            json:
+                {"results_count": 69,
+                 "results_list":
+                    {"movie":
+                        [{...},
+                         {...},
+                         ]
+                     },
+                    {"episode":
+                        [{...},
+                         {...},
+                         ]
+                     },
+                    {...}
+                 }
+        """
+
+        req = self._cmd(cmd='search', pprint=pprint, query=query, limit=limit)
+        return req
+
+    def set_mobile_device_config(self, mobile_device_id=None,
+                                 friendly_name=None):
+        """
+        Configure an existing notification agent.
+
+        Required parameters:
+            mobile_device_id (int):        The mobile device config to update
+
+        Optional parameters:
+            friendly_name (str):           A friendly name to identify the
+                                           mobile device
+
+        Returns:
+            None
+        """
+
+        req = self._cmd(cmd='set_mobile_device_config',
+                        mobile_device_id=mobile_device_id,
+                        friendly_name=friendly_name)
+        return req
+
+    def set_newsletter_config(self, newsletter_id=None, agent_id=None,
+                              newsletter_config=None, newsletter_email=None,
+                              **cfg_opts):
+        """
+        Configure an existing newsletter agent.
+
+        Required parameters:
+            newsletter_id (int):    The newsletter config to update
+            agent_id (int):         The newsletter type of the newsletter
+
+        Optional parameters:
+            Pass all the config options for the agent with the
+            'newsletter_config_' and 'newsletter_email_' prefix.
+
+        Returns:
+            None
+        """
+
+        req = self._cmd(cmd='set_newsletter_config',
+                        newsletter_id=newsletter_id, agent_id=agent_id,
+                        newsletter_config=newsletter_config,
+                        newsletter_email=newsletter_email, **cfg_opts)
+        return req
+
+    def set_notifier_config(self, notifier_id=None, agent_id=None, **cfg_opts):
+        """
+        Configure an existing notification agent.
+
+        Required parameters:
+            notifier_id (int):        The notifier config to update
+            agent_id (int):           The agent of the notifier
+
+        Optional parameters:
+            Pass all the config options for the agent with the agent prefix:
+                e.g. For Telegram: telegram_bot_token
+                                   telegram_chat_id
+                                   telegram_disable_web_preview
+                                   telegram_html_support
+                                   telegram_incl_poster
+                                   telegram_incl_subject
+            Notify actions (bin):  0 or 1,
+                e.g. on_play, on_stop, etc.
+            Notify text (str):
+                e.g. on_play_subject, on_play_body, etc.
+
+        Returns:
+            None
+        """
+
+        req = self._cmd(cmd='set_notifier_config', notifier_id=notifier_id,
+                        agent_id=agent_id, **cfg_opts)
+        return req
+
+    def sql(self, query=None):
+        """
+        Query the Tautulli database with raw SQL.
+
+        Automatically makes a backup of the database if the latest backup is
+        older than 24hrs. `api_sql` must be manually enabled in the config file.
+
+        Required parameters:
+            query (str):        The SQL query
+
+        Optional parameters:
+            None
+
+        Returns:
+            None
+        """
+
+        req = self._cmd(cmd='sql', query=query)
+        return req
+
+    def terminate_session(self, session_key=None, session_id=None,
+                          message=None):
+        """
+        Stop a streaming session.
+
+        Required parameters:
+            session_key (int):          The session key of the session to
+                                        terminate, OR
+            session_id (str):           The session ID of the session to
+                                        terminate
+
+        Optional parameters:
+            message (str):              A custom message to send to the client
+
+        Returns:
+            None
+        """
+
+        req = self._cmd(cmd='terminate_session', session_key=session_key,
+                        session_id=session_id, message=message)
+        return req
+
+    def undelete_library(self, session_key=None, session_name=None):
+        """
+        Restore a deleted library section to Tautulli.
+
+        Required parameters:
+            section_id (str):       The id of the Plex library section
+            section_name (str):     The name of the Plex library section
+
+        Optional parameters:
+            None
+
+        Returns:
+            None
+        """
+
+        req = self._cmd(cmd='undelete_library', session_key=session_key,
+                        session_name=session_name)
+        return req
+
+    def undelete_user(self, user_id=None, username=None):
+        """
+        Restore a deleted user to Tautulli.
+
+        Required parameters:
+            user_id (str):          The id of the Plex user
+            username (str):         The username of the Plex user
+
+        Optional parameters:
+            None
+
+        Returns:
+            None
+        """
+
+        req = self._cmd(cmd='undelete_user', user_id=user_id, username=username)
+        return req
+
+    def uninstall_geoip_db(self):
+        """Uninstalls the GeoLite2 database"""
+
+        req = self._cmd(cmd='uninstall_geoip_db')
+        return req
+
+    def update(self):
+        """Update Tautulli."""
+
+        req = self._cmd(cmd='update')
+        return req
+
+    def update_check(self, pprint=False):
+        """
+        Check for Tautulli updates.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            None
+
+        Returns:
+            json
+                {"result": "success",
+                 "update": true,
+                 "message": "An update for Tautulli is available."
+                }
+        """
+
+        req = self._cmd(cmd='update_check', pprint=pprint)
+        return req
+
+    def update_metadata_details(self, old_rating_key=None,
+                                new_rating_key=None, media_type=None):
+        """
+        Update the metadata in the Tautulli database by matching rating keys.
+
+        Also updates all parents or children of the media item if it is a
+        show/season/episode or artist/album/track.
+
+        Required parameters:
+            old_rating_key (int):       12345
+            new_rating_key (int):       54321
+            media_type (str):           "movie", "show", "season",
+                                        "episode", "artist", "album", "track"
+
+        Optional parameters:
+            None
+
+        Returns:
+            None
+        """
+
+        req = self._cmd(cmd='update_metadata_details',
+                        old_rating_key=old_rating_key,
+                        new_rating_key=new_rating_key, media_type=media_type)
         return req

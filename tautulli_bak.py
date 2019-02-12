@@ -4069,9 +4069,7 @@ class Tautulli:
         return resp
 
     def refresh_libraries_list(self):
-        """
-        Refresh the Tautulli libraries list.
-        """
+        """Refresh the Tautulli libraries list."""
 
         payload = {
             'apikey': API_KEY,
@@ -4083,9 +4081,7 @@ class Tautulli:
         return resp
 
     def refresh_users_list(self):
-        """
-        Refresh the Tautulli users list.
-        """
+        """Refresh the Tautulli users list."""
 
         payload = {
             'apikey': API_KEY,
@@ -4133,9 +4129,7 @@ class Tautulli:
         return resp
 
     def restart(self):
-        """
-        Restart Tautulli.
-        """
+        """Restart Tautulli."""
 
         payload = {
             'apikey': API_KEY,
@@ -4303,9 +4297,10 @@ class Tautulli:
 
     def sql(self, query=None):
         """
-        Query the Tautulli database with raw SQL. Automatically makes a
-        backup of the database if the latest backup is older than 24hrs.
-        `api_sql` must be manually enabled in the config file.
+        Query the Tautulli database with raw SQL.
+
+        Automatically makes a backup of the database if the latest backup is
+        older than 24hrs. `api_sql` must be manually enabled in the config file.
 
         Required parameters:
             query (str):        The SQL query
@@ -4424,9 +4419,7 @@ class Tautulli:
         """
 
     def uninstall_geoip_db(self):
-        """
-        Uninstalls the GeoLite2 database
-        """
+        """Uninstalls the GeoLite2 database"""
 
         payload = {
             'apikey': API_KEY,
@@ -4438,9 +4431,7 @@ class Tautulli:
         return resp
 
     def update(self):
-        """
-        Update Tautulli.
-        """
+        """Update Tautulli."""
 
         payload = {
             'apikey': API_KEY,
