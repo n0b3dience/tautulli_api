@@ -1,0 +1,67 @@
+{
+  "$id": "get_plays_by_hourofday#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "A schema for defining get_plays_by_hourofday() parameters",
+  "type": "object",
+  "properties": {
+
+    "apikey": {
+      "type": "string",
+      "description": "The Tautulli API key"
+    },
+
+    "cmd": {
+      "type": "string",
+      "description": "The API command"
+    },
+
+    "out_type": {
+      "type": "string",
+      "enum": ["json", "xml"],
+      "description": "The type of output to return (\"json\" or \"xml\")"
+    },
+
+    "callback": {
+      "type": "string"
+    },
+
+    "debug": {
+      "anyOf": [
+        {"type": "string", "pattern": "^0*?[01]$"},
+        {"type": "integer", "minimum": 0, "maximum": 1}
+      ],
+      "description": "Enable/disable debugging"
+    },
+
+    "time_range": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "pattern": "^(\\d+)$"}
+      ],
+      "description": "The number of days of data to return"
+    },
+
+    "y_axis": {
+      "type": "string",
+      "enum": ["plays", "duration"]
+    },
+
+    "user_id": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "pattern": "^(\\d+)$"}
+      ],
+      "description": "'user_id=<int>' is the user's ID - INTEGER (133788) or STRING (\"133788\")"
+    },
+
+    "grouping": {
+      "anyOf": [
+        {"type": "string", "pattern": "^(0*?[01])$"},
+        {"type": "integer", "minimum": 0, "maximum": 1}
+      ],
+      "description": "'grouping=<bin>' is 0 or 1 (OR \"0\" or \"1\")"
+    }
+    
+  },
+  "required": ["apikey", "cmd"]
+}

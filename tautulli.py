@@ -251,7 +251,7 @@ class Tautulli:
         Remove a mobile device from the database.
 
         Required parameters:
-            mobile_device_id (int):        The device id to delete
+            mobile_device_id (int):        The device ID to delete
 
         Optional parameters:
             None
@@ -422,7 +422,7 @@ class Tautulli:
         Update a user on Tautulli.
 
         Required parameters:
-            user_id (str):              The id of the Plex user
+            user_id (int):              The id of the Plex user
 
         Optional parameters:
             friendly_name(str):         The friendly name of the user
@@ -433,6 +433,7 @@ class Tautulli:
         Returns:
             None
         """
+
         req = self._cmd(cmd='edit_user', user_id=user_id,
                         friendly_name=friendly_name, custom_thumb=custom_thumb,
                         keep_history=keep_history, allow_guest=allow_guest)
@@ -1729,7 +1730,7 @@ class Tautulli:
             None
 
         Optional parameters:
-            time_range (str):       The number of days of data to return
+            time_range (int):       The number of days of data to return
             y_axis (str):           "plays" or "duration"
             user_id (str):          The user id to filter the data
             grouping (int):         0 or 1

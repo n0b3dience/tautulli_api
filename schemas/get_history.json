@@ -116,7 +116,6 @@
         {"type": "integer", "minimum": 0},
         {"type": "string", "pattern": "^(\\d+)$"}
       ],
-      "minimum": 0,
       "description": "'start=<int>' is the row to start from - INTEGER (0) (default) or STRING (\"0\")"
     },
 

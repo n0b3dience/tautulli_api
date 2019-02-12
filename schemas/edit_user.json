@@ -1,0 +1,68 @@
+{
+  "$id": "edit_user#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "A schema for defining edit_user() parameters",
+  "type": "object",
+  "properties": {
+
+    "apikey": {
+      "type": "string",
+      "description": "The Tautulli API key"
+    },
+
+    "cmd": {
+      "type": "string",
+      "description": "The API command"
+    },
+
+    "out_type": {
+      "type": "string",
+      "enum": ["json", "xml"],
+      "description": "The type of output to return (\"json\" or \"xml\")"
+    },
+
+    "callback": {
+      "type": "string"
+    },
+
+    "debug": {
+      "anyOf": [
+        {"type": "string", "pattern": "^0*?[01]$"},
+        {"type": "integer", "minimum": 0, "maximum": 1}
+      ],
+      "description": "Enable/disable debugging"
+    },
+    
+    "user_id": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "pattern": "^(\\d+)$"}
+      ],
+      "description": "'user_id=<int>' is the user's ID - INTEGER (133788) or STRING (\"133788\")"
+    },
+
+    "friendly_name": {
+      "type": "string"
+    },
+
+    "custom_thumb": {
+      "type": "string",
+      "description": "The URL for the custom library thumbnail"
+    },
+
+    "keep_history": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0, "maximum": 1},
+        {"type": "string", "pattern": "^0*?[01]$"}
+          ]
+    },
+
+    "allow_guest": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0, "maximum": 1},
+        {"type": "string", "pattern": "^0*?[01]$"}
+          ]
+    }
+  },
+  "required": ["apikey", "cmd", "user_id"]
+}
