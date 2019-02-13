@@ -1,0 +1,140 @@
+{
+  "$id": "get_history#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "A schema for defining get_history() parameters",
+  "type": "object",
+  "properties": {
+
+    "cmd": {
+      "type": "string",
+      "description": "The API command"
+    },
+
+    "out_type": {
+      "type": "string",
+      "enum": ["json", "xml"],
+      "description": "The type of output to return (\"json\" or \"xml\")"
+    },
+
+    "callback": {
+      "type": "string"
+    },
+
+    "debug": {
+      "anyOf": [
+        {"type": "string", "pattern": "^0*?[01]$"},
+        {"type": "integer", "minimum": 0, "maximum": 1}
+      ],
+      "description": "Enable/disable debugging"
+    },
+
+    "grouping": {
+      "anyOf": [
+        {"type": "string", "pattern": "^(0*?[01])$"},
+        {"type": "integer", "minimum": 0, "maximum": 1}
+      ],
+      "description": "'grouping=<bin>' is 0 or 1 (OR \"0\" or \"1\")"
+    },
+
+    "user": {
+      "type": "string",
+      "description": "'user=<username>' is a username STRING"
+    },
+
+    "user_id": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "pattern": "^(\\d+)$"}
+      ],
+      "description": "'user_id=<int>' is the user's ID - INTEGER (133788) or STRING (\"133788\")"
+    },
+
+    "rating_key": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "pattern": "^(\\d+)$"}
+      ],
+      "description": "'rating_key=<int>' is an item's rating key - INTEGER (4348) or STRING (\"4348\")"
+    },
+
+    "parent_rating_key": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "pattern": "^(\\d+)$"}
+      ],
+      "description": "'parent_rating_key=<int>' is an item's parent's rating key - INTEGER (544) or STRING (\"544\")"
+    },
+
+    "grandparent_rating_key": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "pattern": "^(\\d+)$"}
+      ],
+      "description": "'grandparent_rating_key=<int>' is an item's grandparent's rating key - INTEGER (351) or STRING (\"351\")"
+    },
+
+    "start_date": {
+      "type": "string",
+      "pattern": "^(\\d{4}-\\d{2}-\\d{2})$",
+      "description": "'start_date=<YYYY-MM-DD>' date must be in format: \"2018-01-01\""
+    },
+
+    "section_id": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "pattern": "^(\\d+)$"}
+      ],
+      "description": "'section_id=<int>' is the section's ID - INTEGER (2) or STRING (\"2\")"
+    },
+
+    "media_type": {
+      "type": "string",
+      "enum": ["movie", "episode", "track"],
+      "description": "'media_type=<type str>' is the library media type to filter: \"movie\", \"episode\" or \"track\""
+    },
+
+    "transcode_decision": {
+      "type": "string",
+      "enum": ["direct play", "copy", "transcode"],
+      "description": "'transcode_decision=<tcode dec str>' is the transcode type to filter: \"direct play\", \"copy\" or \"transcode\""
+    },
+
+    "order_column": {
+      "type": "string",
+      "enum": ["date", "friendly_name", "ip_address", "platform", "player", "full_title", "started", "paused_counter", "stopped", "duration"],
+      "description": "'order_column=<column str>' order results by: \"date\", \"friendly_name\", \"ip_address\", \"platform\", \"ip_address\", \"ip_address\", \"ip_address\", \"ip_address\", \"ip_address\" or \"ip_address\""
+    },
+
+    "order_dir": {
+      "type": "string",
+      "enum": ["desc", "asc"],
+      "description": "'order_dir=<dir str>' is the direction to return the results: \"asc\" or \"desc\" (default)"
+    },
+
+    "start": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "pattern": "^(\\d+)$"}
+      ],
+      "description": "'start=<int>' is the row to start from - INTEGER (0) (default) or STRING (\"0\")"
+    },
+
+    "length": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "pattern": "^(\\d+)$"}
+      ],
+      "minimum": 0,
+      "description": "'length=<int>' is the number of items to return - INTEGER (25) (default) or STRING (\"25\")"
+    },
+
+    "search": {
+      "type": "string",
+      "description": "'search=<search str>' is a string to search for"
+    }
+
+  },
+  "required": ["cmd", "apikey"],
+  "dependencies": {
+  }
+}

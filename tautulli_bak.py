@@ -1,11 +1,6 @@
-"""
-Tautulli base class
-"""
-from payload import Payload
-from validator import Validator
-from requester import Requester
-from tautulli_api_auth import TautulliApiAuth
 import configparser
+from tautulli_api_auth import TautulliApiAuth
+import utils
 
 
 # ConfigParser Variables
@@ -15,38 +10,161 @@ config.read('settings_private.ini')
 HOST = config['USER_SETTINGS']['host']
 PORT = config['USER_SETTINGS']['port']
 API_KEY = config['USER_SETTINGS']['api_key']
-SCHEMA = config['USER_SETTINGS']['schema']
-PATH = config['USER_SETTINGS']['path']
+SCHEMA = 'http'
+PATH = ''
 
 
 class Tautulli:
-    """Tautulli base class"""
 
-    def __init__(self, host=None, port=None, apikey=None,
-                 schema=None, path=None):
-        # Endpoint values
-        self.host = host or HOST
-        self.port = port or PORT
-        self.apikey = apikey or API_KEY
-        self.schema = schema or SCHEMA
-        self.path = path or PATH
-        self.url = '{0}://{1}:{2}{3}/api/v2'.format(
-            self.schema, self.host, self.port, self.path
+    def __init__(self):
+        self._base_url = '{0}://{1}:{2}{3}/api/v2'.format(
+            SCHEMA, HOST, PORT, PATH
         )
-        # Requests authorization
-        self.auth = TautulliApiAuth(apikey=self.apikey)
+        # TODO: Figure out how the below ApiAuth works
+        self.auth = TautulliApiAuth(apikey=API_KEY)
 
-    def _cmd(self, pprint=False, **params):
-        """Sends and receives API command"""
-        payload = {'apikey': self.apikey}
-        payload.update(Payload(params=params).payload)
-        validator = Validator(payload)
-        validator.validate()
-        requester = Requester(self.url, payload)
-        r = requester.get(pprint=pprint)
-        return r
+    def get_history(self, grouping=None, user=None, user_id=None,
+                    rating_key=None, parent_rating_key=None,
+                    grandparent_rating_key=None, start_date=None,
+                    section_id=None, media_type=None,
+                    transcode_decision=None, order_column=None,
+                    order_dir=None, start=None, length=None, search=None):
+        """
+        Get the Tautulli history.
 
-    # API methods
+        Required parameters:
+            None
+
+        Optional parameters:
+            grouping (int):                 0 or 1
+            user (str):                     "Jon Snow"
+            user_id (int):                  133788
+            rating_key (int):               4348
+            parent_rating_key (int):        544
+            grandparent_rating_key (int):   351
+            start_date (str):               "YYYY-MM-DD"
+            section_id (int):               2
+            media_type (str):               "movie", "episode", "track"
+            transcode_decision (str):       "direct play", "copy", "transcode",
+            order_column (str):             "date", "friendly_name",
+                                            "ip_address", "platform", "player",
+                                            "full_title", "started",
+                                            "paused_counter", "stopped",
+                                            "duration"
+            order_dir (str):                "desc" or "asc",
+                                            default: "desc"
+            start (int):                    Row to start from,
+                                            default: 0
+            length (int):                   Number of items to return,
+                                            default: 25
+            search (str):                   A string to search for, "Thrones"
+
+        Returns:
+        json:
+            {"draw": 1,
+             "recordsTotal": 1000,
+             "recordsFiltered": 250,
+             "total_duration": "42 days 5 hrs 18 mins",
+             "filter_duration": "10 hrs 12 mins",
+             "data":
+                [{"date": 1462687607,
+                  "duration": 263,
+                  "friendly_name": "Mother of Dragons",
+                  "full_title": "Game of Thrones - The Red Woman",
+                  "grandparent_rating_key": 351,
+                  "grandparent_title": "Game of Thrones",
+                  "original_title": "",
+                  "group_count": 1,
+                  "group_ids": "1124",
+                  "id": 1124,
+                  "ip_address": "xxx.xxx.xxx.xxx",
+                  "media_index": 17,
+                  "media_type": "episode",
+                  "parent_media_index": 7,
+                  "parent_rating_key": 544,
+                  "parent_title": "",
+                  "paused_counter": 0,
+                  "percent_complete": 84,
+                  "platform": "Chrome",
+                  "player": "Plex Web (Chrome)",
+                  "rating_key": 4348,
+                  "reference_id": 1123,
+                  "session_key": null,
+                  "started": 1462688107,
+                  "state": null,
+                  "stopped": 1462688370,
+                  "thumb": "/library/metadata/4348/thumb/1462414561",
+                  "title": "The Red Woman",
+                  "transcode_decision": "transcode",
+                  "user": "DanyKhaleesi69",
+                  "user_id": 8008135,
+                  "watched_status": 0,
+                  "year": 2016
+                  },
+                 {...},
+                 {...}
+                 ]
+             }
+
+        Example usage:
+            get_history(user="Jon Snow", order_dir="asc", length=20)
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_history',
+            'grouping': grouping,                               # (bin)
+            'user': user,                                       # (str)
+            'user_id': user_id,                                 # (int)
+            'rating_key': rating_key,                           # (int)
+            'parent_rating_key': parent_rating_key,             # (int)
+            'grandparent_rating_key': grandparent_rating_key,   # (int)
+            'start_date': start_date,                           # (str)
+            'section_id': section_id,                           # (int)
+            'media_type': media_type,                           # (str)
+            'transcode_decision': transcode_decision,           # (str)
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
+        }
+
+        media_type_list = ["movie", "episode", "track"]
+        transcode_decision_list = ["direct play", "copy", "transcode"]
+        order_column_list = [
+            "date", "friendly_name", "ip_address", "platform", "player",
+            "full_title", "started", "paused_counter", "stopped", "duration"
+        ]
+        order_dir_list = ["desc", "asc"]
+
+        # Check keyword arguments
+        utils.check_bin_kw(grouping, is_required=False)
+        utils.check_str_kw(user, is_required=False)
+        utils.check_pos_int_kw(user_id, is_required=False)
+        utils.check_pos_int_kw(rating_key, is_required=False)
+        utils.check_pos_int_kw(parent_rating_key, is_required=False)
+        utils.check_pos_int_kw(grandparent_rating_key,
+                               is_required=False)
+        utils.check_str_kw(start_date, is_required=False)
+        utils.check_pos_int_kw(section_id, is_required=False)
+        utils.check_str_kw(media_type, value_check_dict=media_type_list,
+                           is_required=False)
+        utils.check_str_kw(transcode_decision,
+                           value_check_dict=transcode_decision_list,
+                           is_required=False)
+        utils.check_str_kw(order_column, value_check_dict=order_column_list,
+                           is_required=False)
+        utils.check_str_kw(order_dir, value_check_dict=order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
     def add_newsletter_config(self, agent_id=None):
         """
         Add a new notification agent.
@@ -61,8 +179,17 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='add_newsletter_config', agent_id=agent_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'add_newsletter_config',
+            'agent_id': agent_id                                # (int)
+        }
+
+        utils.check_pos_int_kw(agent_id, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def add_notifier_config(self, agent_id=None):
         """
@@ -78,26 +205,53 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='add_notifier_config', agent_id=agent_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'add_notifier_config',
+            'agent_id': agent_id                                # (int)
+        }
+
+        utils.check_pos_int_kw(agent_id, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def arnold(self):
         """Get to the chopper!"""
 
-        req = self._cmd(cmd='arnold')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'arnold'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def backup_config(self):
         """Create a manual backup of the `config.ini` file."""
 
-        req = self._cmd(cmd='backup_config')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'backup_config'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def backup_db(self):
         """Create a manual backup of the `plexpy.db` file."""
 
-        req = self._cmd(cmd='backup_db')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'backup_db'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_all_library_history(self, section_id=None):
         """
@@ -113,9 +267,18 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_all_library_history',
-                        section_id=section_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_all_library_history',
+            'section_id': section_id                            # (int) (req)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(section_id, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_all_user_history(self, user_id=None):
         """
@@ -131,14 +294,30 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_all_user_history', user_id=user_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_all_user_history',
+            'user_id': user_id                                  # (int) (req)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(user_id, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_cache(self):
         """Delete and recreate the cache directory."""
 
-        req = self._cmd(cmd='delete_cache')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_cache'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_hosted_images(self, rating_key=None, service=None,
                              delete_all=None):
@@ -162,15 +341,34 @@ class Tautulli:
                  "message": "Deleted hosted images from Imgur."}
         """
 
-        req = self._cmd(cmd='delete_hosted_images', rating_key=rating_key,
-                        service=service, delete_all=delete_all)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_hosted_images',
+            'rating_key': rating_key,                           # (int)
+            'service': service,                                 # (str)
+            'delete_all': delete_all                            # (bool)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(rating_key, is_required=False)
+        utils.check_str_kw(service, is_required=False)
+        utils.check_bool_kw(delete_all, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_image_cache(self):
         """Delete and recreate the image cache directory."""
 
-        req = self._cmd(cmd='delete_image_cache')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_image_cache'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_library(self, section_id=None):
         """
@@ -189,8 +387,18 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_library', section_id=section_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_library',
+            'section_id': section_id                        # (int) (req)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(section_id, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_login_log(self):
         """
@@ -206,8 +414,14 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_login_log')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_login_log'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_lookup_info(self, rating_key=None):
         """
@@ -226,8 +440,26 @@ class Tautulli:
                  "message": "Deleted lookup info."}
         """
 
-        req = self._cmd(cmd='delete_lookup_info', rating_key=rating_key)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_lookup_info'
+        }
+
+        if rating_key is not None:
+            if type(rating_key) == int:
+                payload['rating_key'] = rating_key
+            else:
+                raise TypeError(
+                    '"rating_key=<val>" <val> MUST be an INTEGER'
+                )
+        else:
+            raise ValueError(
+                '"rating_key" is a required keyword argument'
+            )
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_media_info_cache(self, section_id=None):
         """
@@ -243,15 +475,33 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_media_info_cache', section_id=section_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_media_info_cache'
+        }
+
+        if section_id is not None:
+            if type(section_id) == str:
+                payload['section_id'] = section_id
+            else:
+                raise TypeError(
+                    '"section_id=<val>" <val> MUST be a STRING'
+                )
+        else:
+            raise ValueError(
+                '"section_id" is a required keyword argument'
+            )
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_mobile_device(self, mobile_device_id=None):
         """
         Remove a mobile device from the database.
 
         Required parameters:
-            mobile_device_id (int):        The device ID to delete
+            mobile_device_id (int):        The device id to delete
 
         Optional parameters:
             None
@@ -260,9 +510,26 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_mobile_device',
-                        mobile_device_id=mobile_device_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_mobile_device'
+        }
+
+        if mobile_device_id is not None:
+            if type(mobile_device_id) == int:
+                payload['mobile_device_id'] = mobile_device_id
+            else:
+                raise TypeError(
+                    '"mobile_device_id=<val>" <val> MUST be an INTEGER'
+                )
+        else:
+            raise ValueError(
+                '"mobile_device_id" is a required keyword argument'
+            )
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_newsletter(self, newsletter_id=None):
         """
@@ -278,8 +545,26 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_newsletter', newsletter_id=newsletter_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_newsletter'
+        }
+
+        if newsletter_id is not None:
+            if type(newsletter_id) == int:
+                payload['newsletter_id'] = newsletter_id
+            else:
+                raise TypeError(
+                    '"newsletter_id=<val>" <val> MUST be an INTEGER'
+                )
+        else:
+            raise ValueError(
+                '"newsletter_id" is a required keyword argument'
+            )
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_newsletter_log(self):
         """
@@ -295,8 +580,14 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_newsletter_log')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_newsletter_log'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_notification_log(self):
         """
@@ -312,8 +603,14 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_notification_log')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_notification_log'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_notifier(self, notifier_id=None):
         """
@@ -329,14 +626,30 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_notifier', notifier_id=notifier_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_notifier',
+            'notifier_id': notifier_id                          # (int)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(notifier_id, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_temp_sessions(self):
         """Flush out all of the temporary sessions in the database."""
 
-        req = self._cmd(cmd='delete_temp_sessions')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_temp_sessions'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def delete_user(self, user_id=None):
         """
@@ -352,48 +665,93 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='delete_user', user_id=user_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'delete_user',
+            'user_id': user_id                                  # (int) (req)
+        }
 
-    def docs(self, pprint=False):
+        # Check keyword arguments
+        utils.check_pos_int_kw(user_id, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def docs(self):
         """
-        Return the api docs as a dict.
-
-        Commands are keys, docstrings are values.
+        Return the api docs as a dict where commands are keys,
+        docstrings are values.
         """
 
-        req = self._cmd(cmd='docs', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'docs'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def docs_md(self):
         """Return the api docs formatted with markdown."""
 
-        req = self._cmd(cmd='docs_md')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'docs_md'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def download_config(self):
         """Download the Tautulli configuration file."""
 
-        req = self._cmd(cmd='download_config')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'download_config'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def download_database(self):
         """Download the Tautulli database file."""
 
-        req = self._cmd(cmd='download_database')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'download_database'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def download_log(self):
         """Download the Tautulli log file."""
 
-        req = self._cmd(cmd='download_log')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'download_log'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def download_plex_log(self):
         """Download the Plex log file."""
 
-        req = self._cmd(cmd='download_plex_log')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'download_plex_log'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def edit_library(self, section_id=None, custom_thumb=None,
                      keep_history=None):
@@ -412,9 +770,22 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='edit_library', section_id=section_id,
-                        custom_thumb=custom_thumb, keep_history=keep_history)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'edit_library',
+            'section_id': section_id,                           # (str) (req)
+            'custom_thumb': custom_thumb,                       # (str)
+            'keep_history': keep_history                        # (bin)
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(section_id, is_required=True)
+        utils.check_str_kw(custom_thumb, is_required=False)
+        utils.check_bin_kw(keep_history, is_required=False)
+
+        # Send request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def edit_user(self, user_id=None, friendly_name=None, custom_thumb=None,
                   keep_history=None, allow_guest=None):
@@ -422,7 +793,7 @@ class Tautulli:
         Update a user on Tautulli.
 
         Required parameters:
-            user_id (int):              The id of the Plex user
+            user_id (str):              The id of the Plex user
 
         Optional parameters:
             friendly_name(str):         The friendly name of the user
@@ -434,13 +805,28 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='edit_user', user_id=user_id,
-                        friendly_name=friendly_name, custom_thumb=custom_thumb,
-                        keep_history=keep_history, allow_guest=allow_guest)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'edit_user',
+            'user_id': user_id,                                 # (str) (req)
+            'friendly_name': friendly_name,                     # (str)
+            'custom_thumb': custom_thumb,                       # (str)
+            'keep_history': keep_history,                       # (bin)
+            'allow_guest': allow_guest                          # (bin)
+        }
 
-    def get_activity(self, pprint=False, session_key=None, session_id=None,
-                     out_type=None, callback=None, debug=None):
+        # Check keyword arguments
+        utils.check_str_kw(user_id, is_required=True)
+        utils.check_str_kw(friendly_name, is_required=False)
+        utils.check_str_kw(custom_thumb, is_required=False)
+        utils.check_bin_kw(keep_history, is_required=False)
+        utils.check_bin_kw(allow_guest, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_activity(self, session_key=None, session_id=None):
         """
         Get the current activity on the PMS.
 
@@ -682,12 +1068,22 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_activity', pprint=pprint,
-                        session_key=session_key, session_id=session_id,
-                        out_type=out_type, callback=callback, debug=debug)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_activity',
+            'session_key': session_key,                         # (int)
+            'session_id': session_id                            # (str)
+        }
 
-    def get_apikey(self, pprint=False, username=None, password=None):
+        # Check keyword arguments
+        utils.check_pos_int_kw(session_key, is_required=False)
+        utils.check_str_kw(session_id, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_apikey(self, username=None, password=None):
         """
         Get the apikey.
 
@@ -705,11 +1101,22 @@ class Tautulli:
             string:             "apikey"
         """
 
-        req = self._cmd(cmd='get_apikey', pprint=pprint, username=username,
-                        password=password)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_apikey',
+            'username': username,                               # (str)
+            'password': password                                # (str)
+        }
 
-    def get_date_formats(self, pprint=False):
+        # Check keyword arguments
+        utils.check_str_kw(username, is_required=False)
+        utils.check_str_kw(password, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_date_formats(self):
         """
         Get the date and time formats used by Tautulli.
 
@@ -726,13 +1133,21 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_date_formats', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_date_formats'
+        }
 
-    def get_geoip_lookup(self, pprint=False, ip_address=None):
+        # Send request
+        response = utils.send_receive_request(
+            self._base_url, params_dict=payload
+        )
+        # Return request
+        return response
+
+    def get_geoip_lookup(self, ip_address=None):
         """
         Get the geolocation info for an IP address.
-
         The GeoLite2 database must be installed.
 
         Required parameters:
@@ -758,112 +1173,21 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_geoip_lookup', pprint=pprint,
-                        ip_address=ip_address)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_geoip_lookup',
+            'ip_address': ip_address                            # (str) (req)
+        }
 
-    def get_history(self, pprint=False, grouping=None, user=None, user_id=None,
-                    rating_key=None, parent_rating_key=None,
-                    grandparent_rating_key=None, start_date=None,
-                    section_id=None, media_type=None,
-                    transcode_decision=None, order_column=None,
-                    order_dir=None, start=None, length=None, search=None,
-                    out_type=None, callback=None, debug=None):
-        """
-        Get the Tautulli history.
+        # Check keyword arguments
+        utils.check_str_kw(ip_address, is_required=True)
 
-        Required parameters:
-            None
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
-        Optional parameters:
-            grouping (int):                 0 or 1
-            user (str):                     "Jon Snow"
-            user_id (int):                  133788
-            rating_key (int):               4348
-            parent_rating_key (int):        544
-            grandparent_rating_key (int):   351
-            start_date (str):               "YYYY-MM-DD"
-            section_id (int):               2
-            media_type (str):               "movie", "episode", "track"
-            transcode_decision (str):       "direct play", "copy", "transcode",
-            order_column (str):             "date", "friendly_name",
-                                            "ip_address", "platform", "player",
-                                            "full_title", "started",
-                                            "paused_counter", "stopped",
-                                            "duration"
-            order_dir (str):                "desc" or "asc",
-                                            default: "desc"
-            start (int):                    Row to start from,
-                                            default: 0
-            length (int):                   Number of items to return,
-                                            default: 25
-            search (str):                   A string to search for, "Thrones"
-
-        Returns:
-        json:
-            {"draw": 1,
-             "recordsTotal": 1000,
-             "recordsFiltered": 250,
-             "total_duration": "42 days 5 hrs 18 mins",
-             "filter_duration": "10 hrs 12 mins",
-             "data":
-                [{"date": 1462687607,
-                  "duration": 263,
-                  "friendly_name": "Mother of Dragons",
-                  "full_title": "Game of Thrones - The Red Woman",
-                  "grandparent_rating_key": 351,
-                  "grandparent_title": "Game of Thrones",
-                  "original_title": "",
-                  "group_count": 1,
-                  "group_ids": "1124",
-                  "id": 1124,
-                  "ip_address": "xxx.xxx.xxx.xxx",
-                  "media_index": 17,
-                  "media_type": "episode",
-                  "parent_media_index": 7,
-                  "parent_rating_key": 544,
-                  "parent_title": "",
-                  "paused_counter": 0,
-                  "percent_complete": 84,
-                  "platform": "Chrome",
-                  "player": "Plex Web (Chrome)",
-                  "rating_key": 4348,
-                  "reference_id": 1123,
-                  "session_key": null,
-                  "started": 1462688107,
-                  "state": null,
-                  "stopped": 1462688370,
-                  "thumb": "/library/metadata/4348/thumb/1462414561",
-                  "title": "The Red Woman",
-                  "transcode_decision": "transcode",
-                  "user": "DanyKhaleesi69",
-                  "user_id": 8008135,
-                  "watched_status": 0,
-                  "year": 2016
-                  },
-                 {...},
-                 {...}
-                 ]
-             }
-
-        Example usage:
-            get_history(user="Jon Snow", order_dir="asc", length=20)
-        """
-
-        req = self._cmd(cmd='get_history', pprint=pprint, grouping=grouping,
-                        user=user, user_id=user_id, rating_key=rating_key,
-                        parent_rating_key=parent_rating_key,
-                        grandparent_rating_key=grandparent_rating_key,
-                        start_date=start_date, section_id=section_id,
-                        media_type=media_type,
-                        transcode_decision=transcode_decision,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search,
-                        out_type=out_type, callback=callback, debug=debug)
-        return req
-
-    def get_home_stats(self, pprint=False, grouping=None, time_range=None,
-                       stats_type=None, stats_count=None):
+    def get_home_stats(self, grouping=None, time_range=None, stats_type=None,
+                       stats_count=None):
         """
         Get the homepage watch statistics.
 
@@ -938,12 +1262,26 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_home_stats', pprint=pprint, grouping=grouping,
-                        time_range=time_range, stats_type=stats_type,
-                        stats_count=stats_count)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_home_stats',
+            'grouping': grouping,                               # (bin)
+            'time_range': time_range,                           # (str)
+            'stats_type': stats_type,                           # (bin)
+            'stats_count': stats_count                          # (int)
+        }
 
-    def get_libraries(self, pprint=False):
+        # Check keyword arguments
+        utils.check_bin_kw(grouping, is_required=False)
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_bin_kw(stats_type, is_required=False)
+        utils.check_pos_int_kw(stats_count, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_libraries(self):
         """
         Get a list of all libraries on your server.
 
@@ -969,12 +1307,20 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_libraries', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_libraries'
+        }
 
-    def get_libraries_table(self, pprint=False, order_column=None,
-                            order_dir=None, start=None, length=None,
-                            search=None):
+        # Send request
+        response = utils.send_receive_request(
+            self._base_url, params_dict=payload
+        )
+        # Return request
+        return response
+
+    def get_libraries_table(self, order_column=None, order_dir=None,
+                            start=None, length=None, search=None):
         """
         Get the data on the Tautulli libraries table.
 
@@ -1030,12 +1376,38 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_libraries_table', pprint=pprint,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_libraries_table',
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
+        }
 
-    def get_library(self, pprint=False, section_id=None):
+        order_column_list = [
+            "library_thumb", "section_name", "section_type", "count",
+            "parent_count", "child_count", "last_accessed", "last_played",
+            "plays", "duration"
+        ]
+
+        order_dir_list = ["asc", "desc"]
+
+        # Check keyword arguments
+        utils.check_str_kw(order_column, order_column_list,
+                           is_required=False)
+        utils.check_str_kw(order_dir, order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_library(self, section_id=None):
         """
         Get a library's details.
 
@@ -1061,20 +1433,30 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_library', pprint=pprint, section_id=section_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_library',
+            'section_id': section_id
+        }
 
-    def get_library_media_info(self, pprint=False, section_id=None,
-                               rating_key=None, section_type=None,
-                               order_column=None, order_dir=None, start=None,
-                               length=None, search=None, refresh=None):
+        # Check keyword arguments
+        utils.check_pos_int_kw(section_id, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_library_media_info(self, section_id=None, rating_key=None,
+                               section_type=None, order_column=None,
+                               order_dir=None, start=None, length=None,
+                               search=None, refresh=None):
         """
         Get the data on the Tautulli media info tables.
 
         Required parameters:
             section_id (int):               The id of the Plex library
                                             section, OR
-            rating_key (int):               The grandparent or parent rating key
+            rating_key (str):               The grandparent or parent rating key
 
         Optional parameters:
             section_type (str):             "movie", "show", "artist", "photo"
@@ -1128,14 +1510,57 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_library_media_info', pprint=pprint,
-                        section_id=section_id, rating_key=rating_key,
-                        section_type=section_type, order_column=order_column,
-                        order_dir=order_dir, start=start, length=length,
-                        search=search, refresh=refresh)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_library_media_info',
+            'section_id': section_id,                           # (int)
+            'rating_key': rating_key,                           # (str)
+            'section_type': section_type,                       # (str)
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search,                                   # (str)
+            'refresh': refresh                                  # (str)
+        }
 
-    def get_library_names(self, pprint=False):
+        section_type_list = ["movie", "show", "artist", "photo"]
+        order_column_list = [
+            "added_at", "sort_title", "container", "bitrate", "video_codec",
+            "video_resolution", "video_framerate", "audio_codec",
+            "audio_channels",  "file_size", "last_played", "play_count"
+        ]
+        order_dir_list = ["desc", "asc"]
+
+        # Check for ONLY one required arguments
+        if section_id and rating_key is None:
+            raise ValueError(
+                'Either "section_id" OR "rating_key" is required'
+            )
+        elif section_id and rating_key is not None:
+            raise ValueError(
+                'Only ONE required argument ("section_id" OR "rating_key") '
+                'is required'
+            )
+        elif section_id is not None:
+            utils.check_pos_int_kw(section_id)
+        elif rating_key is not None:
+            utils.check_str_kw(rating_key)
+
+        # Check optional keyword arguments
+        utils.check_str_kw(section_type, section_type_list)
+        utils.check_str_kw(order_column, order_column_list)
+        utils.check_str_kw(order_dir, order_dir_list)
+        utils.check_pos_int_kw(start)
+        utils.check_pos_int_kw(length)
+        utils.check_str_kw(search)
+        utils.check_str_kw(refresh)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_library_names(self):
         """
         Get a list of library sections and ids on the PMS.
 
@@ -1163,11 +1588,16 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_library_names', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_library_names'
+        }
 
-    def get_library_user_stats(self, pprint=False, section_id=None,
-                               grouping=None):
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_library_user_stats(self, section_id=None, grouping=None):
         """
         Get a library's user statistics.
 
@@ -1194,12 +1624,22 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_library_user_stats', pprint=pprint,
-                        section_id=section_id, grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_library_user_stats',
+            'section_id': section_id,                           # (int)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_library_watch_time_stats(self, pprint=False, section_id=None,
-                                     grouping=None):
+        # Check keyword arguments
+        utils.check_pos_int_kw(section_id, is_required=True)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_library_watch_time_stats(self, section_id=None, grouping=None):
         """
         Get a library's watch time statistics.
 
@@ -1230,12 +1670,23 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_library_watch_time_stats', pprint=pprint,
-                        section_id=section_id, grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_library_watch_time_stats',
+            'section_id': section_id,                           # (int)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_logs(self, pprint=False, sort=None, search=None, order=None,
-                 regex=None, start=None, end=None):
+        # Check keyword arguments
+        utils.check_pos_int_kw(section_id, is_required=True)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_logs(self, sort=None, search=None, order=None, regex=None,
+                 start=None, end=None):
         """
         Get the Tautulli logs.
 
@@ -1263,12 +1714,33 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_logs', pprint=pprint, sort=sort,
-                        search=search, order=order, regex=regex,
-                        start=start, end=end)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_logs',
+            'sort': sort,                                       # (str)
+            'search': search,                                   # (str)
+            'order': order,                                     # (str)
+            'regex': regex,                                     # (str)
+            'start': start,                                     # (int)
+            'end': start                                        # (int)
+        }
 
-    def get_metadata(self, pprint=False, rating_key=None):
+        sort_list = ["time", "thread", "msg", "loglevel"]
+        order_list = ["desc", "asc"]
+
+        # Check keyword arguments
+        utils.check_str_kw(sort, sort_list, is_required=False)
+        utils.check_str_kw(search, is_required=False)
+        utils.check_str_kw(order, order_list, is_required=False)
+        utils.check_str_kw(regex, is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(end, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_metadata(self, rating_key=None):
         """
         Get the metadata for a media item.
 
@@ -1414,12 +1886,20 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_metadata', pprint=pprint,
-                        rating_key=rating_key)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_metadata',
+            'rating_key': rating_key                            # (str)
+        }
 
-    def get_new_rating_keys(self, pprint=False, rating_key=None,
-                            media_type=None):
+        # Check keyword arguments
+        utils.check_str_kw(rating_key, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_new_rating_keys(self, rating_key=None, media_type=None):
         """
         Get a list of new rating keys for the PMS of all of the
         item's parent/children.
@@ -1438,11 +1918,26 @@ class Tautulli:
                 {}
         """
 
-        req = self._cmd(cmd='get_new_rating_keys', pprint=pprint,
-                        rating_key=rating_key, media_type=media_type)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_new_rating_keys',
+            'rating_key': rating_key,                           # (str)
+            'media_type': media_type                            # (str)
+        }
 
-    def get_newsletter_config(self, pprint=False, newsletter_id=None):
+        media_type_list = ['movie', 'show', 'season', 'episode', 'artist',
+                           'album', 'track']
+
+        # Check keyword arguments
+        utils.check_str_kw(rating_key, is_required=True)
+        utils.check_str_kw(media_type, media_type_list,
+                           is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_newsletter_config(self, newsletter_id=None):
         """
         Get the configuration for an existing notification agent.
 
@@ -1480,13 +1975,21 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_newsletter_config', pprint=pprint,
-                        newsletter_id=newsletter_id)
-        return req
-    
-    def get_newsletter_log(self, pprint=False, order_column=None, 
-                           order_dir=None, start=None, length=None, 
-                           search=None):
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_newsletter_config',
+            'newsletter_id': newsletter_id                      # (int)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(newsletter_id, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_newsletter_log(self, order_column=None, order_dir=None,
+                           start=None, length=None, search=None):
         """
         Get the data on the Tautulli newsletter logs table.
 
@@ -1527,13 +2030,36 @@ class Tautulli:
                      ]
                  }
         """
-        
-        req = self._cmd(cmd='get_newsletter_log', pprint=pprint, 
-                        order_column=order_column, order_dir=order_dir, 
-                        start=start, length=length, search=search)
-        return req
-    
-    def get_newsletters(self, pprint=False):
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_newsletter_log',
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
+        }
+
+        order_column_list = ["timestamp", "newsletter_id", "agent_name",
+                             "notify_action", "subject_text", "start_date",
+                             "end_date", "uuid"]
+        order_dir_list = ["desc", "asc"]
+
+        # Check keyword arguments
+        utils.check_str_kw(order_column, order_column_list,
+                           is_required=False)
+        utils.check_str_kw(order_dir, order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_newsletters(self):
         """
         Get a list of configured newsletters.
 
@@ -1555,13 +2081,18 @@ class Tautulli:
                   }
                  ]
         """
-        
-        req = self._cmd(cmd='get_newsletters', pprint=pprint)
-        return req
-    
-    def get_notification_log(self, pprint=False, order_column=None,
-                             order_dir=None, start=None, length=None,
-                             search=None):
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_newsletters'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_notification_log(self, order_column=None, order_dir=None,
+                             start=None, length=None, search=None):
         """
         Get the data on the Tautulli notification logs table.
 
@@ -1602,13 +2133,35 @@ class Tautulli:
                      ]
                  }
         """
-        
-        req = self._cmd(cmd='get_notification_log', pprint=pprint,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search)
-        return req
 
-    def get_notifier_config(self, pprint=False, notifier_id=None):
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_notification_log',
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
+        }
+
+        order_column_list = ["timestamp", "notifier_id", "agent_name",
+                             "notify_action", "subject_text", "body_text"]
+        order_dir_list = ["desc", "asc"]
+
+        # Check keyword arguments
+        utils.check_str_kw(order_column, order_column_list,
+                           is_required=False)
+        utils.check_str_kw(order_dir, order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_notifier_config(self, notifier_id=None):
         """
         Get the configuration for an existing notification agent.
 
@@ -1648,11 +2201,20 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_notifier_config', pprint=pprint,
-                        notifier_id=notifier_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_notifier_config',
+            'notifier_id': notifier_id                          # (int)
+        }
 
-    def get_notifier_parameters(self, pprint=False):
+        # Check keyword arguments
+        utils.check_pos_int_kw(notifier_id, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_notifier_parameters(self):
         """
         Get the list of available notification parameters.
 
@@ -1668,10 +2230,16 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_notifier_parameters', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_notifier_parameters'
+        }
 
-    def get_notifiers(self, pprint=False, notify_action=None):
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_notifiers(self, notify_action=None):
         """
         Get a list of configured notifiers.
 
@@ -1693,12 +2261,20 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_notifiers', pprint=pprint,
-                        notify_action=notify_action)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_notifiers',
+            'notify_action': notify_action                      # (str)
+        }
 
-    def get_old_rating_keys(self, pprint=False, rating_key=None,
-                            media_type=None):
+        # Check keyword arguments
+        utils.check_str_kw(notify_action, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+        
+    def get_old_rating_keys(self, rating_key=None, media_type=None):
         """
         Get a list of old rating keys from the Tautulli database for all
         of the item's parent/children.
@@ -1717,12 +2293,27 @@ class Tautulli:
                 {}
         """
 
-        req = self._cmd(cmd='get_old_rating_keys', pprint=pprint,
-                        rating_key=rating_key, media_type=media_type)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_old_rating_keys',
+            'rating_key': rating_key,                           # (str)
+            'media_type': media_type                            # (str)
+        }
 
-    def get_plays_by_date(self, pprint=False, time_range=None, y_axis=None,
-                          user_id=None, grouping=None):
+        media_type_list = ['movie', 'show', 'season', 'episode', 'artist',
+                           'album', 'track']
+
+        # Check keyword arguments
+        utils.check_str_kw(rating_key, is_required=True)
+        utils.check_str_kw(media_type, media_type_list,
+                           is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_plays_by_date(self, time_range=None, y_axis=None, user_id=None,
+                          grouping=None):
         """
         Get graph data by date.
 
@@ -1730,7 +2321,7 @@ class Tautulli:
             None
 
         Optional parameters:
-            time_range (int):       The number of days of data to return
+            time_range (str):       The number of days of data to return
             y_axis (str):           "plays" or "duration"
             user_id (str):          The user id to filter the data
             grouping (int):         0 or 1
@@ -1747,13 +2338,29 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_plays_by_date', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_by_date',
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_plays_by_dayofweek(self, pprint=False, time_range=None,
-                               y_axis=None, user_id=None, grouping=None):
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_plays_by_dayofweek(self, time_range=None, y_axis=None,
+                               user_id=None, grouping=None):
         """
         Get graph data by day of the week.
 
@@ -1778,13 +2385,29 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_plays_by_dayofweek', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_by_dayofweek',
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_plays_by_hourofday(self, pprint=False, time_range=None,
-                               y_axis=None, user_id=None, grouping=None):
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_plays_by_hourofday(self, time_range=None, y_axis=None,
+                               user_id=None, grouping=None):
         """
         Get graph data by hour of the day.
 
@@ -1809,14 +2432,29 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_plays_by_hourofday', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_by_hourofday',
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_plays_by_source_resolution(self, pprint=False, time_range=None,
-                                       y_axis=None, user_id=None,
-                                       grouping=None):
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_plays_by_source_resolution(self, time_range=None, y_axis=None,
+                                       user_id=None, grouping=None):
         """
         Get graph data by source resolution.
 
@@ -1840,15 +2478,29 @@ class Tautulli:
                      ]
                  }
         """
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_by_source_resolution',
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
+        }
 
-        req = self._cmd(cmd='get_plays_by_source_resolution', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        y_axis_list = ['plays', 'duration']
 
-    def get_plays_by_stream_resolution(self, pprint=False, time_range=None,
-                                       y_axis=None, user_id=None,
-                                       grouping=None):
+        # Check keyword arguments
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_plays_by_stream_resolution(self, time_range=None, y_axis=None,
+                                       user_id=None, grouping=None):
         """
         Get graph data by stream resolution.
 
@@ -1873,13 +2525,29 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_plays_by_stream_resolution', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_by_stream_resolution',
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_plays_by_stream_type(self, pprint=False, time_range=None,
-                                 y_axis=None, user_id=None, grouping=None):
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_plays_by_stream_type(self, time_range=None, y_axis=None,
+                                 user_id=None, grouping=None):
         """
         Get graph data by stream type by date.
 
@@ -1904,13 +2572,29 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_plays_by_stream_type', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_by_stream_type',
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_plays_by_top_10_platforms(self, pprint=False, time_range=None,
-                                      y_axis=None, user_id=None, grouping=None):
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_plays_by_top_10_platforms(self, time_range=None, y_axis=None,
+                                      user_id=None, grouping=None):
         """
         Get graph data by top 10 platforms.
 
@@ -1935,13 +2619,76 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_plays_by_top_10_platforms', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_by_top_10_platforms',
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_plays_per_month(self, pprint=False, time_range=None,
-                            y_axis=None, user_id=None, grouping=None):
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_plays_by_top_10_users(self, time_range=None, y_axis=None,
+                                  user_id=None, grouping=None):
+        """
+        Get graph data by top 10 users.
+
+        Required parameters:
+            None
+
+        Optional parameters:
+            time_range (str):       The number of days of data to return
+            y_axis (str):           "plays" or "duration"
+            user_id (str):          The user id to filter the data
+            grouping (bin):         0 or 1
+
+        Returns:
+            json:
+                {"categories":
+                    ["Jon Snow", "DanyKhaleesi69", "A Girl", ...]
+                 "series":
+                    [{"name": "Movies", "data": [...]}
+                     {"name": "TV", "data": [...]},
+                     {"name": "Music", "data": [...]}
+                     ]
+                 }
+        """
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_by_top_10_users',
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
+        }
+
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_plays_per_month(self, time_range=None, y_axis=None,
+                            user_id=None, grouping=None):
         """
         Get graph data by month.
 
@@ -1966,12 +2713,28 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_plays_per_month', pprint=pprint,
-                        time_range=time_range, y_=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plays_per_month',
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_plex_log(self, pprint=False, window=None, log_type=None):
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_plex_log(self, window=None, log_type=None):
         """
         Get the PMS logs.
 
@@ -1993,9 +2756,22 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_plex_log', pprint=pprint, window=window,
-                        log_type=log_type)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_plex_log',
+            'window': window,                                   # (int)
+            'log_type': log_type                                # (str)
+        }
+
+        log_type_list = ['server', 'scanner']
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(window, is_required=False)
+        utils.check_str_kw(log_type, log_type_list, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_pms_token(self, username=None, password=None):
         """
@@ -2012,11 +2788,22 @@ class Tautulli:
             string:             The Plex token used for Tautulli
         """
 
-        req = self._cmd(cmd='get_pms_token', username=username,
-                        password=password)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_pms_token',
+            'username': username,                               # (str)
+            'password': password                                # (str)
+        }
 
-    def get_pms_update(self, pprint=False):
+        # Check keyword arguments
+        utils.check_str_kw(username, is_required=True)
+        utils.check_str_kw(password, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_pms_update(self):
         """
         Check for updates to the Plex Media Server.
 
@@ -2043,11 +2830,17 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_pms_update', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_pms_update'
+        }
 
-    def get_recently_added(self, pprint=False, count=25, start=None,
-                           media_type=None, section_id=None):
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+        
+    def get_recently_added(self, count=25, start=None, media_type=None,
+                           section_id=None):
         """
         Get all items that where recently added to plex.
 
@@ -2089,12 +2882,29 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_recently_added', pprint=pprint, count=count,
-                        start=start, media_type=media_type,
-                        section_id=section_id)
-        return req
-    
-    def get_server_friendly_name(self, pprint=False):
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_recently_added',
+            'count': count,                                     # (int) (req)
+            'start': start,                                     # (int)
+            'type': media_type,                                 # (str)
+            'section_id': section_id                            # (int)
+        }
+
+        media_type_list = ["movie", "show", "artist"]
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(count, is_required=True)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_str_kw(media_type, media_type_list,
+                           is_required=False)
+        utils.check_pos_int_kw(section_id, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_server_friendly_name(self):
         """
         Get the name of the PMS.
 
@@ -2107,9 +2917,15 @@ class Tautulli:
         Returns:
             string:     "Winterfell-Server"
         """
-        
-        req = self._cmd(cmd='get_server_friendly_name', pprint=pprint)
-        return req
+
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_server_friendly_name'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def get_server_id(self, hostname='localhost', port=32400, ssl=None,
                       remote=None):
@@ -2125,16 +2941,30 @@ class Tautulli:
             remote (bin):       0 or 1
 
         Returns:
-            str:
-                '08u2phnlkdshf890bhdlksghnljsahgleikjfg9t'
+            json:
+                {'identifier': '08u2phnlkdshf890bhdlksghnljsahgleikjfg9t'}
         """
 
-        req = self._cmd(cmd='get_server_id', hostname=hostname, port=port,
-                        ssl=ssl, remote=remote)
-        server_id = req['response']['data']['identifier']
-        return server_id
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_server_id',
+            'hostname': hostname,                               # (str) (req)
+            'port': port,                                       # (int) (req)
+            'ssl': ssl,                                         # (bin)
+            'remote': remote                                    # (bin)
+        }
 
-    def get_server_identity(self, pprint=False):
+        # Check keyword arguments
+        utils.check_str_kw(hostname, is_required=True)
+        utils.check_pos_int_kw(port, is_required=True)
+        utils.check_bin_kw(ssl, is_required=False)
+        utils.check_bin_kw(remote, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_server_identity(self):
         """
         Get info about the local server.
 
@@ -2152,10 +2982,16 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_server_identity', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_server_identity'
+        }
 
-    def get_server_list(self, pprint=False):
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_server_list(self):
         """
         Get all your servers that are published to Plex.tv.
 
@@ -2180,10 +3016,16 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_server_list', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_server_list'
+        }
 
-    def get_server_pref(self, pprint=False, pref=None):
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_server_pref(self, pref=None):
         """
         Get a specified PMS server preference.
 
@@ -2194,10 +3036,20 @@ class Tautulli:
             string:             Value of preference
         """
 
-        req = self._cmd(cmd='get_server_pref', pprint=pprint, pref=pref)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_server_pref',
+            'pref': pref                                        # (str)
+        }
 
-    def get_servers_info(self, pprint=False):
+        # Check keyword arguments
+        utils.check_str_kw(pref, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_servers_info(self):
         """
         Get info about the PMS.
 
@@ -2218,10 +3070,16 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_servers_info', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_servers_info'
+        }
 
-    def get_settings(self, pprint=False, key=None):
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_settings(self, key=None):
         """
         Gets all settings from the config file.
 
@@ -2239,10 +3097,20 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_settings', pprint=pprint, key=key)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_settings',
+            'key': key                                          # (str)
+        }
 
-    def get_stream_data(self, pprint=False, row_id=None, session_key=None):
+        # Check keyword arguments
+        utils.check_str_kw(key, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_stream_data(self, row_id=None, session_key=None):
         """
         Get the stream details from history or current stream.
 
@@ -2304,11 +3172,33 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_stream_data', pprint=pprint, row_id=row_id,
-                        session_key=session_key)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_stream_data',
+            'row_id': row_id,                                   # (int)
+            'session_key': session_key                          # (int)
+        }
 
-    def get_stream_type_by_top_10_platforms(self, pprint=False, time_range=None,
+        # Check for ONLY one required arguments
+        if row_id and session_key is None:
+            raise ValueError(
+                'Either "row_id" OR "session_key" is required'
+            )
+        elif row_id and session_key is not None:
+            raise ValueError(
+                'Only ONE required argument ("row_id" OR "session_key") '
+                'is required'
+            )
+        elif row_id is not None:
+            utils.check_pos_int_kw(row_id)
+        elif session_key is not None:
+            utils.check_pos_int_kw(session_key)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_stream_type_by_top_10_platforms(self, time_range=None,
                                             y_axis=None, user_id=None,
                                             grouping=None):
         """
@@ -2335,14 +3225,29 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_stream_type_by_top_10_platforms',
-                        pprint=pprint, time_range=time_range, y_axis=y_axis,
-                        user_id=user_id, grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_stream_type_by_top_10_platforms',
+            'time_range': time_range,                               # (str)
+            'y_axis': y_axis,                                       # (str)
+            'user_id': user_id,                                     # (str)
+            'grouping': grouping                                    # (bin)
+        }
 
-    def get_stream_type_by_top_10_users(self, pprint=False, time_range=None,
-                                        y_axis=None, user_id=None,
-                                        grouping=None):
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_stream_type_by_top_10_users(self, time_range=None, y_axis=None,
+                                        user_id=None, grouping=None):
         """
         Get graph data by stream type by top 10 users.
 
@@ -2367,21 +3272,37 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_stream_type_by_top_10_users', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis,
-                        user_id=user_id, grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_stream_type_by_top_10_users',
+            'time_range': time_range,                           # (str)
+            'y_axis': y_axis,                                   # (str)
+            'user_id': user_id,                                 # (str)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_synced_items(self, pprint=False, machine_id=None, user_id=None):
+        y_axis_list = ['plays', 'duration']
+
+        # Check keyword arguments
+        utils.check_str_kw(time_range, is_required=False)
+        utils.check_str_kw(y_axis, y_axis_list, is_required=False)
+        utils.check_str_kw(user_id, is_required=False)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_synced_items(self, machine_id=None, user_id=None):
         """
         Get a list of synced items on the PMS.
-
+        
         Required parameters:
             machine_id (str):       The PMS identifier
-
+        
         Optional parameters:
             user_id (str):          The id of the Plex user
-
+        
         Returns:
             json:
                 [{"audio_bitrate": "192",
@@ -2413,20 +3334,31 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_synced_items', pprint=pprint,
-                        machine_id=machine_id, user_id=user_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_synced_items',
+            'machine_id': machine_id,                           # (str) (req)
+            'user_id': user_id                                  # (str)
+        }
 
-    def get_user(self, pprint=False, user_id=None):
+        # Check keyword arguments
+        utils.check_str_kw(machine_id, is_required=True)
+        utils.check_str_kw(user_id, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+    
+    def get_user(self, user_id=None):
         """
         Get a user's details.
-
+        
         Required parameters:
             user_id (str):          The id of the Plex user
-
+        
         Optional parameters:
             None
-
+        
         Returns:
             json:
                 {"allow_guest": 1,
@@ -2445,27 +3377,37 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_user', pprint=pprint, user_id=user_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_user',
+            'user_id': user_id                                  # (str)
+        }
 
-    def get_user_ips(self, pprint=False, user_id=None, order_column=None,
-                     order_dir=None, start=None, length=None, search=None):
+        # Check keyword arguments
+        utils.check_str_kw(user_id, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_user_ips(self, user_id=None, order_column=None, order_dir=None,
+                     start=None, length=None, search=None):
         """
         Get the data on Tautulli users IP table.
-
+        
         Required parameters:
             user_id (str):                  The id of the Plex user
-
+        
         Optional parameters:
-            order_column (str):             "last_seen", "ip_address",
+            order_column (str):             "last_seen", "ip_address", 
                                             "platform", "player",
                                             "last_played", "play_count"
             order_dir (str):                "desc" or "asc"
             start (int):                    Row to start from, 0
             length (int):                   Number of items to return, 25
-            search (str):                   A string to search for,
+            search (str):                   A string to search for, 
                                             "xxx.xxx.xxx.xxx"
-
+        
         Returns:
             json:
                 {"draw": 1,
@@ -2496,12 +3438,36 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_user_ips', pprint=pprint, user_id=user_id,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_user_ips',
+            'user_id': user_id,                                 # (str) (req)
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
+        }
 
-    def get_user_logins(self, pprint=False, user_id=None, order_column=None,
+        order_column_list = ["last_seen", "ip_address", "platform", "player", 
+                             "last_played", "play_count"]
+        order_dir_list = ["desc", "asc"]
+
+        # Check keyword arguments
+        utils.check_str_kw(user_id, is_required=True)
+        utils.check_str_kw(order_column, order_column_list,
+                           is_required=False)
+        utils.check_str_kw(order_dir, order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_user_logins(self, user_id=None, order_column=None,
                         order_dir=None, start=None, length=None, search=None):
         """
         Get the data on Tautulli user login table.
@@ -2544,12 +3510,36 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_user_logins', pprint=pprint, user_id=user_id,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_user_logins',
+            'user_id': user_id,                                 # (str) (req)
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
+        }
 
-    def get_user_names(self, pprint=False):
+        order_column_list = ["date", "time", "ip_address", "host",
+                             "os", "browser"]
+        order_dir_list = ["desc", "asc"]
+
+        # Check keyword arguments
+        utils.check_str_kw(user_id, is_required=True)
+        utils.check_str_kw(order_column, order_column_list,
+                           is_required=False)
+        utils.check_str_kw(order_dir, order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_user_names(self):
         """
         Get a list of all user and user ids.
 
@@ -2568,10 +3558,16 @@ class Tautulli:
                 ]
         """
 
-        req = self._cmd(cmd='get_user_names', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_user_names'
+        }
 
-    def get_user_player_stats(self, pprint=False, user_id=None, grouping=None):
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_user_player_stats(self, user_id=None, grouping=None):
         """
         Get a user's player statistics.
 
@@ -2598,12 +3594,22 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_user_player_stats', pprint=pprint,
-                        user_id=user_id, grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_user_player_stats',
+            'user_id': user_id,                                 # (str) (req)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_user_watch_time_stats(self, pprint=False, user_id=None,
-                                  grouping=None):
+        # Check keyword arguments
+        utils.check_str_kw(user_id, is_required=True)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_user_watch_time_stats(self, user_id=None, grouping=None):
         """
         Get a user's watch time statistics.
 
@@ -2634,11 +3640,22 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_user_watch_time_stats', pprint=pprint,
-                        user_id=user_id, grouping=grouping)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_user_watch_time_stats',
+            'user_id': user_id,                                 # (str) (req)
+            'grouping': grouping                                # (bin)
+        }
 
-    def get_users(self, pprint=False):
+        # Check keyword arguments
+        utils.check_str_kw(user_id, is_required=True)
+        utils.check_bin_kw(grouping, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_users(self):
         """
         Get a list of all users that have access to your server.
 
@@ -2674,11 +3691,17 @@ class Tautulli:
                  ]
         """
 
-        req = self._cmd(cmd='get_users', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_users'
+        }
 
-    def get_users_table(self, pprint=False, order_column=None, order_dir=None,
-                        start=None, length=None, search=None):
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def get_users_table(self, order_column=None, order_dir=None, start=None, 
+                        length=None, search=None):
         """
         Get the data on Tautulli users table.
 
@@ -2688,7 +3711,7 @@ class Tautulli:
         Optional parameters:
             order_column (str):             "user_thumb", "friendly_name",
                                             "last_seen", "ip_address",
-                                            "platform", "player",
+                                            "platform", "player", 
                                             "last_played", "plays",
                                             "duration"
             order_dir (str):                "desc" or "asc"
@@ -2732,22 +3755,45 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='get_users_table', pprint=pprint,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_users_table',
+            'order_column': order_column,                       # (str)
+            'order_dir': order_dir,                             # (str)
+            'start': start,                                     # (int)
+            'length': length,                                   # (int)
+            'search': search                                    # (str)
+        }
 
-    def get_whois_lookup(self, pprint=False, ip_address=None):
+        order_column_list = ["user_thumb", "friendly_name", "last_seen", 
+                             "ip_address", "platform", "player",
+                             "last_played", "plays", "duration"]
+        order_dir_list = ["desc", "asc"]
+
+        # Check keyword arguments
+        utils.check_str_kw(order_column, order_column_list,
+                           is_required=False)
+        utils.check_str_kw(order_dir, order_dir_list,
+                           is_required=False)
+        utils.check_pos_int_kw(start, is_required=False)
+        utils.check_pos_int_kw(length, is_required=False)
+        utils.check_str_kw(search, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+        
+    def get_whois_lookup(self, ip_address=None):
         """
         Get the connection info for an IP address.
 
         Required parameters:
-            ip_address (str):               IP address of connection for
+            ip_address (str):               IP address of connection for 
                                             whois lookup
-
+        
         Optional parameters:
             None
-
+        
         Returns:
             json:
                 {"host": "google-public-dns-a.google.com",
@@ -2764,45 +3810,81 @@ class Tautulli:
             json:
                 {"host": "Not available",
                  "nets": [],
-                 "error": "IPv4 address 127.0.0.1 is already defined as
+                 "error": "IPv4 address 127.0.0.1 is already defined as 
                           Loopback via RFC 1122, Section 3.2.1.3."
         """
 
-        req = self._cmd(cmd='get_whois_lookup', pprint=pprint,
-                        ip_address=ip_address)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'get_whois_lookup',
+            'ip_address': ip_address                            # (str) (req)
+        }
 
-    def import_database(self, app=None, database_path=None,
-                        table_name=None, import_ignore_interval=None):
+        # Check keyword arguments
+        utils.check_str_kw(ip_address, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+    
+    def import_database(self, app=None, database_path=None, table_name=None, 
+                        import_ignore_interval=None):
         """
         Import a PlexWatch or Plexivity database into Tautulli.
 
         Required parameters:
             app (str):                      "plexwatch" or "plexivity"
-            database_path (str):            The full path to the plexwatch
+            database_path (str):            The full path to the plexwatch 
                                             database file
             table_name (str):               "processed" or "grouped"
-
+        
         Optional parameters:
-            import_ignore_interval (int):   The minimum number of seconds
+            import_ignore_interval (int):   The minimum number of seconds 
                                             for a stream to import
-
+        
         Returns:
             None
         """
 
-        req = self._cmd(cmd='import_database', app=app,
-                        database_path=database_path, table_name=table_name,
-                        import_ignore_interval=import_ignore_interval)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'import_database',
+            'app': app,                                         # (str) (req)
+            'database_path': database_path,                     # (str) (req)
+            'table_name': table_name,                           # (str) (req)
+            'import_ignore_interval': import_ignore_interval    # (int)
+        }
+        
+        app_list = ['plexwatch', 'plexivity']
+        table_name_list = ['processed', 'grouped']
+
+        # Check keyword arguments
+        utils.check_str_kw(app, app_list, is_required=True)
+        utils.check_str_kw(database_path, is_required=True)
+        utils.check_str_kw(table_name, table_name_list, 
+                           is_required=True)
+        utils.check_pos_int_kw(import_ignore_interval, 
+                               is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def install_geoip_db(self):
-        """Downloads and installs the GeoLite2 database"""
+        """
+        Downloads and installs the GeoLite2 database
+        """
 
-        req = self._cmd(cmd='install_geoip_db')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'install_geoip_db'
+        }
 
-    def notify(self, pprint=False, notifier_id=None, subject=None, body=None,
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+    
+    def notify(self, notifier_id=None, subject=None, body=None, 
                script_args=None):
         """
         Send a notification using Tautulli.
@@ -2811,42 +3893,70 @@ class Tautulli:
             notifier_id (int):      The ID number of the notification agent
             subject (str):          The subject of the message
             body (str):             The body of the message
-
+        
         Optional parameters:
             script_args (str):      The arguments for script notifications
-
+        
         Returns:
             None
         """
 
-        req = self._cmd(cmd='notify', pprint=pprint, notifier_id=notifier_id,
-                        subject=subject, body=body, script_args=script_args)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'notify',
+            'notifier_id': notifier_id,                         # (int) (req)
+            'subject': subject,                                 # (str) (req)
+            'body': body,                                       # (str) (req)
+            'script_args': script_args                          # (str)
+        }
 
-    def notify_newsletter(self, pprint=False, newsletter_id=None, subject=None,
-                          body=None, message=None):
+        # Check keyword arguments
+        utils.check_pos_int_kw(notifier_id, is_required=True)
+        utils.check_str_kw(subject, is_required=True)
+        utils.check_str_kw(body, is_required=True)
+        utils.check_str_kw(script_args, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+    
+    def notify_newsletter(self, newsletter_id=None, subject=None, body=None, 
+                          message=None):
         """
         Send a newsletter using Tautulli.
-
+        
         Required parameters:
             newsletter_id (int):    The ID number of the newsletter agent
-
+        
         Optional parameters:
             subject (str):          The subject of the newsletter
             body (str):             The body of the newsletter
             message (str):          The message of the newsletter
-
+        
         Returns:
             None
         """
 
-        req = self._cmd(cmd='notify_newsletter', pprint=pprint,
-                        newsletter_id=newsletter_id, subject=subject,
-                        body=body, message=message)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'notify_newsletter',
+            'newsletter_id': newsletter_id,                     # (int) (req)
+            'subject': subject,                                 # (str)
+            'body': body,                                       # (str)
+            'message': message                                  # (str)
+        }
 
-    def notify_recently_added(self, pprint=False, rating_key=None,
-                              notifier_id=None):
+        # Check keyword arguments
+        utils.check_pos_int_kw(newsletter_id, is_required=True)
+        utils.check_str_kw(subject, is_required=False)
+        utils.check_str_kw(body, is_required=False)
+        utils.check_str_kw(message, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+        
+    def notify_recently_added(self, rating_key=None, notifier_id=None):
         """
         Send a recently added notification using Tautulli.
 
@@ -2866,59 +3976,121 @@ class Tautulli:
                 }
         """
 
-        req = self._cmd(cmd='notify_recently_added', pprint=pprint,
-                        rating_key=rating_key, notifier_id=notifier_id)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'notify_recently_added',
+            'rating_key': rating_key,                           # (int) (req)
+            'notifier_id': notifier_id                          # (int)
+        }
 
-    def pms_image_proxy(self, pprint=False, rating_key=None, width=None,
+        # Check keyword arguments
+        utils.check_pos_int_kw(rating_key, is_required=True)
+        utils.check_pos_int_kw(notifier_id, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def pms_image_proxy(self, img=None, rating_key=None, width=None,
                         height=None, opacity=None, background=None,
                         blur=None, img_format=None, fallback=None,
                         refresh=None, return_hash=None):
         """
-                Get image from PMS; save it to image cache directory.
+        Gets an image from the PMS and saves it to the image cache directory.
 
-                Required parameters:
-                    img (str):              /library/metadata/
-                                            153037/thumb/1462175060
-                    or
-                    rating_key (int):       54321
+        Required parameters:
+            img (str):              /library/metadata/153037/thumb/1462175060
+            or
+            rating_key (int):       54321
 
-                Optional parameters:
-                    width (int):            300
-                    height (int):           450
-                    opacity (int):          25
-                    background (int):       282828
-                    blur (int):             3
-                    img_format (str):       png
-                    fallback (str):         "poster", "cover", "art"
-                    refresh (bool):         True or False whether to refresh the
-                                            image cache
-                    return_hash (bool):     True or False to return the
-                                            self-hosted image hash instead of
-                                            the image
+        Optional parameters:
+            width (int):            300
+            height (int):           450
+            opacity (int):          25
+            background (int):       282828
+            blur (int):             3
+            img_format (str):       png
+            fallback (str):         "poster", "cover", "art"
+            refresh (bool):         True or False whether to refresh the
+                                    image cache
+            return_hash (bool):     True or False to return the self-hosted
+                                    image hash instead of the image
 
-                Returns:
-                    None
-                """
+        Returns:
+            None
+        """
 
-        req = self._cmd(cmd='pms_image_proxy', pprint=pprint,
-                        rating_key=rating_key, width=width, height=height,
-                        opacity=opacity, background=background, blur=blur,
-                        img_format=img_format, fallback=fallback,
-                        refresh=refresh, return_hash=return_hash)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'pms_image_proxy',
+            'img': img,                                 # (str) (req, bitwise)
+            'rating_key': rating_key,                   # (int) (req, bitwise)
+            'width': width,                             # (int)
+            'height': height,                           # (int)
+            'opacity': opacity,                         # (int)
+            'background': background,                   # (int)
+            'blur': blur,                               # (int)
+            'img_format': img_format,                   # (str)
+            'fallback': fallback,                       # (str)
+            'refresh': refresh,                         # (bool)
+            'return_hash': return_hash                  # (bool)
+        }
+
+        fallback_list = ["poster", "cover", "art"]
+
+        # Check for ONLY one required arguments
+        if img and rating_key is None:
+            raise ValueError(
+                'Either "img" OR "rating_key" is required'
+            )
+        elif img and rating_key is not None:
+            raise ValueError(
+                'Only ONE required argument ("img" OR "rating_key") '
+                'is required'
+            )
+        elif img is not None:
+            utils.check_str_kw(img)
+        elif rating_key is not None:
+            utils.check_pos_int_kw(rating_key)
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(width, is_required=False)
+        utils.check_pos_int_kw(height, is_required=False)
+        utils.check_pos_int_kw(opacity, is_required=False)
+        utils.check_pos_int_kw(background, is_required=False)
+        utils.check_pos_int_kw(blur, is_required=False)
+        utils.check_str_kw(img_format, is_required=False)
+        utils.check_str_kw(fallback, fallback_list, is_required=False)
+        utils.check_bool_kw(refresh, is_required=False)
+        utils.check_bool_kw(return_hash, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def refresh_libraries_list(self):
         """Refresh the Tautulli libraries list."""
 
-        req = self._cmd(cmd='refresh_libraries_list')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'refresh_libraries_list'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def refresh_users_list(self):
         """Refresh the Tautulli users list."""
 
-        req = self._cmd(cmd='refresh_users_list')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'refresh_users_list'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def register_device(self, device_name=None, device_id=None,
                         friendly_name=None):
@@ -2928,7 +4100,7 @@ class Tautulli:
         Required parameters:
             device_name (str):        The device name of the Tautulli
                                       Android App
-            device_id (int):          The OneSignal device id of the Tautulli
+            device_id (str):          The OneSignal device id of the Tautulli
                                       Android App
 
         Optional parameters:
@@ -2939,17 +4111,36 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='register_device', device_name=device_name,
-                        device_id=device_id, friendly_name=friendly_name)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'register_device',
+            'device_name': device_name,                         # (str) (req)
+            'device_id': device_id,                             # (str) (req)
+            'friendly_name': friendly_name                      # (str)
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(device_name, is_required=True)
+        utils.check_str_kw(device_id, is_required=True)
+        utils.check_str_kw(friendly_name, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def restart(self):
         """Restart Tautulli."""
 
-        req = self._cmd(cmd='restart')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'restart',
+        }
 
-    def search(self, pprint=False, query=None, limit=None):
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def search(self, query=None, limit=None):
         """
         Get search results from the PMS.
 
@@ -2978,8 +4169,20 @@ class Tautulli:
                  }
         """
 
-        req = self._cmd(cmd='search', pprint=pprint, query=query, limit=limit)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'search',
+            'query': query,                                     # (str) (req)
+            'limit': limit                                      # (int)
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(query, is_required=True)
+        utils.check_pos_int_kw(limit, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def set_mobile_device_config(self, mobile_device_id=None,
                                  friendly_name=None):
@@ -2997,14 +4200,23 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='set_mobile_device_config',
-                        mobile_device_id=mobile_device_id,
-                        friendly_name=friendly_name)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'set_mobile_device_config',
+            'mobile_device_id': mobile_device_id,               # (int) (req)
+            'friendly_name': friendly_name                      # (str)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(mobile_device_id, is_required=True)
+        utils.check_str_kw(friendly_name, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def set_newsletter_config(self, newsletter_id=None, agent_id=None,
-                              newsletter_config=None, newsletter_email=None,
-                              **cfg_opts):
+                              newsletter_config_=None, newsletter_email_=None):
         """
         Configure an existing newsletter agent.
 
@@ -3020,11 +4232,24 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='set_newsletter_config',
-                        newsletter_id=newsletter_id, agent_id=agent_id,
-                        newsletter_config=newsletter_config,
-                        newsletter_email=newsletter_email, **cfg_opts)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'set_newsletter_config',
+            'newsletter_id': newsletter_id,                     # (int) (req)
+            'agent_id': agent_id,                               # (int) (req)
+            'newsletter_config_': newsletter_config_,           # (str)
+            'newsletter_email_': newsletter_email_              # (str)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(newsletter_id, is_required=True)
+        utils.check_pos_int_kw(agent_id, is_required=True)
+        utils.check_str_kw(newsletter_config_, is_required=False)
+        utils.check_str_kw(newsletter_email_, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def set_notifier_config(self, notifier_id=None, agent_id=None, **cfg_opts):
         """
@@ -3051,9 +4276,24 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='set_notifier_config', notifier_id=notifier_id,
-                        agent_id=agent_id, **cfg_opts)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'set_notifier_config',
+            'notifier_id': notifier_id,                         # (int) (req)
+            'agent_id': agent_id,                               # (int) (req)
+        }
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(notifier_id, is_required=True)
+        utils.check_pos_int_kw(agent_id, is_required=True)
+
+        # Pack **cfg_opts in payload
+        for kw, val in cfg_opts.items():
+            payload[kw] = val
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def sql(self, query=None):
         """
@@ -3072,8 +4312,18 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='sql', query=query)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'sql',
+            'query': query,                                     # (str) (req)
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(query, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def terminate_session(self, session_key=None, session_id=None,
                           message=None):
@@ -3083,7 +4333,7 @@ class Tautulli:
         Required parameters:
             session_key (int):          The session key of the session to
                                         terminate, OR
-            session_id (str):           The session ID of the session to
+            session_id (str):           The session id of the session to
                                         terminate
 
         Optional parameters:
@@ -3093,9 +4343,35 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='terminate_session', session_key=session_key,
-                        session_id=session_id, message=message)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'terminate_session',
+            'session_key': session_key,                 # (int) (req, bitwise)
+            'session_id': session_id,                   # (str) (req, bitwise)
+            'message': message                          # (str)
+        }
+
+        # Check for ONLY one required arguments
+        if session_key and session_id is None:
+            raise ValueError(
+                'Either "session_key" OR "session_id" is required'
+            )
+        elif session_key and session_id is not None:
+            raise ValueError(
+                'Only ONE required argument ("session_key" OR "session_id") '
+                'is required'
+            )
+        elif session_key is not None:
+            utils.check_pos_int_kw(session_key)
+        elif session_id is not None:
+            utils.check_str_kw(session_id)
+
+        # Check keyword arguments
+        utils.check_str_kw(message, is_required=False)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def undelete_library(self, session_key=None, session_name=None):
         """
@@ -3112,9 +4388,20 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='undelete_library', session_key=session_key,
-                        session_name=session_name)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'undelete_library',
+            'session_key': session_key,                         # (str) (req)
+            'session_name': session_name                        # (str) (req)
+        }
+
+        # Check keyword arguments
+        utils.check_str_kw(session_key, is_required=True)
+        utils.check_str_kw(session_name, is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def undelete_user(self, user_id=None, username=None):
         """
@@ -3131,22 +4418,31 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='undelete_user', user_id=user_id, username=username)
-        return req
-
     def uninstall_geoip_db(self):
         """Uninstalls the GeoLite2 database"""
 
-        req = self._cmd(cmd='uninstall_geoip_db')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'uninstall_geoip_db'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def update(self):
         """Update Tautulli."""
 
-        req = self._cmd(cmd='update')
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'update'
+        }
 
-    def update_check(self, pprint=False):
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
+
+    def update_check(self):
         """
         Check for Tautulli updates.
 
@@ -3164,14 +4460,19 @@ class Tautulli:
                 }
         """
 
-        req = self._cmd(cmd='update_check', pprint=pprint)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'update_check'
+        }
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp
 
     def update_metadata_details(self, old_rating_key=None,
                                 new_rating_key=None, media_type=None):
         """
         Update the metadata in the Tautulli database by matching rating keys.
-
         Also updates all parents or children of the media item if it is a
         show/season/episode or artist/album/track.
 
@@ -3188,7 +4489,23 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='update_metadata_details',
-                        old_rating_key=old_rating_key,
-                        new_rating_key=new_rating_key, media_type=media_type)
-        return req
+        payload = {
+            'apikey': API_KEY,
+            'cmd': 'undelete_library',
+            'old_rating_key': old_rating_key,                   # (int) (req)
+            'new_rating_key': new_rating_key,                   # (int) (req)
+            'media_type': media_type                            # (str) (req)
+        }
+
+        media_type_list = ["movie", "show", "season", "episode", "artist",
+                           "album", "track"]
+
+        # Check keyword arguments
+        utils.check_pos_int_kw(old_rating_key, is_required=True)
+        utils.check_pos_int_kw(new_rating_key, is_required=True)
+        utils.check_str_kw(media_type, media_type_list,
+                           is_required=True)
+
+        # Send/receive request
+        resp = utils.send_receive_request(self._base_url, params_dict=payload)
+        return resp

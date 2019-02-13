@@ -2,16 +2,17 @@ from requests.auth import AuthBase
 
 
 class TautulliApiAuth(AuthBase):
-    def __init__(self, api_key):
-        self.api_key = api_key
+    """Used to add authorization key to request headers"""
+    def __init__(self, apikey):
+        self.apikey = apikey
 
     def __call__(self, request):
-        request.headers.update(get_auth_headers(self.api_key))
+        request.headers.update(self.get_auth_headers())
         return request
 
-
-def get_auth_headers(api_key):
-    return {
-        'Content-Type': 'Application/JSON',
-        'Authorization': api_key
-    }
+    def get_auth_headers(self):
+        """Returns headers with authorization key"""
+        return {
+            'Content-Type': 'Application/JSON',
+            'Authorization': self.apikey
+        }

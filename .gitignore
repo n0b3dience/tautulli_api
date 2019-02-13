@@ -60,3 +60,6 @@ target/
 # PyCharm
 .idea/
 /settings_private.ini
+
+# Misc
+notes/
