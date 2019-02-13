@@ -29,7 +29,10 @@ class TestTautulli(unittest.TestCase):
     def test_get_server_id(self):
         tautulli = Tautulli()
         req = tautulli.get_server_id(hostname='192.168.1.7')
-        print(req)
+        self.assertIsNotNone(
+            req,
+            msg=":::ERROR::: 'Tautulli.get_server_id()' returned 'None'"
+        )
 
 
 if __name__ == '__main__':

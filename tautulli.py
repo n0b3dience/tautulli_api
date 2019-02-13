@@ -4,7 +4,6 @@ Tautulli base class
 from payload import Payload
 from validator import Validator
 from requester import Requester
-from tautulli_api_auth import TautulliApiAuth
 import configparser
 
 
@@ -33,8 +32,6 @@ class Tautulli:
         self.url = '{0}://{1}:{2}{3}/api/v2'.format(
             self.schema, self.host, self.port, self.path
         )
-        # Requests authorization
-        self.auth = TautulliApiAuth(apikey=self.apikey)
 
     def _cmd(self, pprint=False, **params):
         """Sends and receives API command"""
