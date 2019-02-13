@@ -3097,7 +3097,7 @@ class Tautulli:
                         session_id=session_id, message=message)
         return req
 
-    def undelete_library(self, session_key=None, session_name=None):
+    def undelete_library(self, section_id=None, section_name=None):
         """
         Restore a deleted library section to Tautulli.
 
@@ -3112,8 +3112,8 @@ class Tautulli:
             None
         """
 
-        req = self._cmd(cmd='undelete_library', session_key=session_key,
-                        session_name=session_name)
+        req = self._cmd(cmd='undelete_library', section_id=section_id,
+                        section_name=section_name)
         return req
 
     def undelete_user(self, user_id=None, username=None):
