@@ -2,7 +2,7 @@
 Tautulli base class
 """
 from payload import Payload
-from validator import Validator
+# from validator import Validator
 from requester import Requester
 import configparser
 
@@ -37,8 +37,8 @@ class Tautulli:
         """Sends and receives API command"""
         payload = {'apikey': self.apikey}
         payload.update(Payload(params=params).payload)
-        validator = Validator(payload)
-        validator.validate()
+        # validator = Validator(payload)
+        # validator.validate()
         requester = Requester(self.url, payload)
         r = requester.get(pprint=pprint)
         return r
