@@ -2,7 +2,6 @@
 Tautulli base class
 """
 from payload import Payload
-# from validator import Validator
 from requester import Requester
 import configparser
 
@@ -37,11 +36,8 @@ class Tautulli:
         """Sends and receives API command"""
         payload = {'apikey': self.apikey}
         payload.update(Payload(params=params).payload)
-        # validator = Validator(payload)
-        # validator.validate()
         requester = Requester(self.url, payload)
-        r = requester.get(pprint=pprint)
-        return r
+        return requester.get(pprint=pprint)
 
     # API methods
     def add_newsletter_config(self, agent_id=None):
@@ -57,9 +53,7 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='add_newsletter_config', agent_id=agent_id)
-        return req
+        return self._cmd(cmd='add_newsletter_config', agent_id=agent_id)
 
     def add_notifier_config(self, agent_id=None):
         """
@@ -74,27 +68,19 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='add_notifier_config', agent_id=agent_id)
-        return req
+        return self._cmd(cmd='add_notifier_config', agent_id=agent_id)
 
     def arnold(self):
         """Get to the chopper!"""
-
-        req = self._cmd(cmd='arnold')
-        return req
+        return self._cmd(cmd='arnold')
 
     def backup_config(self):
         """Create a manual backup of the `config.ini` file."""
-
-        req = self._cmd(cmd='backup_config')
-        return req
+        return self._cmd(cmd='backup_config')
 
     def backup_db(self):
         """Create a manual backup of the `plexpy.db` file."""
-
-        req = self._cmd(cmd='backup_db')
-        return req
+        return self._cmd(cmd='backup_db')
 
     def delete_all_library_history(self, section_id=None):
         """
@@ -109,10 +95,8 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='delete_all_library_history',
-                        section_id=section_id)
-        return req
+        return self._cmd(cmd='delete_all_library_history',
+                         section_id=section_id)
 
     def delete_all_user_history(self, user_id=None):
         """
@@ -127,15 +111,11 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='delete_all_user_history', user_id=user_id)
-        return req
+        return self._cmd(cmd='delete_all_user_history', user_id=user_id)
 
     def delete_cache(self):
         """Delete and recreate the cache directory."""
-
-        req = self._cmd(cmd='delete_cache')
-        return req
+        return self._cmd(cmd='delete_cache')
 
     def delete_hosted_images(self, rating_key=None, service=None,
                              delete_all=None):
@@ -158,16 +138,12 @@ class Tautulli:
                 {"result": "success",
                  "message": "Deleted hosted images from Imgur."}
         """
-
-        req = self._cmd(cmd='delete_hosted_images', rating_key=rating_key,
-                        service=service, delete_all=delete_all)
-        return req
+        return self._cmd(cmd='delete_hosted_images', rating_key=rating_key,
+                         service=service, delete_all=delete_all)
 
     def delete_image_cache(self):
         """Delete and recreate the image cache directory."""
-
-        req = self._cmd(cmd='delete_image_cache')
-        return req
+        return self._cmd(cmd='delete_image_cache')
 
     def delete_library(self, section_id=None):
         """
@@ -185,9 +161,7 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='delete_library', section_id=section_id)
-        return req
+        return self._cmd(cmd='delete_library', section_id=section_id)
 
     def delete_login_log(self):
         """
@@ -202,9 +176,7 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='delete_login_log')
-        return req
+        return self._cmd(cmd='delete_login_log')
 
     def delete_lookup_info(self, rating_key=None):
         """
@@ -222,9 +194,7 @@ class Tautulli:
                 {"result": "success",
                  "message": "Deleted lookup info."}
         """
-
-        req = self._cmd(cmd='delete_lookup_info', rating_key=rating_key)
-        return req
+        return self._cmd(cmd='delete_lookup_info', rating_key=rating_key)
 
     def delete_media_info_cache(self, section_id=None):
         """
@@ -239,9 +209,7 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='delete_media_info_cache', section_id=section_id)
-        return req
+        return self._cmd(cmd='delete_media_info_cache', section_id=section_id)
 
     def delete_mobile_device(self, mobile_device_id=None):
         """
@@ -256,10 +224,8 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='delete_mobile_device',
-                        mobile_device_id=mobile_device_id)
-        return req
+        return self._cmd(cmd='delete_mobile_device',
+                         mobile_device_id=mobile_device_id)
 
     def delete_newsletter(self, newsletter_id=None):
         """
@@ -274,9 +240,7 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='delete_newsletter', newsletter_id=newsletter_id)
-        return req
+        return self._cmd(cmd='delete_newsletter', newsletter_id=newsletter_id)
 
     def delete_newsletter_log(self):
         """
@@ -291,9 +255,7 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='delete_newsletter_log')
-        return req
+        return self._cmd(cmd='delete_newsletter_log')
 
     def delete_notification_log(self):
         """
@@ -308,9 +270,7 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='delete_notification_log')
-        return req
+        return self._cmd(cmd='delete_notification_log')
 
     def delete_notifier(self, notifier_id=None):
         """
@@ -325,15 +285,11 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='delete_notifier', notifier_id=notifier_id)
-        return req
+        return self._cmd(cmd='delete_notifier', notifier_id=notifier_id)
 
     def delete_temp_sessions(self):
         """Flush out all of the temporary sessions in the database."""
-
-        req = self._cmd(cmd='delete_temp_sessions')
-        return req
+        return self._cmd(cmd='delete_temp_sessions')
 
     def delete_user(self, user_id=None):
         """
@@ -348,9 +304,7 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='delete_user', user_id=user_id)
-        return req
+        return self._cmd(cmd='delete_user', user_id=user_id)
 
     def docs(self, pprint=False):
         """
@@ -358,39 +312,27 @@ class Tautulli:
 
         Commands are keys, docstrings are values.
         """
-
-        req = self._cmd(cmd='docs', pprint=pprint)
-        return req
+        return self._cmd(cmd='docs', pprint=pprint)
 
     def docs_md(self):
         """Return the api docs formatted with markdown."""
-
-        req = self._cmd(cmd='docs_md')
-        return req
+        return self._cmd(cmd='docs_md')
 
     def download_config(self):
         """Download the Tautulli configuration file."""
-
-        req = self._cmd(cmd='download_config')
-        return req
+        return self._cmd(cmd='download_config')
 
     def download_database(self):
         """Download the Tautulli database file."""
-
-        req = self._cmd(cmd='download_database')
-        return req
+        return self._cmd(cmd='download_database')
 
     def download_log(self):
         """Download the Tautulli log file."""
-
-        req = self._cmd(cmd='download_log')
-        return req
+        return self._cmd(cmd='download_log')
 
     def download_plex_log(self):
         """Download the Plex log file."""
-
-        req = self._cmd(cmd='download_plex_log')
-        return req
+        return self._cmd(cmd='download_plex_log')
 
     def edit_library(self, section_id=None, custom_thumb=None,
                      keep_history=None):
@@ -408,10 +350,8 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='edit_library', section_id=section_id,
-                        custom_thumb=custom_thumb, keep_history=keep_history)
-        return req
+        return self._cmd(cmd='edit_library', section_id=section_id,
+                         custom_thumb=custom_thumb, keep_history=keep_history)
 
     def edit_user(self, user_id=None, friendly_name=None, custom_thumb=None,
                   keep_history=None, allow_guest=None):
@@ -430,11 +370,9 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='edit_user', user_id=user_id,
-                        friendly_name=friendly_name, custom_thumb=custom_thumb,
-                        keep_history=keep_history, allow_guest=allow_guest)
-        return req
+        return self._cmd(cmd='edit_user', user_id=user_id,
+                         friendly_name=friendly_name, custom_thumb=custom_thumb,
+                         keep_history=keep_history, allow_guest=allow_guest)
 
     def get_activity(self, pprint=False, session_key=None, session_id=None,
                      out_type=None, callback=None, debug=None):
@@ -678,11 +616,9 @@ class Tautulli:
                  "wan_bandwidth": 0
                  }
         """
-
-        req = self._cmd(cmd='get_activity', pprint=pprint,
-                        session_key=session_key, session_id=session_id,
-                        out_type=out_type, callback=callback, debug=debug)
-        return req
+        return self._cmd(cmd='get_activity', pprint=pprint,
+                         session_key=session_key, session_id=session_id,
+                         out_type=out_type, callback=callback, debug=debug)
 
     def get_apikey(self, pprint=False, username=None, password=None):
         """
@@ -701,10 +637,8 @@ class Tautulli:
         Returns:
             string:             "apikey"
         """
-
-        req = self._cmd(cmd='get_apikey', pprint=pprint, username=username,
-                        password=password)
-        return req
+        return self._cmd(cmd='get_apikey', pprint=pprint, username=username,
+                         password=password)
 
     def get_date_formats(self, pprint=False):
         """
@@ -722,9 +656,7 @@ class Tautulli:
                  "time_format": "HH:mm",
                  }
         """
-
-        req = self._cmd(cmd='get_date_formats', pprint=pprint)
-        return req
+        return self._cmd(cmd='get_date_formats', pprint=pprint)
 
     def get_geoip_lookup(self, pprint=False, ip_address=None):
         """
@@ -754,10 +686,8 @@ class Tautulli:
                 {"error": "The address 127.0.0.1 is not in the database."
                  }
         """
-
-        req = self._cmd(cmd='get_geoip_lookup', pprint=pprint,
-                        ip_address=ip_address)
-        return req
+        return self._cmd(cmd='get_geoip_lookup', pprint=pprint,
+                         ip_address=ip_address)
 
     def get_history(self, pprint=False, grouping=None, user=None, user_id=None,
                     rating_key=None, parent_rating_key=None,
@@ -846,18 +776,16 @@ class Tautulli:
         Example usage:
             get_history(user="Jon Snow", order_dir="asc", length=20)
         """
-
-        req = self._cmd(cmd='get_history', pprint=pprint, grouping=grouping,
-                        user=user, user_id=user_id, rating_key=rating_key,
-                        parent_rating_key=parent_rating_key,
-                        grandparent_rating_key=grandparent_rating_key,
-                        start_date=start_date, section_id=section_id,
-                        media_type=media_type,
-                        transcode_decision=transcode_decision,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search,
-                        out_type=out_type, callback=callback, debug=debug)
-        return req
+        return self._cmd(cmd='get_history', pprint=pprint, grouping=grouping,
+                         user=user, user_id=user_id, rating_key=rating_key,
+                         parent_rating_key=parent_rating_key,
+                         grandparent_rating_key=grandparent_rating_key,
+                         start_date=start_date, section_id=section_id,
+                         media_type=media_type,
+                         transcode_decision=transcode_decision,
+                         order_column=order_column, order_dir=order_dir,
+                         start=start, length=length, search=search,
+                         out_type=out_type, callback=callback, debug=debug)
 
     def get_home_stats(self, pprint=False, grouping=None, time_range=None,
                        stats_type=None, stats_count=None):
@@ -934,11 +862,9 @@ class Tautulli:
                   }
                  ]
         """
-
-        req = self._cmd(cmd='get_home_stats', pprint=pprint, grouping=grouping,
-                        time_range=time_range, stats_type=stats_type,
-                        stats_count=stats_count)
-        return req
+        return self._cmd(cmd='get_home_stats', pprint=pprint, grouping=grouping,
+                         time_range=time_range, stats_type=stats_type,
+                         stats_count=stats_count)
 
     def get_libraries(self, pprint=False):
         """
@@ -965,9 +891,7 @@ class Tautulli:
                  {...}
                  ]
         """
-
-        req = self._cmd(cmd='get_libraries', pprint=pprint)
-        return req
+        return self._cmd(cmd='get_libraries', pprint=pprint)
 
     def get_libraries_table(self, pprint=False, order_column=None,
                             order_dir=None, start=None, length=None,
@@ -1026,11 +950,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_libraries_table', pprint=pprint,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search)
-        return req
+        return self._cmd(cmd='get_libraries_table', pprint=pprint,
+                         order_column=order_column, order_dir=order_dir,
+                         start=start, length=length, search=search)
 
     def get_library(self, pprint=False, section_id=None):
         """
@@ -1057,9 +979,8 @@ class Tautulli:
                  "section_type": "movie"
                  }
         """
-
-        req = self._cmd(cmd='get_library', pprint=pprint, section_id=section_id)
-        return req
+        return self._cmd(cmd='get_library', pprint=pprint,
+                         section_id=section_id)
 
     def get_library_media_info(self, pprint=False, section_id=None,
                                rating_key=None, section_type=None,
@@ -1124,13 +1045,11 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_library_media_info', pprint=pprint,
-                        section_id=section_id, rating_key=rating_key,
-                        section_type=section_type, order_column=order_column,
-                        order_dir=order_dir, start=start, length=length,
-                        search=search, refresh=refresh)
-        return req
+        return self._cmd(cmd='get_library_media_info', pprint=pprint,
+                         section_id=section_id, rating_key=rating_key,
+                         section_type=section_type, order_column=order_column,
+                         order_dir=order_dir, start=start, length=length,
+                         search=search, refresh=refresh)
 
     def get_library_names(self, pprint=False):
         """
@@ -1159,9 +1078,7 @@ class Tautulli:
                  {...}
                  ]
         """
-
-        req = self._cmd(cmd='get_library_names', pprint=pprint)
-        return req
+        return self._cmd(cmd='get_library_names', pprint=pprint)
 
     def get_library_user_stats(self, pprint=False, section_id=None,
                                grouping=None):
@@ -1190,10 +1107,8 @@ class Tautulli:
                  {...}
                  ]
         """
-
-        req = self._cmd(cmd='get_library_user_stats', pprint=pprint,
-                        section_id=section_id, grouping=grouping)
-        return req
+        return self._cmd(cmd='get_library_user_stats', pprint=pprint,
+                         section_id=section_id, grouping=grouping)
 
     def get_library_watch_time_stats(self, pprint=False, section_id=None,
                                      grouping=None):
@@ -1226,10 +1141,8 @@ class Tautulli:
                   }
                  ]
         """
-
-        req = self._cmd(cmd='get_library_watch_time_stats', pprint=pprint,
-                        section_id=section_id, grouping=grouping)
-        return req
+        return self._cmd(cmd='get_library_watch_time_stats', pprint=pprint,
+                         section_id=section_id, grouping=grouping)
 
     def get_logs(self, pprint=False, sort=None, search=None, order=None,
                  regex=None, start=None, end=None):
@@ -1259,11 +1172,9 @@ class Tautulli:
                  {...}
                  ]
         """
-
-        req = self._cmd(cmd='get_logs', pprint=pprint, sort=sort,
-                        search=search, order=order, regex=regex,
-                        start=start, end=end)
-        return req
+        return self._cmd(cmd='get_logs', pprint=pprint, sort=sort,
+                         search=search, order=order, regex=regex,
+                         start=start, end=end)
 
     def get_metadata(self, pprint=False, rating_key=None):
         """
@@ -1410,10 +1321,8 @@ class Tautulli:
                  "year": "2016"
                  }
         """
-
-        req = self._cmd(cmd='get_metadata', pprint=pprint,
-                        rating_key=rating_key)
-        return req
+        return self._cmd(cmd='get_metadata', pprint=pprint,
+                         rating_key=rating_key)
 
     def get_new_rating_keys(self, pprint=False, rating_key=None,
                             media_type=None):
@@ -1434,10 +1343,8 @@ class Tautulli:
             json:
                 {}
         """
-
-        req = self._cmd(cmd='get_new_rating_keys', pprint=pprint,
-                        rating_key=rating_key, media_type=media_type)
-        return req
+        return self._cmd(cmd='get_new_rating_keys', pprint=pprint,
+                         rating_key=rating_key, media_type=media_type)
 
     def get_newsletter_config(self, pprint=False, newsletter_id=None):
         """
@@ -1476,13 +1383,11 @@ class Tautulli:
                  "email_config_options": [{...}, ...]
                  }
         """
+        return self._cmd(cmd='get_newsletter_config', pprint=pprint,
+                         newsletter_id=newsletter_id)
 
-        req = self._cmd(cmd='get_newsletter_config', pprint=pprint,
-                        newsletter_id=newsletter_id)
-        return req
-    
-    def get_newsletter_log(self, pprint=False, order_column=None, 
-                           order_dir=None, start=None, length=None, 
+    def get_newsletter_log(self, pprint=False, order_column=None,
+                           order_dir=None, start=None, length=None,
                            search=None):
         """
         Get the data on the Tautulli newsletter logs table.
@@ -1524,12 +1429,10 @@ class Tautulli:
                      ]
                  }
         """
-        
-        req = self._cmd(cmd='get_newsletter_log', pprint=pprint, 
-                        order_column=order_column, order_dir=order_dir, 
-                        start=start, length=length, search=search)
-        return req
-    
+        return self._cmd(cmd='get_newsletter_log', pprint=pprint,
+                         order_column=order_column, order_dir=order_dir,
+                         start=start, length=length, search=search)
+
     def get_newsletters(self, pprint=False):
         """
         Get a list of configured newsletters.
@@ -1552,10 +1455,8 @@ class Tautulli:
                   }
                  ]
         """
-        
-        req = self._cmd(cmd='get_newsletters', pprint=pprint)
-        return req
-    
+        return self._cmd(cmd='get_newsletters', pprint=pprint)
+
     def get_notification_log(self, pprint=False, order_column=None,
                              order_dir=None, start=None, length=None,
                              search=None):
@@ -1599,11 +1500,9 @@ class Tautulli:
                      ]
                  }
         """
-        
-        req = self._cmd(cmd='get_notification_log', pprint=pprint,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search)
-        return req
+        return self._cmd(cmd='get_notification_log', pprint=pprint,
+                         order_column=order_column, order_dir=order_dir,
+                         start=start, length=length, search=search)
 
     def get_notifier_config(self, pprint=False, notifier_id=None):
         """
@@ -1644,10 +1543,8 @@ class Tautulli:
                                  }
                  }
         """
-
-        req = self._cmd(cmd='get_notifier_config', pprint=pprint,
-                        notifier_id=notifier_id)
-        return req
+        return self._cmd(cmd='get_notifier_config', pprint=pprint,
+                         notifier_id=notifier_id)
 
     def get_notifier_parameters(self, pprint=False):
         """
@@ -1664,9 +1561,7 @@ class Tautulli:
                 {
                  }
         """
-
-        req = self._cmd(cmd='get_notifier_parameters', pprint=pprint)
-        return req
+        return self._cmd(cmd='get_notifier_parameters', pprint=pprint)
 
     def get_notifiers(self, pprint=False, notify_action=None):
         """
@@ -1689,10 +1584,8 @@ class Tautulli:
                   }
                  ]
         """
-
-        req = self._cmd(cmd='get_notifiers', pprint=pprint,
-                        notify_action=notify_action)
-        return req
+        return self._cmd(cmd='get_notifiers', pprint=pprint,
+                         notify_action=notify_action)
 
     def get_old_rating_keys(self, pprint=False, rating_key=None,
                             media_type=None):
@@ -1713,10 +1606,8 @@ class Tautulli:
             json:
                 {}
         """
-
-        req = self._cmd(cmd='get_old_rating_keys', pprint=pprint,
-                        rating_key=rating_key, media_type=media_type)
-        return req
+        return self._cmd(cmd='get_old_rating_keys', pprint=pprint,
+                         rating_key=rating_key, media_type=media_type)
 
     def get_plays_by_date(self, pprint=False, time_range=None, y_axis=None,
                           user_id=None, grouping=None):
@@ -1743,11 +1634,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_plays_by_date', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        return self._cmd(cmd='get_plays_by_date', pprint=pprint,
+                         time_range=time_range, y_axis=y_axis, user_id=user_id,
+                         grouping=grouping)
 
     def get_plays_by_dayofweek(self, pprint=False, time_range=None,
                                y_axis=None, user_id=None, grouping=None):
@@ -1774,11 +1663,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_plays_by_dayofweek', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        return self._cmd(cmd='get_plays_by_dayofweek', pprint=pprint,
+                         time_range=time_range, y_axis=y_axis, user_id=user_id,
+                         grouping=grouping)
 
     def get_plays_by_hourofday(self, pprint=False, time_range=None,
                                y_axis=None, user_id=None, grouping=None):
@@ -1805,11 +1692,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_plays_by_hourofday', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        return self._cmd(cmd='get_plays_by_hourofday', pprint=pprint,
+                         time_range=time_range, y_axis=y_axis, user_id=user_id,
+                         grouping=grouping)
 
     def get_plays_by_source_resolution(self, pprint=False, time_range=None,
                                        y_axis=None, user_id=None,
@@ -1837,11 +1722,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_plays_by_source_resolution', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        return self._cmd(cmd='get_plays_by_source_resolution', pprint=pprint,
+                         time_range=time_range, y_axis=y_axis, user_id=user_id,
+                         grouping=grouping)
 
     def get_plays_by_stream_resolution(self, pprint=False, time_range=None,
                                        y_axis=None, user_id=None,
@@ -1869,11 +1752,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_plays_by_stream_resolution', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        return self._cmd(cmd='get_plays_by_stream_resolution', pprint=pprint,
+                         time_range=time_range, y_axis=y_axis, user_id=user_id,
+                         grouping=grouping)
 
     def get_plays_by_stream_type(self, pprint=False, time_range=None,
                                  y_axis=None, user_id=None, grouping=None):
@@ -1900,11 +1781,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_plays_by_stream_type', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        return self._cmd(cmd='get_plays_by_stream_type', pprint=pprint,
+                         time_range=time_range, y_axis=y_axis, user_id=user_id,
+                         grouping=grouping)
 
     def get_plays_by_top_10_platforms(self, pprint=False, time_range=None,
                                       y_axis=None, user_id=None, grouping=None):
@@ -1931,11 +1810,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_plays_by_top_10_platforms', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        return self._cmd(cmd='get_plays_by_top_10_platforms', pprint=pprint,
+                         time_range=time_range, y_axis=y_axis, user_id=user_id,
+                         grouping=grouping)
 
     def get_plays_per_month(self, pprint=False, time_range=None,
                             y_axis=None, user_id=None, grouping=None):
@@ -1962,11 +1839,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_plays_per_month', pprint=pprint,
-                        time_range=time_range, y_=y_axis, user_id=user_id,
-                        grouping=grouping)
-        return req
+        return self._cmd(cmd='get_plays_per_month', pprint=pprint,
+                         time_range=time_range, y_=y_axis, user_id=user_id,
+                         grouping=grouping)
 
     def get_plex_log(self, pprint=False, window=None, log_type=None):
         """
@@ -1989,10 +1864,8 @@ class Tautulli:
                  [...]
                  ]
         """
-
-        req = self._cmd(cmd='get_plex_log', pprint=pprint, window=window,
-                        log_type=log_type)
-        return req
+        return self._cmd(cmd='get_plex_log', pprint=pprint, window=window,
+                         log_type=log_type)
 
     def get_pms_token(self, username=None, password=None):
         """
@@ -2008,10 +1881,8 @@ class Tautulli:
         Returns:
             string:             The Plex token used for Tautulli
         """
-
-        req = self._cmd(cmd='get_pms_token', username=username,
-                        password=password)
-        return req
+        return self._cmd(cmd='get_pms_token', username=username,
+                         password=password)
 
     def get_pms_update(self, pprint=False):
         """
@@ -2039,9 +1910,7 @@ class Tautulli:
                  "download_url": "https://downloads.plex.tv/...",
                  }
         """
-
-        req = self._cmd(cmd='get_pms_update', pprint=pprint)
-        return req
+        return self._cmd(cmd='get_pms_update', pprint=pprint)
 
     def get_recently_added(self, pprint=False, count=25, start=None,
                            media_type=None, section_id=None):
@@ -2085,12 +1954,10 @@ class Tautulli:
                      ]
                  }
         """
+        return self._cmd(cmd='get_recently_added', pprint=pprint, count=count,
+                         start=start, media_type=media_type,
+                         section_id=section_id)
 
-        req = self._cmd(cmd='get_recently_added', pprint=pprint, count=count,
-                        start=start, media_type=media_type,
-                        section_id=section_id)
-        return req
-    
     def get_server_friendly_name(self, pprint=False):
         """
         Get the name of the PMS.
@@ -2104,9 +1971,7 @@ class Tautulli:
         Returns:
             string:     "Winterfell-Server"
         """
-        
-        req = self._cmd(cmd='get_server_friendly_name', pprint=pprint)
-        return req
+        return self._cmd(cmd='get_server_friendly_name', pprint=pprint)
 
     def get_server_id(self, hostname='localhost', port=32400, ssl=None,
                       remote=None):
@@ -2125,11 +1990,9 @@ class Tautulli:
             str:
                 '08u2phnlkdshf890bhdlksghnljsahgleikjfg9t'
         """
-
-        req = self._cmd(cmd='get_server_id', hostname=hostname, port=port,
-                        ssl=ssl, remote=remote)
-        server_id = req['response']['data']['identifier']
-        return server_id
+        return self._cmd(
+            cmd='get_server_id', hostname=hostname, port=port, ssl=ssl,
+            remote=remote)['response']['data']['identifier']
 
     def get_server_identity(self, pprint=False):
         """
@@ -2148,9 +2011,7 @@ class Tautulli:
                   }
                  ]
         """
-
-        req = self._cmd(cmd='get_server_identity', pprint=pprint)
-        return req
+        return self._cmd(cmd='get_server_identity', pprint=pprint)
 
     def get_server_list(self, pprint=False):
         """
@@ -2176,9 +2037,7 @@ class Tautulli:
                  {...}
                  ]
         """
-
-        req = self._cmd(cmd='get_server_list', pprint=pprint)
-        return req
+        return self._cmd(cmd='get_server_list', pprint=pprint)
 
     def get_server_pref(self, pprint=False, pref=None):
         """
@@ -2190,9 +2049,7 @@ class Tautulli:
         Returns:
             string:             Value of preference
         """
-
-        req = self._cmd(cmd='get_server_pref', pprint=pprint, pref=pref)
-        return req
+        return self._cmd(cmd='get_server_pref', pprint=pprint, pref=pref)
 
     def get_servers_info(self, pprint=False):
         """
@@ -2214,9 +2071,7 @@ class Tautulli:
                   }
                  ]
         """
-
-        req = self._cmd(cmd='get_servers_info', pprint=pprint)
-        return req
+        return self._cmd(cmd='get_servers_info', pprint=pprint)
 
     def get_settings(self, pprint=False, key=None):
         """
@@ -2235,9 +2090,7 @@ class Tautulli:
                  ...
                  }
         """
-
-        req = self._cmd(cmd='get_settings', pprint=pprint, key=key)
-        return req
+        return self._cmd(cmd='get_settings', pprint=pprint, key=key)
 
     def get_stream_data(self, pprint=False, row_id=None, session_key=None):
         """
@@ -2300,10 +2153,8 @@ class Tautulli:
                  "video_width": 1920
                  }
         """
-
-        req = self._cmd(cmd='get_stream_data', pprint=pprint, row_id=row_id,
-                        session_key=session_key)
-        return req
+        return self._cmd(cmd='get_stream_data', pprint=pprint, row_id=row_id,
+                         session_key=session_key)
 
     def get_stream_type_by_top_10_platforms(self, pprint=False, time_range=None,
                                             y_axis=None, user_id=None,
@@ -2331,11 +2182,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_stream_type_by_top_10_platforms',
-                        pprint=pprint, time_range=time_range, y_axis=y_axis,
-                        user_id=user_id, grouping=grouping)
-        return req
+        return self._cmd(cmd='get_stream_type_by_top_10_platforms',
+                         pprint=pprint, time_range=time_range, y_axis=y_axis,
+                         user_id=user_id, grouping=grouping)
 
     def get_stream_type_by_top_10_users(self, pprint=False, time_range=None,
                                         y_axis=None, user_id=None,
@@ -2363,11 +2212,9 @@ class Tautulli:
                     ]
                  }
         """
-
-        req = self._cmd(cmd='get_stream_type_by_top_10_users', pprint=pprint,
-                        time_range=time_range, y_axis=y_axis,
-                        user_id=user_id, grouping=grouping)
-        return req
+        return self._cmd(cmd='get_stream_type_by_top_10_users', pprint=pprint,
+                         time_range=time_range, y_axis=y_axis,
+                         user_id=user_id, grouping=grouping)
 
     def get_synced_items(self, pprint=False, machine_id=None, user_id=None):
         """
@@ -2409,10 +2256,8 @@ class Tautulli:
                  {...}
                  ]
         """
-
-        req = self._cmd(cmd='get_synced_items', pprint=pprint,
-                        machine_id=machine_id, user_id=user_id)
-        return req
+        return self._cmd(cmd='get_synced_items', pprint=pprint,
+                         machine_id=machine_id, user_id=user_id)
 
     def get_user(self, pprint=False, user_id=None):
         """
@@ -2441,9 +2286,7 @@ class Tautulli:
                  "username": "LordCommanderSnow"
                  }
         """
-
-        req = self._cmd(cmd='get_user', pprint=pprint, user_id=user_id)
-        return req
+        return self._cmd(cmd='get_user', pprint=pprint, user_id=user_id)
 
     def get_user_ips(self, pprint=False, user_id=None, order_column=None,
                      order_dir=None, start=None, length=None, search=None):
@@ -2492,11 +2335,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_user_ips', pprint=pprint, user_id=user_id,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search)
-        return req
+        return self._cmd(cmd='get_user_ips', pprint=pprint, user_id=user_id,
+                         order_column=order_column, order_dir=order_dir,
+                         start=start, length=length, search=search)
 
     def get_user_logins(self, pprint=False, user_id=None, order_column=None,
                         order_dir=None, start=None, length=None, search=None):
@@ -2540,11 +2381,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_user_logins', pprint=pprint, user_id=user_id,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search)
-        return req
+        return self._cmd(cmd='get_user_logins', pprint=pprint, user_id=user_id,
+                         order_column=order_column, order_dir=order_dir,
+                         start=start, length=length, search=search)
 
     def get_user_names(self, pprint=False):
         """
@@ -2564,9 +2403,7 @@ class Tautulli:
                  {...},
                 ]
         """
-
-        req = self._cmd(cmd='get_user_names', pprint=pprint)
-        return req
+        return self._cmd(cmd='get_user_names', pprint=pprint)
 
     def get_user_player_stats(self, pprint=False, user_id=None, grouping=None):
         """
@@ -2594,10 +2431,8 @@ class Tautulli:
                  {...}
                  ]
         """
-
-        req = self._cmd(cmd='get_user_player_stats', pprint=pprint,
-                        user_id=user_id, grouping=grouping)
-        return req
+        return self._cmd(cmd='get_user_player_stats', pprint=pprint,
+                         user_id=user_id, grouping=grouping)
 
     def get_user_watch_time_stats(self, pprint=False, user_id=None,
                                   grouping=None):
@@ -2630,10 +2465,8 @@ class Tautulli:
                   }
                  ]
         """
-
-        req = self._cmd(cmd='get_user_watch_time_stats', pprint=pprint,
-                        user_id=user_id, grouping=grouping)
-        return req
+        return self._cmd(cmd='get_user_watch_time_stats', pprint=pprint,
+                         user_id=user_id, grouping=grouping)
 
     def get_users(self, pprint=False):
         """
@@ -2670,9 +2503,7 @@ class Tautulli:
                  {...}
                  ]
         """
-
-        req = self._cmd(cmd='get_users', pprint=pprint)
-        return req
+        return self._cmd(cmd='get_users', pprint=pprint)
 
     def get_users_table(self, pprint=False, order_column=None, order_dir=None,
                         start=None, length=None, search=None):
@@ -2728,11 +2559,9 @@ class Tautulli:
                      ]
                  }
         """
-
-        req = self._cmd(cmd='get_users_table', pprint=pprint,
-                        order_column=order_column, order_dir=order_dir,
-                        start=start, length=length, search=search)
-        return req
+        return self._cmd(cmd='get_users_table', pprint=pprint,
+                         order_column=order_column, order_dir=order_dir,
+                         start=start, length=length, search=search)
 
     def get_whois_lookup(self, pprint=False, ip_address=None):
         """
@@ -2764,10 +2593,8 @@ class Tautulli:
                  "error": "IPv4 address 127.0.0.1 is already defined as
                           Loopback via RFC 1122, Section 3.2.1.3."
         """
-
-        req = self._cmd(cmd='get_whois_lookup', pprint=pprint,
-                        ip_address=ip_address)
-        return req
+        return self._cmd(cmd='get_whois_lookup', pprint=pprint,
+                         ip_address=ip_address)
 
     def import_database(self, app=None, database_path=None,
                         table_name=None, import_ignore_interval=None):
@@ -2787,17 +2614,13 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='import_database', app=app,
-                        database_path=database_path, table_name=table_name,
-                        import_ignore_interval=import_ignore_interval)
-        return req
+        return self._cmd(cmd='import_database', app=app,
+                         database_path=database_path, table_name=table_name,
+                         import_ignore_interval=import_ignore_interval)
 
     def install_geoip_db(self):
         """Downloads and installs the GeoLite2 database"""
-
-        req = self._cmd(cmd='install_geoip_db')
-        return req
+        return self._cmd(cmd='install_geoip_db')
 
     def notify(self, pprint=False, notifier_id=None, subject=None, body=None,
                script_args=None):
@@ -2815,10 +2638,8 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='notify', pprint=pprint, notifier_id=notifier_id,
-                        subject=subject, body=body, script_args=script_args)
-        return req
+        return self._cmd(cmd='notify', pprint=pprint, notifier_id=notifier_id,
+                         subject=subject, body=body, script_args=script_args)
 
     def notify_newsletter(self, pprint=False, newsletter_id=None, subject=None,
                           body=None, message=None):
@@ -2836,11 +2657,9 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='notify_newsletter', pprint=pprint,
-                        newsletter_id=newsletter_id, subject=subject,
-                        body=body, message=message)
-        return req
+        return self._cmd(cmd='notify_newsletter', pprint=pprint,
+                         newsletter_id=newsletter_id, subject=subject,
+                         body=body, message=message)
 
     def notify_recently_added(self, pprint=False, rating_key=None,
                               notifier_id=None):
@@ -2862,10 +2681,8 @@ class Tautulli:
                  "message": "Notification queued."
                 }
         """
-
-        req = self._cmd(cmd='notify_recently_added', pprint=pprint,
-                        rating_key=rating_key, notifier_id=notifier_id)
-        return req
+        return self._cmd(cmd='notify_recently_added', pprint=pprint,
+                         rating_key=rating_key, notifier_id=notifier_id)
 
     def pms_image_proxy(self, pprint=False, rating_key=None, width=None,
                         height=None, opacity=None, background=None,
@@ -2897,25 +2714,19 @@ class Tautulli:
                 Returns:
                     None
                 """
-
-        req = self._cmd(cmd='pms_image_proxy', pprint=pprint,
-                        rating_key=rating_key, width=width, height=height,
-                        opacity=opacity, background=background, blur=blur,
-                        img_format=img_format, fallback=fallback,
-                        refresh=refresh, return_hash=return_hash)
-        return req
+        return self._cmd(cmd='pms_image_proxy', pprint=pprint,
+                         rating_key=rating_key, width=width, height=height,
+                         opacity=opacity, background=background, blur=blur,
+                         img_format=img_format, fallback=fallback,
+                         refresh=refresh, return_hash=return_hash)
 
     def refresh_libraries_list(self):
         """Refresh the Tautulli libraries list."""
-
-        req = self._cmd(cmd='refresh_libraries_list')
-        return req
+        return self._cmd(cmd='refresh_libraries_list')
 
     def refresh_users_list(self):
         """Refresh the Tautulli users list."""
-
-        req = self._cmd(cmd='refresh_users_list')
-        return req
+        return self._cmd(cmd='refresh_users_list')
 
     def register_device(self, device_name=None, device_id=None,
                         friendly_name=None):
@@ -2935,16 +2746,12 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='register_device', device_name=device_name,
-                        device_id=device_id, friendly_name=friendly_name)
-        return req
+        return self._cmd(cmd='register_device', device_name=device_name,
+                         device_id=device_id, friendly_name=friendly_name)
 
     def restart(self):
         """Restart Tautulli."""
-
-        req = self._cmd(cmd='restart')
-        return req
+        return self._cmd(cmd='restart')
 
     def search(self, pprint=False, query=None, limit=None):
         """
@@ -2974,9 +2781,7 @@ class Tautulli:
                     {...}
                  }
         """
-
-        req = self._cmd(cmd='search', pprint=pprint, query=query, limit=limit)
-        return req
+        return self._cmd(cmd='search', pprint=pprint, query=query, limit=limit)
 
     def set_mobile_device_config(self, mobile_device_id=None,
                                  friendly_name=None):
@@ -2993,11 +2798,9 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='set_mobile_device_config',
-                        mobile_device_id=mobile_device_id,
-                        friendly_name=friendly_name)
-        return req
+        return self._cmd(cmd='set_mobile_device_config',
+                         mobile_device_id=mobile_device_id,
+                         friendly_name=friendly_name)
 
     def set_newsletter_config(self, newsletter_id=None, agent_id=None,
                               newsletter_config=None, newsletter_email=None,
@@ -3016,12 +2819,10 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='set_newsletter_config',
-                        newsletter_id=newsletter_id, agent_id=agent_id,
-                        newsletter_config=newsletter_config,
-                        newsletter_email=newsletter_email, **cfg_opts)
-        return req
+        return self._cmd(cmd='set_newsletter_config',
+                         newsletter_id=newsletter_id, agent_id=agent_id,
+                         newsletter_config=newsletter_config,
+                         newsletter_email=newsletter_email, **cfg_opts)
 
     def set_notifier_config(self, notifier_id=None, agent_id=None, **cfg_opts):
         """
@@ -3047,10 +2848,8 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='set_notifier_config', notifier_id=notifier_id,
-                        agent_id=agent_id, **cfg_opts)
-        return req
+        return self._cmd(cmd='set_notifier_config', notifier_id=notifier_id,
+                         agent_id=agent_id, **cfg_opts)
 
     def sql(self, query=None):
         """
@@ -3068,9 +2867,7 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='sql', query=query)
-        return req
+        return self._cmd(cmd='sql', query=query)
 
     def terminate_session(self, session_key=None, session_id=None,
                           message=None):
@@ -3089,10 +2886,8 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='terminate_session', session_key=session_key,
-                        session_id=session_id, message=message)
-        return req
+        return self._cmd(cmd='terminate_session', session_key=session_key,
+                         session_id=session_id, message=message)
 
     def undelete_library(self, section_id=None, section_name=None):
         """
@@ -3108,10 +2903,8 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='undelete_library', section_id=section_id,
-                        section_name=section_name)
-        return req
+        return self._cmd(cmd='undelete_library', section_id=section_id,
+                         section_name=section_name)
 
     def undelete_user(self, user_id=None, username=None):
         """
@@ -3127,21 +2920,16 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='undelete_user', user_id=user_id, username=username)
-        return req
+        return self._cmd(cmd='undelete_user', user_id=user_id,
+                         username=username)
 
     def uninstall_geoip_db(self):
         """Uninstalls the GeoLite2 database"""
-
-        req = self._cmd(cmd='uninstall_geoip_db')
-        return req
+        return self._cmd(cmd='uninstall_geoip_db')
 
     def update(self):
         """Update Tautulli."""
-
-        req = self._cmd(cmd='update')
-        return req
+        return self._cmd(cmd='update')
 
     def update_check(self, pprint=False):
         """
@@ -3160,9 +2948,7 @@ class Tautulli:
                  "message": "An update for Tautulli is available."
                 }
         """
-
-        req = self._cmd(cmd='update_check', pprint=pprint)
-        return req
+        return self._cmd(cmd='update_check', pprint=pprint)
 
     def update_metadata_details(self, old_rating_key=None,
                                 new_rating_key=None, media_type=None):
@@ -3184,8 +2970,6 @@ class Tautulli:
         Returns:
             None
         """
-
-        req = self._cmd(cmd='update_metadata_details',
-                        old_rating_key=old_rating_key,
-                        new_rating_key=new_rating_key, media_type=media_type)
-        return req
+        return self._cmd(cmd='update_metadata_details',
+                         old_rating_key=old_rating_key,
+                         new_rating_key=new_rating_key, media_type=media_type)
