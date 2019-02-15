@@ -18,8 +18,7 @@ class Tautulli:
         self.schema = schema or SCHEMA
         self.path = path or PATH
         self.url = '{0}://{1}:{2}{3}/api/v2'.format(
-            self.schema, self.host, self.port, self.path
-        )
+            self.schema, self.host, self.port, self.path)
 
     def _cmd(self, pprint=False, **params):
         """Sends and receives API command"""
