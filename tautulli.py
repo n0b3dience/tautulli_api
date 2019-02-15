@@ -374,8 +374,7 @@ class Tautulli:
                          friendly_name=friendly_name, custom_thumb=custom_thumb,
                          keep_history=keep_history, allow_guest=allow_guest)
 
-    def get_activity(self, pprint=False, session_key=None, session_id=None,
-                     out_type=None, callback=None, debug=None):
+    def get_activity(self, pprint=False, session_key=None, session_id=None):
         """
         Get the current activity on the PMS.
 
@@ -617,8 +616,7 @@ class Tautulli:
                  }
         """
         return self._cmd(cmd='get_activity', pprint=pprint,
-                         session_key=session_key, session_id=session_id,
-                         out_type=out_type, callback=callback, debug=debug)
+                         session_key=session_key, session_id=session_id)
 
     def get_apikey(self, pprint=False, username=None, password=None):
         """
@@ -694,8 +692,7 @@ class Tautulli:
                     grandparent_rating_key=None, start_date=None,
                     section_id=None, media_type=None,
                     transcode_decision=None, order_column=None,
-                    order_dir=None, start=None, length=None, search=None,
-                    out_type=None, callback=None, debug=None):
+                    order_dir=None, start=None, length=None, search=None):
         """
         Get the Tautulli history.
 
@@ -784,8 +781,7 @@ class Tautulli:
                          media_type=media_type,
                          transcode_decision=transcode_decision,
                          order_column=order_column, order_dir=order_dir,
-                         start=start, length=length, search=search,
-                         out_type=out_type, callback=callback, debug=debug)
+                         start=start, length=length, search=search)
 
     def get_home_stats(self, pprint=False, grouping=None, time_range=None,
                        stats_type=None, stats_count=None):
