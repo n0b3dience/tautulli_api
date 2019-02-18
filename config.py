@@ -3,7 +3,7 @@ import configparser
 
 # ConfigParser Variables
 config = configparser.ConfigParser()
-config.read('settings_private.ini')
+config.read('settings.ini')
 # Settings File Variables
 HOST = config['USER_SETTINGS']['host']
 PORT = config['USER_SETTINGS']['port']
