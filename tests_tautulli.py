@@ -2,32 +2,34 @@ from tautulli import Tautulli
 import unittest
 
 
+tautulli = Tautulli()
+
+
 class TestTautulli(unittest.TestCase):
     """Test Tautulli() methods"""
 
     def test_get_history_0(self):
-
-        tautulli = Tautulli()
-
-        hist_test_exp = 'success'
-
+        """Check default get_history() fn"""
         req = tautulli.get_history()
         hist_test_act = req['response']['result']
-
-        self.assertEqual(hist_test_act, hist_test_exp)
+        self.assertEqual(
+            hist_test_act,
+            'success',
+            msg=":::ERROR::: 'test_get_history_1()' FAILED"
+        )
 
     def test_get_history_1(self):
-        tautulli = Tautulli()
-        hist_test_exp = 'success'
-
-        req = tautulli.get_history(
-            user='nettles4349', out_type='json', length=10)
+        """Check get_history() fn with kwargs"""
+        req = tautulli.get_history(user='nettles4349', length=10)
         hist_test_act = req['response']['result']
-
-        self.assertEqual(hist_test_act, hist_test_exp)
+        self.assertEqual(
+            hist_test_act,
+            'success',
+            msg=":::ERROR::: 'test_get_history_1()' FAILED"
+        )
 
     def test_get_server_id(self):
-        tautulli = Tautulli()
+        """Check get_server_id() fn"""
         req = tautulli.get_server_id(hostname='192.168.1.7')
         self.assertIsNotNone(
             req,
