@@ -11,12 +11,12 @@ _**NOTE:** This is an unofficial work-in-progress and is provided as-is. It has
 not been fully tested. Feel free to report any bugs you may find at the [project's 
 Github page](https://github.com/n0b3dience/tautulli_api/issues)._
 
-####Example
-#####Tautulli Web API:
+###Example
+####Tautulli Web API:
 ```
 http://localhost:8181/api/v2?apikey=66198313a092496b8a725867d2223b5f&cmd=get_metadata&rating_key=153037
 ```
-#####Tautulli API Python Wrapper
+####Tautulli API Python Wrapper
 ```
 # Construct a Tautulli() object
 tautulli = Tautulli(
