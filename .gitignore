@@ -64,3 +64,6 @@ target/
 
 # Misc
 notes/
+
+# VS Code
+.vscode/
